@@ -41,7 +41,7 @@ apiVersion: platform.confluent.io/v1beta1
 kind: Connect
 metadata:
   name: connect
-  namespace: operator
+  namespace: confluent 
 spec:
   replicas: 2
   image:

@@ -30,11 +30,6 @@ spec:
         externalAccess:
           type: loadBalancer
           loadBalancer:
-            bootstrapPrefix: tutorial-kafka
-            brokerPrefix: tutorial-b
-            annotations:
-              foo: bar
-              baz: foo
             domain: ## Domain 
 ---
 apiVersion: platform.confluent.io/v1beta1
@@ -50,6 +45,10 @@ spec:
   dependencies:
     kafka:
       bootstrapEndpoint: kafka:9071
+  externalAccess:
+    type: loadBalancer
+    loadBalancer:
+      domain: ## Domain    
 ---
 apiVersion: platform.confluent.io/v1beta1
 kind: KsqlDB
@@ -103,3 +102,7 @@ spec:
   image:
     application: confluentinc/cp-schema-registry-operator:6.0.0.0
     init: confluentinc/cp-init-container-operator:6.0.0.0
+  externalAccess:
+    type: loadBalancer
+    loadBalancer:
+      domain: ## Domain    

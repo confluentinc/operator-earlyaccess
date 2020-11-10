@@ -28,7 +28,7 @@ Set up a Kubernetes cluster
 
 Set up a Kubernetes cluster for this tutorial.
 
-#. Add or get access to a  Kubernetes cluster.
+#. Add or get access to a Kubernetes cluster.
 
 #. Save the Kubernetes cluster domain name. 
  
@@ -38,7 +38,6 @@ Set up a Kubernetes cluster for this tutorial.
    ::
 
      export DOMAIN=<Your Kubernetes cluster domain name>
-
 
 #. Create the namespace and set it to the current namespace. In this tutorial, we will deploy Confluent Platform in the ``confluent`` namespace.
 
@@ -58,7 +57,8 @@ Set up a Kubernetes cluster for this tutorial.
 Set the current tutorial directory
 ==================================
 
-Set the tutorial directory for this tutorial under the directory you downloaded the tutorial files:
+Set the tutorial directory for this tutorial under the directory you downloaded
+the tutorial files:
 
 ::
    
@@ -68,15 +68,11 @@ Set the tutorial directory for this tutorial under the directory you downloaded 
 Deploy Confluent Operator
 =========================
 
-The Confluent Operator is packaged as a Helm Chart, and you will use Helm to
-deploy the Operator.
-
-#. From the directory that you downloaded Confluent Operator to, install Confluent Operator with the following Helm command:
+#. Install Confluent Operator using Helm:
 
    ::
    
-     helm upgrade --install operator \
-       charts/confluentinc/confluent-operator 
+     helm upgrade --install operator confluentinc/confluent-operator
 
 #. Check that the Confluent Operator pod comes up and is running:
 
@@ -91,8 +87,8 @@ Deploy Confluent Platform
 You install Confluent Platform components as custom resources (CRs). 
 
 You can configure all Confluent Platform components as custom resources. In this
-tutorial, you will configure all components in a single file and apply the
-configuration with one ``kubectl apply`` command.
+tutorial, you will configure all components in a single file and deploy all
+compoents with one ``kubectl apply`` command.
 
 ================================
 Configure Confluent Platform CRs
@@ -155,7 +151,7 @@ For example, you will access Control Center at:
 Deploy Confluent Platform
 =========================
 
-Run the following command to deploy Confluent Platform:
+#. Deploy Confluent Platform with the above configuration:
 
 ::
 

@@ -62,7 +62,8 @@ Set up a Kubernetes cluster for this tutorial.
 Set the current tutorial directory
 ==================================
 
-Set the tutorial directory for this tutorial under the directory you downloaded the tutorial files:
+Set the tutorial directory for this tutorial under the directory you downloaded
+the tutorial files:
 
 ::
    
@@ -72,15 +73,11 @@ Set the tutorial directory for this tutorial under the directory you downloaded 
 Deploy Confluent Operator
 =========================
 
-The Confluent Operator is packaged as a Helm Chart, and you will use Helm to
-deploy the Operator.
-
-#. From the directory that you downloaded Confluent Operator to, install Confluent Operator with the following Helm command:
+#. Install Confluent Operator using Helm:
 
    ::
    
-     helm upgrade --install operator \
-       charts/confluentinc/confluent-operator 
+     helm upgrade --install operator confluentinc/confluent-operator
 
 #. Check that the Confluent Operator pod comes up and is running:
 
@@ -147,7 +144,7 @@ http://$NPHOST:30200
 Deploy Confluent Platform
 =========================
 
-Run the following command to deploy Confluent Platform:
+#. Deploy Confluent Platform with the above configuration:
 
 ::
 

@@ -161,11 +161,11 @@ follow:
     configs:
       cleanup.policy: "delete"
       
-#. Deploy the producer app:
+Deploy the producer app:
 
-   ::
+::
    
-     kubectl apply -f $TUTORIAL_HOME/producer-app-data.yaml
+  kubectl apply -f $TUTORIAL_HOME/producer-app-data.yaml
 
 Validate in Control Center
 ^^^^^^^^^^^^^^^^^^^^^^^^^^

@@ -178,11 +178,22 @@ Add DNS records
 
 Create DNS records for the externally exposed components:
 
-#. Retrieve the external IP addresses of the components:
+#. Retrieve the external IP addresses of bootstrap load balancers of the brokers and components:
 
    ::
    
      kubectl get svc
+     
+   Get the ``EXTERNAL-IP`` values of the following services from the output:
+   
+   * ``connect-bootstrap-lb``          
+   * ``controlcenter-bootstrap-lb``   
+   * ``kafka-0-lb``               
+   * ``kafka-1-lb``                  
+   * ``kafka-2-lb``                    
+   * ``kafka-bootstrap-lb``          
+   * ``ksqldb-bootstrap-lb``           
+   * ``schemaregistry-bootstrap-lb`` 
 
 #. Get the DNS hostnames of Confluent Platform components. In this tutorial, we are using the default prefixes, which are the component names. So the DNS hostnames are:
 

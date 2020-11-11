@@ -1,10 +1,9 @@
 Deploy Confluent Platform with Load Balancer
 ============================================
 
-In this scenario workflow, you'll learn how to set up Confluent Platform
-component clusters with the Kubernetes LoadBalancer service type to enable
-external clients to access Confluent Platform, including Kafka and other
-components.
+In this scenario workflow, you'll set up Confluent Platform component clusters
+with the Kubernetes LoadBalancer service type to enable external clients to
+access Confluent Platform, including Kafka and other components.
 
 Before you begin this tutorial:
 
@@ -44,6 +43,8 @@ Set up a Kubernetes cluster for this tutorial.
    ::
    
      kubectl create namespace confluent
+   
+   ::
 
      kubectl config set-context --current --namespace=confluent
 
@@ -80,19 +81,15 @@ Deploy Confluent Operator
    
      kubectl get pods
      
-=========================     
-Deploy Confluent Platform
-=========================
+================================
+Configure Confluent Platform CRs
+================================
 
 You install Confluent Platform components as custom resources (CRs). 
 
 You can configure all Confluent Platform components as custom resources. In this
 tutorial, you will configure all components in a single file and deploy all
 compoents with one ``kubectl apply`` command.
-
-================================
-Configure Confluent Platform CRs
-================================
 
 The CR configuration file contains a custom resource specification for each
 Confluent Platform component, including replicas, image to use, resource

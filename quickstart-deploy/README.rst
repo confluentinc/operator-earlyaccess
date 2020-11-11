@@ -38,6 +38,8 @@ Set up a Kubernetes cluster for this tutorial.
    ::
    
      kubectl create namespace confluent
+     
+   ::
 
      kubectl config set-context --current --namespace=confluent
 
@@ -50,7 +52,7 @@ the tutorial files:
 
 ::
    
-  export TUTORIAL_HOME=<Tutorial directory>/quickstart-deploy
+  export TUTORIAL_HOME=<Tutorial directory>/secure-authz-encrypt-deploy
 
 =========================
 Deploy Confluent Operator
@@ -70,19 +72,15 @@ The assumption is that you’ve set up Early Access credentials following <link>
    
      kubectl get pods
 
-=========================
-Deploy Confluent Platform
-=========================
+========================================
+Review Confluent Platform configurations
+========================================
 
 You install Confluent Platform components as custom resources (CRs). 
 
 You can configure all Confluent Platform components as custom resources. In this
 tutorial, you will configure all components in a single file and deploy all
 compoents with one ``kubectl apply`` command.
-
-========================================
-Review Confluent Platform Configurations
-========================================
 
 The entire Confluent Platform is configured in one configuration file:
 ``$TUTORIAL_HOME/confluent-platform.yaml``

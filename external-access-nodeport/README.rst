@@ -1,9 +1,9 @@
 Deploy Confluent Platform with NodePort
 =======================================
 
-In this scenario workflow, you'll learn how to set up Confluent Platform
-clusters with the Kubernetes NodePort service type to enable external clients to
-access Confluent Platform, including Kafka and other components.
+In this scenario workflow, you'll set up Confluent Platform clusters with the
+Kubernetes NodePort service type to enable external clients to access Confluent
+Platform, including Kafka and other components.
 
 With the NodePort services, Kubernetes will allocate a port on all nodes of the
 Kubernetes cluster and will make sure that all traffic to this port is routed to
@@ -46,11 +46,13 @@ Set up a Kubernetes cluster for this tutorial.
 
 #. Create the namespace and set it to the current namespace. In this tutorial, we will deploy Confluent Platform in the ``confluent`` namespace.
 
-::
+   ::
 
-  kubectl create namespace confluent
+     kubectl create namespace confluent
 
-  kubectl config set-context --current --namespace=confluent
+   ::
+
+     kubectl config set-context --current --namespace=confluent
 
 #. Create a namespace for the test client to deploy the producer application:
 
@@ -85,19 +87,15 @@ Deploy Confluent Operator
    
      kubectl get pods
      
-=========================     
-Deploy Confluent Platform
-=========================
+================================
+Configure Confluent Platform CRs
+================================
 
 You install Confluent Platform components as custom resources (CRs). 
 
 You can configure all Confluent Platform components as custom resources. In this
 tutorial, you will configure all components in a single file and apply the
 configuration with one ``kubectl apply`` command.
-
-================================
-Configure Confluent Platform CRs
-================================
 
 The CR configuration file contains a custom resource specification for each
 Confluent Platform component, including replicas, image to use, resource

@@ -108,23 +108,27 @@ configured using the NodePort services.
 
 The Kafka section of the file is set as follows for node port access:
 
-spec:  
-  listeners:
-    external:
-      externalAccess:
-        type: nodePort
-        nodePort:
-          host:                 --- [1]
-          nodePortOffset: 30000 --- [2]
+::
+
+  spec:  
+    listeners:
+      external:
+        externalAccess:
+          type: nodePort
+          nodePort:
+            host:                 --- [1]
+            nodePortOffset: 30000 --- [2]
 
 Component section of the confluent-platform.yaml file is set as follows for node port access:
 
-spec:
-  externalAccess:
-    type: nodePort
-    nodePort:
-      host:                    --- [1]
-      nodePortOffset:          --- [2]
+::
+
+  spec:
+    externalAccess:
+      type: nodePort
+      nodePort:
+        host:                    --- [1]
+        nodePortOffset:          --- [2]
 
 * [1]  Set this to the value of $NPHOST. You need to provide this value for this tutorial.
 * [2]  In this tutorial, you will use the ``nodePortOffset`` as specified in ``confluent-platform.yaml``, starting with 30000 for Kafka.
@@ -134,9 +138,11 @@ The access endpoint of each Confluent Platform component will be:
 $NPHOST:<nodeport offset of the component (as set in ``metadata.name`` in the CR
 file)>
 
-For example, you will access Control Center at:
+For example, you will access Control Center at: 
 
-http://$NPHOST:30200
+::
+
+  http://$NPHOST:30200
 
 =========================
 Deploy Confluent Platform

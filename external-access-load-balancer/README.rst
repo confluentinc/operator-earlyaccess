@@ -195,21 +195,22 @@ Create DNS records for the externally exposed components:
    * ``ksqldb-bootstrap-lb``           
    * ``schemaregistry-bootstrap-lb`` 
 
-#. Get the DNS hostnames of Confluent Platform components. In this tutorial, we are using the default prefixes, which are the component names. So the DNS hostnames are:
+#. Add DNS records for the components and the brokers using the IP addresses and the hostnames above, replacing ``$DOMAIN`` with the actual domain name of your Kubernetes cluster.
 
-   * kafka.$DOMAIN
-   * controlcenter.$DOMAIN
-   * ksqldb.$DOMAIN
-   * connect.$DOMAIN
-   * schemaregistry.$DOMAIN
-
-   The hostnames of the three Kafka brokers are:
-
-   * b0.$DOMAIN
-   * b1.$DOMAIN
-   * b2.$DOMAIN
-
-#. Add DNS records for the components and the brokers using the IP addresses and the hostnames above, replacing $DOMAIN with the actual domain name of your Kubernetes cluster.
+   In this tutorial, we are using the default prefixes for components and brokers as shown below:
+   
+   ====================== ====================================================================
+   DNS name               IP address
+   ====================== ====================================================================
+   kafka.$DOMAIN          The ``EXTERNAL-IP`` value of ``kafka-bootstrap-lb`` service
+   b0.$DOMAIN             The ``EXTERNAL-IP`` value of ``kafka-0-lb`` service
+   b1.$DOMAIN             The ``EXTERNAL-IP`` value of ``kafka-1-lb`` service
+   b2.$DOMAIN             The ``EXTERNAL-IP`` value of ``kafka-2-lb`` service
+   controlcenter.$DOMAIN  The ``EXTERNAL-IP`` value of ``controlcenter-bootstrap-lb`` service
+   ksqldb.$DOMAIN         The ``EXTERNAL-IP`` value of ``ksqldb-bootstrap-lb`` service
+   connect.$DOMAIN        The ``EXTERNAL-IP`` value of ``connect-bootstrap-lb`` service
+   schemaregistry.$DOMAIN The ``EXTERNAL-IP`` value of ``schemaregistry-bootstrap-lb`` service
+   ====================== ====================================================================
 
 ========
 Validate

@@ -1,5 +1,5 @@
-Deploy non-secure Confluent Platform
-====================================
+Deploy Confluent Platform
+=========================
 
 In this workflow scenario, you'll set up a simple non-secure (no authn, authz or
 encryption) Confluent Platform, consisting of all components.
@@ -174,9 +174,9 @@ Use Control Center to monitor the Confluent Platform, and see the created topic 
 
 #. Set up port forwarding to Control Center web UI from local machine:
 
-::
+  ::
 
-  kubectl port-forward controlcenter-0 9021:9021
+    kubectl port-forward controlcenter-0 9021:9021
 
 #. Log into Control Center and view the brokers, and the created topic. See that messages are being produced to this topic.
 

@@ -36,6 +36,10 @@ spec:
   image:
     application: confluentinc/cp-server-connect-operator:6.0.0.0
     init: confluentinc/cp-init-container-operator:6.0.0.0
+  dependencies:
+    kafka:
+      bootstrapEndpoint: kafka:9071
+
 ---
 apiVersion: platform.confluent.io/v1beta1
 kind: KsqlDB

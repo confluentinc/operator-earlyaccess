@@ -174,9 +174,9 @@ Use Control Center to monitor the Confluent Platform, and see the created topic 
 
 #. Set up port forwarding to Control Center web UI from local machine:
 
-  ::
+   ::
 
-    kubectl port-forward controlcenter-0 9021:9021
+     kubectl port-forward controlcenter-0 9021:9021
 
 #. Log into Control Center and view the brokers, and the created topic. See that messages are being produced to this topic.
 

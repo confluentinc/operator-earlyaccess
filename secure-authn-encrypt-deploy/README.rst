@@ -81,7 +81,7 @@ In this tutorial, you will deploy a secure Zookeeper, Kafka and Control Center,
 and the rest of Confluent Platform components as shown below:
 
 .. figure:: ../images/confluent-platform-security-deployment.png
-   :width: 300px
+   :width: 400px
    
 To support the above deployment scenario, you need to provide the following
 credentials:
@@ -272,9 +272,9 @@ and data.
 
 #. Set up port forwarding to Control Center web UI from local machine:
 
-  ::
+   ::
 
-    kubectl port-forward controlcenter-0 9021:9021
+     kubectl port-forward controlcenter-0 9021:9021
 
 #. Log into Control Center and view the brokers, and the created topic. See that messages are being produced to this topic.
 

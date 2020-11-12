@@ -47,13 +47,15 @@ the tutorial files:
 
 ::
    
-  export TUTORIAL_HOME=<Tutorial directory>/secure-authz-encrypt-deploy
+  export TUTORIAL_HOME=<Tutorial directory>/secure-authn-encrypt-deploy
 
 =========================
 Deploy Confluent Operator
 =========================
 
-The assumption is that you’ve set up Early Access credentials following <link>.
+The assumption is that you’ve set up Early Access credentials following `the
+instruction
+<https://github.com/confluentinc/operator-earlyaccess/blob/master/README.md>`__.
 
 #. Install Confluent Operator using Helm:
 
@@ -81,12 +83,12 @@ In this tutorial, you will deploy a secure Zookeeper, Kafka and Control Center,
 and the rest of Confluent Platform components as shown below:
 
 .. figure:: ../images/confluent-platform-security-deployment.png
-   :width: 400px
+   :width: 300px
    
 To support the above deployment scenario, you need to provide the following
 credentials:
 
-* Root Certificate Authority to auto-generated certificates
+* Root Certificate Authority to auto-generate certificates
 
 * Authentication credentials for Zookeeper, Kafka, and Control Center
 
@@ -97,42 +99,42 @@ Confluent Operator provides auto-generated certificates for Confluent Platform
 components to use for inter-component TLS. You'll need to generate and provide a
 Root Certificate Authority (CA).
 
-#. Generate a CA pair to use:
+#. Generate a CA pair to use in this tutorial:
 
    ::
 
-     openssl genrsa -out ca-key.pem 2048
+     openssl genrsa -out $TUTORIAL_HOME/ca-key.pem 2048
     
    ::
 
-     openssl req -new -key ca-key.pem -x509 \
+     openssl req -new -key $TUTORIAL_HOME/ca-key.pem -x509 \
        -days 1000 \
-       -out ca.pem \
+       -out $TUTORIAL_HOME/ca.pem \
        -subj "/C=US/ST=CA/L=MountainView/O=Confluent/OU=Opeator/CN=TestCA"
 
 #. Create a Kuebernetes secret for inter-component TLS:
 
    ::
 
-     kubectl create secret tls ca-pair-sslcerts --cert=ca.pem --key=ca-key.pem
+     kubectl create secret tls ca-pair-sslcerts \
+       --cert=$TUTORIAL_HOME/ca.pem \
+       --key=$TUTORIAL_HOME/ca-key.pem
   
 Provide authentication credentials
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Create a Kubernetes secret object that contains file based properties. These
-files are in the format that each respective Confluent component requires for
-authentication credentials.
-
-#. Create secrets object for Zookeeper, Kafka, and Control Center:
+Create a Kubernetes secret object for Zookeeper, Kafka, and Control Center. This
+secret object contains file based properties. These files are in the format that
+each respective Confluent component requires for authentication credentials.
 
    ::
 
      kubectl create secret generic credential \
-     --from-file=plain-users.json=creds-kafka-sasl-users.json \
-     --from-file=digest-users.json=creds-zookeeper-sasl-digest-users.json \
-     --from-file=digest.txt=creds-kafka-zookeeper-credentials.txt \
-     --from-file=plain.txt=creds-client-kafka-sasl-user.txt \
-     --from-file=basic.txt=creds-control-center-users.txt
+     --from-file=plain-users.json=$TUTORIAL_HOME/creds-kafka-sasl-users.json \
+     --from-file=digest-users.json=$TUTORIAL_HOME/creds-zookeeper-sasl-digest-users.json \
+     --from-file=digest.txt=$TUTORIAL_HOME/creds-kafka-zookeeper-credentials.txt \
+     --from-file=plain.txt=$TUTORIAL_HOME/creds-client-kafka-sasl-user.txt \
+     --from-file=basic.txt=$TUTORIAL_HOME/creds-control-center-users.txt
 
 In this tutorial, we use one credential for authenticating all client and server
 communication to Kafka brokers. In production scenarios, you'll want to specify
@@ -222,7 +224,7 @@ a Kubernetes secret that client applications can use.
    
      kubectl describe kafka
   
-#. Copy the internal client configs - Internal.Client - from Kafka status, add credentials:
+#. Copy the internal client configs - ``Internal.Client`` - from Kafka status, add credentials:
   
    ::
    

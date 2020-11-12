@@ -57,6 +57,8 @@ This documentation is organized by scenario workflows. Clone this repo to get th
   * Edit a topic
   * Delete a topic
 
+.. _ea-credentials:
+
 ==================================
 Configure Early Access credentials
 ==================================
@@ -91,6 +93,8 @@ The Confluent Operator itself is packaged as a Helm Chart.
        https://confluent.jfrog.io/confluent/helm-cloud \
        --username $USER \
        --password $APIKEY
+
+.. _download_tutorials:
 
 ============================================
 Download Confluent Operator tutorial package

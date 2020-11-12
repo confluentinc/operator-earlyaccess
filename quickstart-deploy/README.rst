@@ -58,7 +58,7 @@ the tutorial files:
 Deploy Confluent Operator
 =========================
 
-The assumption is that you’ve set up Early Access credentials following <link>.
+#. Set up Early Access credentials as described in :ref:`ea-credentials`.
 
 #. Install Confluent Operator through Helm:
 

@@ -83,7 +83,7 @@ In this tutorial, you will deploy a secure Zookeeper, Kafka and Control Center,
 and the rest of Confluent Platform components as shown below:
 
 .. figure:: ../images/confluent-platform-security-deployment.png
-   :width: 300px
+   :width: 200px
    
 To support the above deployment scenario, you need to provide the following
 credentials:

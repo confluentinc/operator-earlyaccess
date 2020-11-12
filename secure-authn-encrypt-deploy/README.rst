@@ -55,7 +55,7 @@ Deploy Confluent Operator
 
 The assumption is that you’ve set up Early Access credentials following `the
 instruction
-<https://github.com/confluentinc/operator-earlyaccess/blob/master/README.md>`__.
+<https://github.com/confluentinc/operator-earlyaccess/blob/master/README.rst>`__.
 
 #. Install Confluent Operator using Helm:
 

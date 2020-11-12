@@ -16,7 +16,7 @@ Get early access by registering interest here: <link to form>
 
 The assumption is that you understand Kubernetes and Confluent Platform concepts:
 
-* Learn about `Kubernetes <https://kubernetes.io/docs/home>`__`.
+* Learn about `Kubernetes <https://kubernetes.io/docs/home>`__.
 * Lean about `Confluent Platform <https://docs.confluent.io>`__.
 
 To use this Confluent Operator Early Access, you’ll need:

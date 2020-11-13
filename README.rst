@@ -100,7 +100,7 @@ The Confluent Operator itself is packaged as a Helm Chart.
 Download Confluent Operator tutorial package
 ============================================
 
-Download the tutorial package:
+Download the tutorial package from the Git Hub repo:
 
 ::
 

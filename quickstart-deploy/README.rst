@@ -80,12 +80,12 @@ You install Confluent Platform components as custom resources (CRs).
 
 You can configure all Confluent Platform components as custom resources. In this
 tutorial, you will configure all components in a single file and deploy all
-compoents with one ``kubectl apply`` command.
+components with one ``kubectl apply`` command.
 
 The entire Confluent Platform is configured in one configuration file:
 ``$TUTORIAL_HOME/confluent-platform.yaml``
 
-In this configuration file, there is a Custom Resource configuration spec for
+In this configuration file, there is a custom Resource configuration spec for
 each Confluent Platform component - replicas, image to use, resource
 allocations.
 
@@ -143,13 +143,13 @@ app.
 
 The producer app is packaged and deployed as a pod on Kubernetes. The required
 topic is defined as a KafkaTopic custom resource in
-``$TUTORIAL_HOME/producer-app-data.yaml``.
+``$TUTORIAL_HOME/secure-producer-app-data.yaml``.
 
-The ``$TUTORIAL_HOME/producer-app-data.yaml`` defines ``elastic-0`` topic as
-follow:
+The ``$TUTORIAL_HOME/secure-producer-app-data.yaml`` defines the ``elastic-0``
+topic as follows:
 
 ::
-  
+
   apiVersion: platform.confluent.io/v1beta1
   kind: KafkaTopic
   metadata:
@@ -178,7 +178,13 @@ Use Control Center to monitor the Confluent Platform, and see the created topic 
 
      kubectl port-forward controlcenter-0 9021:9021
 
-#. Log into Control Center and view the brokers, and the created topic. See that messages are being produced to this topic.
+#. Browse to Control Center:
+
+   ::
+   
+     http://localhost:9021
+
+#. Check that the ``elastic-0`` topic was created and that messages are being produced to the topic.
 
 =========
 Tear Down

@@ -87,9 +87,9 @@ Deploy Confluent Operator
    
      kubectl get pods
      
-================================
-Configure Confluent Platform CRs
-================================
+============================
+Configure Confluent Platform
+============================
 
 You install Confluent Platform components as custom resources (CRs). 
 
@@ -222,7 +222,8 @@ In a single CR configuration file, you do all of the following:
 * Deploy the producer app.
 * Create a topic for it to write to.
 
-The ``$TUTORIAL_HOME/producer-app-data.yaml`` defines ``elastic-0`` topic as follow:
+The ``$TUTORIAL_HOME/producer-app-data.yaml`` defines the ``elastic-0`` topic as
+follows:
 
 ::
   
@@ -254,7 +255,7 @@ Use Control Center to monitor the Confluent Platform, and see the created topic 
    
      http://$NPHOST:30200
 
-#. Log in to Control Center and view the brokers and the created topic. See that messages are being produced to the elastic-0 topic.
+#. Check that the ``elastic-0`` topic was created and that messages are being produced to the topic.
 
 =========
 Tear Down

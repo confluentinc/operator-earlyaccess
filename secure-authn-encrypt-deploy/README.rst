@@ -127,14 +127,13 @@ Create a Kubernetes secret object for Zookeeper, Kafka, and Control Center. This
 secret object contains file based properties. These files are in the format that
 each respective Confluent component requires for authentication credentials.
 
-   ::
-
-     kubectl create secret generic credential \
-     --from-file=plain-users.json=$TUTORIAL_HOME/creds-kafka-sasl-users.json \
-     --from-file=digest-users.json=$TUTORIAL_HOME/creds-zookeeper-sasl-digest-users.json \
-     --from-file=digest.txt=$TUTORIAL_HOME/creds-kafka-zookeeper-credentials.txt \
-     --from-file=plain.txt=$TUTORIAL_HOME/creds-client-kafka-sasl-user.txt \
-     --from-file=basic.txt=$TUTORIAL_HOME/creds-control-center-users.txt
+::
+  kubectl create secret generic credential \
+  --from-file=plain-users.json=$TUTORIAL_HOME/creds-kafka-sasl-users.json \
+  --from-file=digest-users.json=$TUTORIAL_HOME/creds-zookeeper-sasl-digest-users.json \
+  --from-file=digest.txt=$TUTORIAL_HOME/creds-kafka-zookeeper-credentials.txt \
+  --from-file=plain.txt=$TUTORIAL_HOME/creds-client-kafka-sasl-user.txt \
+  --from-file=basic.txt=$TUTORIAL_HOME/creds-control-center-users.txt
 
 In this tutorial, we use one credential for authenticating all client and server
 communication to Kafka brokers. In production scenarios, you'll want to specify
@@ -205,11 +204,11 @@ Deploy Confluent Platform
    
      kubectl get confluent
 
-#. Get the status of any component. For example, to check Kafka:
+#. Get the status of any component. For example, to check Control Center:
 
    ::
    
-     kubectl describe kafka
+     kubectl describe controlcenter
 
 =============================
 Provide client configurations
@@ -218,13 +217,22 @@ Provide client configurations
 You'll need to provide the client configurations to use. This can be provided as
 a Kubernetes secret that client applications can use.
 
-#. Get status:
+#. Get the status of Kafka:
 
    ::
    
      kubectl describe kafka
   
-#. Copy the internal client configs - ``Internal.Client`` - from Kafka status, add credentials:
+#. In the output of the previous command, validate the internal client config:
+
+   ::
+   
+     Listeners:
+       Internal:
+         Authentication Type: plain
+         Client: bootstrap.servers=kafka.confluent.svc.cluster.local:9071
+
+#. Create the ``kafka.properties`` file in $TUTORIAL_HOME. Add the above endpoint and the credentials as follows:
   
    ::
    
@@ -235,14 +243,12 @@ a Kubernetes secret that client applications can use.
      ssl.truststore.location=/mnt/sslcerts/truststore.jks
      ssl.truststore.password=mystorepassword
 
-#. Take the client properties and create a configuration secret for client applications to use:
+#. Create a configuration secret for client applications to use:
 
    ::
 
-     vi kafka.properties
-
      kubectl create secret generic kafka-client-config-secure \
-       --from-file=kafka.properties \
+       --from-file=$TUTORIAL_HOME/kafka.properties
   
 ========
 Validate
@@ -278,7 +284,13 @@ and data.
 
      kubectl port-forward controlcenter-0 9021:9021
 
-#. Log into Control Center and view the brokers, and the created topic. See that messages are being produced to this topic.
+#. Browse to Control Center and log in as admin with the ``Developer1`` password:
+
+   ::
+   
+     https://localhost:9021
+
+#. Check that the ``elastic-0`` topic was created and that messages are being produced to the topic.
 
 =========
 Tear down

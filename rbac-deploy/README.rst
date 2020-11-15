@@ -145,7 +145,7 @@ Deploy Confluent Platform
 
    ::
 
-     kubectl apply -f $TUTORIAL_HOME/confluent-platform-secure.yaml
+     kubectl apply -f $TUTORIAL_HOME/confluent-platform-rbac-secure.yaml
 
 #. Check that all Confluent Platform resources are deployed:
 

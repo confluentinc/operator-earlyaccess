@@ -158,3 +158,29 @@ Deploy Confluent Platform
    ::
    
      kubectl describe controlcenter
+
+=======================
+Configure Role Bindings
+=======================
+
+#. Set up port forwarding
+
+   ::
+   
+     kubectl -n confluent port-forward kafka-0 8090:8091
+
+#. MDS commands
+
+   ::
+   
+     confluent login --url http://localhost:8090
+
+You should be able to log in.
+
+#. Get Kafka cluster id
+
+   ::
+   
+     confluent cluster describe --url http://localhost:8090
+     export KAFKA_ID=____
+

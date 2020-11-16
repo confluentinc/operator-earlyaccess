@@ -40,9 +40,9 @@ instruction
      
      kubectl get pods
 
-=========================
+===============
 Deploy OpenLDAP
-=========================
+===============
 
 This repo includes a Helm chart for OpenLdap (https://github.com/osixia/docker-openldap) 
 The chart values.yaml includes the set of principal definitions that are needed for Confluent Platform to run with RBAC.
@@ -169,18 +169,57 @@ Configure Role Bindings
    
      kubectl -n confluent port-forward kafka-0 8090:8091
 
+#. Set up DNS access from your local machine
+
+   ::
+   
+     vi /etc/hosts
+     # Add Kafka URL <> localhost mapping
+     127.0.0.1	kafka.confluent.svc.cluster.local
+
 #. MDS commands
 
    ::
    
-     confluent login --url http://localhost:8090
-
-You should be able to log in.
+     confluent login --url https://kafka.confluent.svc.cluster.local:8090 --ca-cert-path $TUTORIAL_HOME/ca.pem
+     # Log in with superuser credentials - user: kafka and pass: kafka-secret
 
 #. Get Kafka cluster id
 
    ::
    
-     confluent cluster describe --url http://localhost:8090
+     curl -ik https://kafka.confluent.svc.cluster.local:8090/v1/metadata/id 
+     # Take the id value and set an environment variable as below:
      export KAFKA_ID=____
+
+#. Create Control Center Role Binding
+
+   ::
+     confluent iam rolebinding create \
+     --principal User:c3 \
+     --role SystemAdmin \
+     --kafka-cluster-id $KAFKA_ID
+
+========
+Validate
+========
+
+Validate in Control Center
+^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Use Control Center to monitor the Confluent Platform, and see the created topic
+and data.
+
+#. Set up port forwarding to Control Center web UI from local machine:
+
+   ::
+
+     kubectl port-forward controlcenter-0 9021:9021
+
+#. Browse to Control Center and log in as admin with the ``Developer1`` password:
+
+   ::
+   
+     https://localhost:9021
+
 

@@ -130,6 +130,7 @@ secret object contains file based properties. These files are in the format that
 each respective Confluent component requires for authentication credentials.
 
 ::
+
   kubectl create secret generic credential \
   --from-file=plain-users.json=$TUTORIAL_HOME/creds-kafka-sasl-users.json \
   --from-file=digest-users.json=$TUTORIAL_HOME/creds-zookeeper-sasl-digest-users.json \

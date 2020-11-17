@@ -8,7 +8,7 @@ Watch the walkthrough: `Secure Deploy Demonstration <https://youtu.be/gC28r-qLbA
 
 Before you begin this tutorial:
 
-* `Set up the prerequisites <https://github.com/confluentinc/operator-earlyaccess#download-confluent-operator-tutorial-package>`__.
+* `Set up the prerequisites <https://github.com/confluentinc/operator-earlyaccess#pre-requisites>`__.
 
 * `Configure the Early Access credentials <https://github.com/confluentinc/operator-earlyaccess#configure-early-access-credentials>`__.
 

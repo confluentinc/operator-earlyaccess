@@ -16,8 +16,6 @@ To complete this scenario, you'll follow these steps:
 
 #. Deploy Confluent Platform.
 
-#. Deploy the Producer application.
-
 #. Tear down Confluent Platform.
 
 =========================
@@ -232,4 +230,31 @@ and data.
    
      https://localhost:9021
 
+=========
+Tear down
+=========
 
+::
+
+  kubectl delete -f confluent-platform-rbac-secure.yaml
+
+::
+
+  kubectl delete secret mds-token
+  kubectl delete secret mds-client
+
+::
+
+  kubectl delete secret credential
+
+::
+
+  kubectl delete secret ca-pair-sslcerts
+
+::
+
+  helm delete operator
+  
+::
+  
+  kubectl delete ns confluent

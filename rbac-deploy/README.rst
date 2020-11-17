@@ -121,15 +121,14 @@ Create a Kubernetes secret object for Zookeeper, Kafka, and Control Center. This
 secret object contains file based properties. These files are in the format that
 each respective Confluent component requires for authentication credentials.
 
-   ::
-
-     kubectl create secret generic credential -n confluent \
-      --from-file=plain-users.json=$TUTORIAL_HOME/creds-kafka-sasl-users.json \
-      --from-file=digest-users.json=$TUTORIAL_HOME/creds-zookeeper-sasl-digest-users.json \
-      --from-file=digest.txt=$TUTORIAL_HOME/creds-kafka-zookeeper-credentials.txt \
-      --from-file=plain.txt=$TUTORIAL_HOME/creds-client-kafka-sasl-user.txt \
-      --from-file=basic.txt=$TUTORIAL_HOME/creds-control-center-users.txt \
-      --from-file=ldap.txt=$TUTORIAL_HOME/ldap.txt
+::
+  kubectl create secret generic credential -n confluent \
+   --from-file=plain-users.json=$TUTORIAL_HOME/creds-kafka-sasl-users.json \
+   --from-file=digest-users.json=$TUTORIAL_HOME/creds-zookeeper-sasl-digest-users.json \
+   --from-file=digest.txt=$TUTORIAL_HOME/creds-kafka-zookeeper-credentials.txt \
+   --from-file=plain.txt=$TUTORIAL_HOME/creds-client-kafka-sasl-user.txt \
+   --from-file=basic.txt=$TUTORIAL_HOME/creds-control-center-users.txt \
+   --from-file=ldap.txt=$TUTORIAL_HOME/ldap.txt
 
 In this tutorial, we use one credential for authenticating all client and server
 communication to Kafka brokers. In production scenarios, you'll want to specify
@@ -137,13 +136,12 @@ different credentials for each of them.
 
 Create Kubernetes secret objects for MDS.
 
-   ::
+::
 
-     kubectl create secret generic mds-token --from-file=mdsPublicKey.pem=$TUTORIAL_HOME/mds-publickey.txt --from-file=mdsTokenKeyPair.pem=$TUTORIAL_HOME/mds-tokenkeypair.txt
-  
-   ::
+  kubectl create secret generic mds-token --from-file=mdsPublicKey.pem=$TUTORIAL_HOME/mds-publickey.txt --from-file=mdsTokenKeyPair.pem=$TUTORIAL_HOME/mds-tokenkeypair.txt
+::
 
-     kubectl create secret generic mds-client --from-file=bearer.txt=$TUTORIAL_HOME/bearer.txt
+  kubectl create secret generic mds-client --from-file=bearer.txt=$TUTORIAL_HOME/bearer.txt
 
 =========================
 Deploy Confluent Platform
@@ -171,13 +169,13 @@ Deploy Confluent Platform
 Configure Role Bindings
 =======================
 
-#. Set up port forwarding
+#. Set up port forwarding:
 
    ::
    
      kubectl -n confluent port-forward kafka-0 8090:8091
 
-#. Set up DNS access from your local machine
+#. Set up DNS access from your local machine:
 
    ::
    
@@ -185,14 +183,14 @@ Configure Role Bindings
      # Add Kafka URL <> localhost mapping
      127.0.0.1	kafka.confluent.svc.cluster.local
 
-#. MDS commands
+#. MDS commands:
 
    ::
    
      confluent login --url https://kafka.confluent.svc.cluster.local:8090 --ca-cert-path $TUTORIAL_HOME/ca.pem
      # Log in with superuser credentials - user: kafka and pass: kafka-secret
 
-#. Get Kafka cluster id
+#. Get Kafka cluster id:
 
    ::
    
@@ -200,9 +198,10 @@ Configure Role Bindings
      # Take the id value and set an environment variable as below:
      export KAFKA_ID=____
 
-#. Create Control Center Role Binding
+#. Create Control Center Role Binding:
 
    ::
+   
      confluent iam rolebinding create \
      --principal User:c3 \
      --role SystemAdmin \

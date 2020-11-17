@@ -25,8 +25,8 @@ The documentation is organized as scenario workflows. Clone this repo to get the
 * `Deploy simple non-secure Confluent Platform <./quickstart-deploy>`_
 * `Deploy Confluent Platform with encryption and authentication <./secure-authn-encrypt-deploy>`_
 * `Deploy Confluent Platform with RBAC authorization <./rbac-deploy>`_
-* `Deploy Confluent Platform with external access through Load Balancer <external-access-load-balancer>`_
-* `Deploy Confluent Platform with external access through NodePorts <external-access-nodeport>`_
+* `Deploy Confluent Platform with external access through Load Balancer <external-access-load-balancer-deploy>`_
+* `Deploy Confluent Platform with external access through NodePorts <external-access-nodeport-deploy>`_
 
 .. _ea-credentials:
 

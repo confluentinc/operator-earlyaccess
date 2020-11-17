@@ -1,23 +1,40 @@
 Confluent Operator Early Access
 ===============================
 
-The next version of Confluent Operator introduces a new Kubernetes-native
-interface, including:
+The next version of Confluent Operator offers a Kubernetes-native experience, including:
 
 * First class Kubernetes custom resource definitions (CRDs)
-  
-  You do not need Helm to install Confluent Platform components.
-  
 * Config overrides for all Confluent components
 * Auto generated certificates
 * Kubernetes tolerations, pod/node affinity support
 
-Get early access by registering interest here: <link to form>
+Check out the product in action: `Kubernetes-Native DevOps with Confluent Operator <https://www.youtube.com/watch?v=lqoZSs_swVI&feature=youtu.be>`_
 
-The assumption is that you understand Kubernetes and Confluent Platform concepts:
+Get early access by registering interest here: `Confluent Operator Early Access Registration <https://events.confluent.io/confluentoperatorearlyaccess>`_
 
-* Learn about `Kubernetes <https://kubernetes.io/docs/home>`__.
-* Lean about `Confluent Platform <https://docs.confluent.io>`__.
+==================
+Scenario workflows
+==================
+
+The documentation is organized as scenario workflows. Clone this repo to get the files needed for each workflow:
+
+::
+
+  git clone git@github.com:confluentinc/operator-earlyaccess.git
+
+* `Deploy simple non-secure Confluent Platform <./quickstart-deploy>`_
+* `Deploy encryption and authentication for Confluent Platform <./secure-authn-encrypt-deploy>`_
+* `Deploy RBAC authorization for Confluent Platform <./rbac-deploy>`_
+* `Configure external access through Load Balancer <external-access-load-balancer>`_
+* `Configure external access through NodePorts <external-access-nodeport>`_
+
+.. _ea-credentials:
+
+==============
+Pre-requisites
+==============
+
+This Confluent Operator Early Access is compatible with Confluent Platform 1.6.0.
 
 To use this Confluent Operator Early Access, you’ll need:
 
@@ -25,45 +42,9 @@ To use this Confluent Operator Early Access, you’ll need:
 * Helm 3 installed on your local machine
 * Kubectl installed on your local machine
 
-This Confluent Operator Early Access is compatible with:
-
-* Confluent Platform 1.6.0
-
-==================
-Scenario workflows
-==================
-
-This documentation is organized by scenario workflows. Clone this repo to get the files needed for each workflow:
-
-::
-
-  git clone git@github.com:confluentinc/operator-earlyaccess.git
-
-* Deploy simple non-secure Confluent Platform
-* Configure external access through Load Balancer
-* Configure external access through NodePorts
-* Deploy encryption and authentication for Confluent Platform
-* Deploy RBAC for Confluent Platform
-
-  * Configure RBAC for Confluent Platform
-  * Configure and deploy OpenLDAP
-  * Bootstrap role bindings
-  * Validate with sample producer and required rolebindings
-
-* Declaratively manage topics
-  
-  * Configure Topic Operator
-  * Create a topic
-  * Edit a topic
-  * Delete a topic
-
-.. _ea-credentials:
-
 ==================================
 Configure Early Access credentials
 ==================================
-
-The Confluent Operator itself is packaged as a Helm Chart. 
 
 #. For this Early Access program, you will have received an API key (associated with your email address) to the Confluent JFrog Artifactory.
 
@@ -85,7 +66,7 @@ The Confluent Operator itself is packaged as a Helm Chart.
              --docker-password=$APIKEY \
              --docker-email=$EMAIL
 
-#. Add a Helm repo:
+#. The Confluent Operator itself is packaged as a Helm Chart. Add a Helm repo :
 
    ::
 

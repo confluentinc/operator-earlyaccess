@@ -22,7 +22,7 @@ The documentation is organized as scenario workflows. Clone this repo to get the
 
   git clone git@github.com:confluentinc/operator-earlyaccess.git
 
-* `Deploy simple non-secure Confluent Platform <https://github.com/confluentinc/operator-earlyaccess/tree/rohit2b/front-page/quickstart-deploy>`_
+* `Deploy simple non-secure Confluent Platform <./quickstart-deploy>`_
 * Deploy encryption and authentication for Confluent Platform
 * Deploy rbac authorization for Confluent Platform
 * Configure external access through Load Balancer

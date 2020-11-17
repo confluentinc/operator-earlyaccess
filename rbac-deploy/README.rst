@@ -6,7 +6,11 @@ SASL_PLAIN authentication, RBAC authorization, and inter-component TLS.
 
 Before you begin this tutorial:
 
-* Clone the Tutorial repo.
+* `Set up the prerequisites <https://github.com/confluentinc/operator-earlyaccess#pre-requisites>`__.
+
+* `Configure the Early Access credentials <https://github.com/confluentinc/operator-earlyaccess#configure-early-access-credentials>`__.
+
+* `Clone the tutorial repo <https://github.com/confluentinc/operator-earlyaccess#download-confluent-operator-tutorial-package>`__.
 
 To complete this scenario, you'll follow these steps:
 

@@ -7,7 +7,11 @@ access Confluent Platform, including Kafka and other components.
 
 Before you begin this tutorial:
 
-* Clone the Tutorial repo.
+* `Set up the prerequisites <https://github.com/confluentinc/operator-earlyaccess#download-confluent-operator-tutorial-package>`__.
+
+* `Configure the Early Access credentials <https://github.com/confluentinc/operator-earlyaccess#configure-early-access-credentials>`__.
+
+* `Clone the tutorial repo <https://github.com/confluentinc/operator-earlyaccess#download-confluent-operator-tutorial-package>`__.
  
 To complete this tutorial, you'll follow these steps:
 

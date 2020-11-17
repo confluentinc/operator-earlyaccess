@@ -4,9 +4,6 @@ Confluent Operator Early Access
 The next version of Confluent Operator offers a Kubernetes-native experience, including:
 
 * First class Kubernetes custom resource definitions (CRDs)
-  
-  You do not need Helm to install Confluent Platform components.
-  
 * Config overrides for all Confluent components
 * Auto generated certificates
 * Kubernetes tolerations, pod/node affinity support
@@ -15,30 +12,35 @@ Check out the product in action: https://www.youtube.com/watch?v=lqoZSs_swVI&fea
 
 Get early access by registering interest here: https://events.confluent.io/confluentoperatorearlyaccess
 
-This Confluent Operator Early Access is compatible with Confluent Platform 1.6.0.
-
 ==================
 Scenario workflows
 ==================
 
-To use this Confluent Operator Early Access, you’ll need:
-
-* A Kubernetes cluster - any CNCF conformant version
-* Helm 3 installed on your local machine
-* Kubectl installed on your local machine
-
-This documentation is organized by scenario workflows. Clone this repo to get the files needed for each workflow:
+The documentation is organized as scenario workflows. Clone this repo to get the files needed for each workflow:
 
 ::
 
   git clone git@github.com:confluentinc/operator-earlyaccess.git
 
 * Deploy simple non-secure Confluent Platform
+* Deploy encryption and authentication for Confluent Platform
+* Deploy rbac authorization for Confluent Platform
 * Configure external access through Load Balancer
 * Configure external access through NodePorts
-* Deploy encryption and authentication for Confluent Platform
 
 .. _ea-credentials:
+
+==============
+Pre-requisites
+==============
+
+This Confluent Operator Early Access is compatible with Confluent Platform 1.6.0.
+
+To use this Confluent Operator Early Access, you’ll need:
+
+* A Kubernetes cluster - any CNCF conformant version
+* Helm 3 installed on your local machine
+* Kubectl installed on your local machine
 
 ==================================
 Configure Early Access credentials

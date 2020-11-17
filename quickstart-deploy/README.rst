@@ -9,6 +9,8 @@ The goal for this scenario is for you to:
 * Quickly set up the complete Confluent Platform on the Kubernetes.
 * Configure a producer to generate sample data.
 
+Watch the walkthrough: `Quickstart Demonstration <https://youtu.be/qepFNPhrL08>`_
+
 Before you begin this tutorial:
 
 * Clone the Tutorial repo.

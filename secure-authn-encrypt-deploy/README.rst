@@ -4,6 +4,8 @@ Deploy Secure Confluent Platform
 In this workflow scenario, you'll set up secure Confluent Platform clusters with
 SASL_PLAIN authentication, no authorization, and inter-component TLS.
 
+Watch the walkthrough: `Secure Deploy Demonstration <https://youtu.be/gC28r-qLbAs>`_
+
 Before you begin this tutorial:
 
 * Clone the Tutorial repo.

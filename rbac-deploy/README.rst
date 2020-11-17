@@ -47,17 +47,23 @@ Deploy OpenLDAP
 This repo includes a Helm chart for OpenLdap (https://github.com/osixia/docker-openldap) 
 The chart values.yaml includes the set of principal definitions that are needed for Confluent Platform to run with RBAC.
 
-# Deploy OpenLdap
+#. Deploy OpenLdap
 
-helm upgrade --install -f ./openldap/ldaps-rbac.yaml test-ldap ./openldap --namespace confluent
+   ::
 
-# Validate that OpenLDAP is running. Log in to the pod
+     helm upgrade --install -f ./openldap/ldaps-rbac.yaml test-ldap ./openldap --namespace confluent
 
-kubectl exec -it ldap-0 bash -n confluent
+#. Validate that OpenLDAP is running. Log in to the pod
 
-# Run LDAP search command
+   ::
 
-ldapsearch -LLL -x -H ldap://ldap.operator.svc.cluster.local:389 -b 'dc=test,dc=com' -D "cn=mds,dc=test,dc=com" -w 'Developer!'
+     kubectl exec -it ldap-0 bash -n confluent
+
+#. Run LDAP search command
+
+   ::
+
+     ldapsearch -LLL -x -H ldap://ldap.operator.svc.cluster.local:389 -b 'dc=test,dc=com' -D "cn=mds,dc=test,dc=com" -w 'Developer!'
 
 ============================
 Deploy configuration secrets
@@ -117,14 +123,15 @@ Create a Kubernetes secret object for Zookeeper, Kafka, and Control Center. This
 secret object contains file based properties. These files are in the format that
 each respective Confluent component requires for authentication credentials.
 
-::
-  kubectl create secret generic credential -n confluent \
-  --from-file=plain-users.json=$TUTORIAL_HOME/creds-kafka-sasl-users.json \
-  --from-file=digest-users.json=$TUTORIAL_HOME/creds-zookeeper-sasl-digest-users.json \
-  --from-file=digest.txt=$TUTORIAL_HOME/creds-kafka-zookeeper-credentials.txt \
-  --from-file=plain.txt=$TUTORIAL_HOME/creds-client-kafka-sasl-user.txt \
-  --from-file=basic.txt=$TUTORIAL_HOME/creds-control-center-users.txt \
-  --from-file=ldap.txt=$TUTORIAL_HOME/ldap.txt
+   ::
+
+     kubectl create secret generic credential -n confluent \
+      --from-file=plain-users.json=$TUTORIAL_HOME/creds-kafka-sasl-users.json \
+      --from-file=digest-users.json=$TUTORIAL_HOME/creds-zookeeper-sasl-digest-users.json \
+      --from-file=digest.txt=$TUTORIAL_HOME/creds-kafka-zookeeper-credentials.txt \
+      --from-file=plain.txt=$TUTORIAL_HOME/creds-client-kafka-sasl-user.txt \
+      --from-file=basic.txt=$TUTORIAL_HOME/creds-control-center-users.txt \
+      --from-file=ldap.txt=$TUTORIAL_HOME/ldap.txt
 
 In this tutorial, we use one credential for authenticating all client and server
 communication to Kafka brokers. In production scenarios, you'll want to specify
@@ -132,10 +139,13 @@ different credentials for each of them.
 
 Create Kubernetes secret objects for MDS.
 
-::
-  kubectl create secret generic mds-token --from-file=mdsPublicKey.pem=$TUTORIAL_HOME/mds-publickey.txt --from-file=mdsTokenKeyPair.pem=$TUTORIAL_HOME/mds-tokenkeypair.txt
+   ::
+
+     kubectl create secret generic mds-token --from-file=mdsPublicKey.pem=$TUTORIAL_HOME/mds-publickey.txt --from-file=mdsTokenKeyPair.pem=$TUTORIAL_HOME/mds-tokenkeypair.txt
   
-  kubectl create secret generic mds-client --from-file=bearer.txt=$TUTORIAL_HOME/bearer.txt
+   ::
+
+     kubectl create secret generic mds-client --from-file=bearer.txt=$TUTORIAL_HOME/bearer.txt
 
 =========================
 Deploy Confluent Platform

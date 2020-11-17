@@ -23,10 +23,10 @@ The documentation is organized as scenario workflows. Clone this repo to get the
   git clone git@github.com:confluentinc/operator-earlyaccess.git
 
 * `Deploy simple non-secure Confluent Platform <./quickstart-deploy>`_
-* Deploy encryption and authentication for Confluent Platform
-* Deploy rbac authorization for Confluent Platform
-* Configure external access through Load Balancer
-* Configure external access through NodePorts
+* `Deploy encryption and authentication for Confluent Platform <./secure-authn-encrypt-deploy>`_
+* `Deploy rbac authorization for Confluent Platform <./rbac-deploy>`_
+* `Configure external access through Load Balancer <external-access-load-balancer>`_
+* `Configure external access through NodePorts <external-access-nodeport>`_
 
 .. _ea-credentials:
 

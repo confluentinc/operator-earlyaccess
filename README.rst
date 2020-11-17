@@ -8,7 +8,7 @@ The next version of Confluent Operator offers a Kubernetes-native experience, in
 * Auto generated certificates
 * Kubernetes tolerations, pod/node affinity support
 
-Check out the product in action: `test <https://www.youtube.com/watch?v=lqoZSs_swVI&feature=youtu.be>`_
+Check out the product in action: `Kubernetes-Native DevOps with Confluent Operator <https://www.youtube.com/watch?v=lqoZSs_swVI&feature=youtu.be>`_
 
 Get early access by registering interest here: https://events.confluent.io/confluentoperatorearlyaccess
 

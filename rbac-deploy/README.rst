@@ -251,7 +251,7 @@ Configure a role binding
    
      kubectl get provides
      
-   Verify that the ``READY`` column for ``controlcenter-0`` is ``1/1``.
+   The ``READY`` column for ``controlcenter-0`` should have ``1/1``.
 
 ========
 Validate

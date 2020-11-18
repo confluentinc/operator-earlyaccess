@@ -84,7 +84,7 @@ Configure Early Access credentials
              --docker-password=$APIKEY \
              --docker-email=$EMAIL
 
-#. The Confluent Operator itself is packaged as a Helm Chart. Add a Helm repo :
+#. The Confluent Operator itself is packaged as a Helm Chart. Add a Helm repo:
 
    ::
 

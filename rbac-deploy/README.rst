@@ -21,7 +21,15 @@ To complete this scenario, you'll follow these steps:
 
 #. Deploy Confluent Operator.
 
+#. Deploy OpenLDAP.
+
+#. Deploy configuration secrets.
+
 #. Deploy Confluent Platform.
+
+#. Configure a role binding.
+
+#. Validate.
 
 #. Tear down Confluent Platform.
 
@@ -183,6 +191,122 @@ Provide authentication credentials
      kubectl create secret generic mds-client \
        --from-file=bearer.txt=$TUTORIAL_HOME/bearer.txt
 
+========================================
+Review Confluent Platform configurations
+========================================
+
+You install Confluent Platform components as custom resources (CRs). 
+
+The Confluent Platform components are configured in one file for secure
+authentication and encryption for:
+``$TUTORIAL_HOME/confluent-platform-rbac-secure.yaml``
+
+Let's take a look at how these components are configured.
+
+Kafka RBAC configuration
+^^^^^^^^^^^^^^^^^^^^^^^^
+
+::
+
+  apiVersion: platform.confluent.io/v1beta1
+  kind: Kafka
+  metadata:
+    name: kafka
+    namespace: confluent
+  spec:
+    authorization:
+      type: rbac                                                  --- [1]
+      superUsers:                                                 --- [2]
+      - User:kafka
+      - User:ANONYMOUS
+    services:
+      restProxy:                                                  --- [3]
+        enabled: true
+        mds:
+          authentication:
+            type: bearer
+            bearer:
+              secretRef: mds-client                               --- [4]
+      mds:                                                        --- [5]
+        tls:
+          enabled: true                                           --- [6]
+        tokenKeyPair:
+          secretRef: mds-token
+        ldap:
+          address: ldap://ldap.confluent.svc.cluster.local:389    --- [7]
+          authentication:
+            type: simple
+            simple:
+              secretRef: credential                               --- [8]
+          tls:
+            enabled: true
+          configurations:                                         --- [9]
+            groupNameAttribute: cn
+            groupObjectClass: group
+            groupMemberAttribute: member
+            groupMemberAttributePattern: CN=(.*),DC=test,DC=com
+            groupSearchBase: dc=test,dc=com
+            userNameAttribute: cn
+            userMemberOfAttributePattern: CN=(.*),DC=test,DC=com
+            userObjectClass: organizationalRole
+            userSearchBase: dc=test,dc=com
+
+* [1] Enable the RBAC authorization.
+
+* [2] MDS super user. This user bypasses authorization and is authenticated through LDAP.
+
+* [3] REST Proxy is required for RBAC.
+
+* [4] The Kubernetes secret for the MDS key token pair created above.
+
+* [5] MDS is required for RBAC.
+
+* [6] TLS is enabled for MDS in this tutorial.
+
+* [7] URL for the LDAP used in this tutorial, OpenLdap.
+
+* [8] The Kubernetes secret for LDAP credential.
+
+* [9] LDAP settings for this tutorial.
+
+Control Center RBAC configuration
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+::
+
+  ---
+  apiVersion: platform.confluent.io/v1beta1
+  kind: ControlCenter
+  metadata:
+    name: controlcenter
+    namespace: confluent
+  spec:
+    authorization:
+      type: rbac                                                  --- [1]
+    dependencies:
+      mds:                                                        --- [2]
+        endpoint: https://kafka.confluent.svc.cluster.local:8090  --- [3]
+        tokenKeyPair:                
+          secretRef: mds-token                                    --- [4]
+        authentication:
+          type: bearer
+          bearer:
+            secretRef: mds-client                                 --- [5]
+        tls:
+          enabled: true                                           --- [6]
+
+* [1] The RBAC authorization is enabled.
+
+* [2] MDS dependency is required for RBAC.
+
+* [3] The MDS endpoint. This is set to the internal endpoint to MDS in this tutorial.
+
+* [4] The Kubernetes secret for MDS token key pair.
+
+* [5] The Kubernetes secret for MDS credential.
+
+* [6] TLS is enabled for MDS in this tutorial. 
+
 =========================
 Deploy Confluent Platform
 =========================
@@ -289,6 +413,9 @@ Tear down
 ::
 
   kubectl delete secret mds-token
+  
+::
+
   kubectl delete secret mds-client
 
 ::

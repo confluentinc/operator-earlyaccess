@@ -2,7 +2,7 @@ Deploy Secure Confluent Platform
 ================================
 
 In this workflow scenario, you'll set up secure Confluent Platform clusters with
-SASL_PLAIN authentication, no authorization, and inter-component TLS.
+SASL PLAIN authentication, no authorization, and inter-component TLS.
 
 Watch the walkthrough: `Secure Deploy Demonstration <https://youtu.be/gC28r-qLbAs>`_
 
@@ -22,9 +22,13 @@ To complete this scenario, you'll follow these steps:
 
 #. Deploy Confluent Operator.
 
+#. Deploy configuration secrets.
+
 #. Deploy Confluent Platform.
 
 #. Deploy the Producer application.
+
+#. Validate.
 
 #. Tear down Confluent Platform.
 
@@ -142,7 +146,7 @@ authentication and encryption for:
 
 Let's take a look at how these components are configured.
 
-* Configure SASL/Plain authentication for Kafka, with a pointer to the externally managed secrets object for credentials:
+* Configure SASL PLAIN authentication for Kafka, with a pointer to the externally managed secrets object for credentials:
 
   ::
   
@@ -156,7 +160,7 @@ Let's take a look at how these components are configured.
           tls:
             enabled: true
 
-* Configure SASL/Plain authentication to Kafka for other components, using a pointer to the externally managed secrets object for credentials:
+* Configure SASL PLAIN authentication to Kafka for other components, using a pointer to the externally managed secrets object for credentials:
  
   ::
   

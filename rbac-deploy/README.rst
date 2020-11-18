@@ -1,5 +1,5 @@
-Deploy RBAC authorization for Confluent Platform
-================================================
+Deploy Confluent Platform with RBAC authorization
+=================================================
 
 In this workflow scenario, you'll set up secure Confluent Platform clusters with
 SASL PLAIN authentication, role-based access control (RBAC) authorization, and
@@ -69,14 +69,14 @@ RBAC.
 
    ::
 
-     helm upgrade --install -f ./openldap/ldaps-rbac.yaml test-ldap ./openldap --namespace confluent
+     helm upgrade --install -f $TUTORIAL_HOME/openldap/ldaps-rbac.yaml test-ldap ./openldap --namespace confluent
 
 
 #. Validate that OpenLDAP is running:  
    
    ::
 
-     kubectl exec -it ldap-0 -- bash
+     kubectl get pods
 
 #. Log in to the LDAP pod:
 
@@ -84,12 +84,18 @@ RBAC.
 
      kubectl exec -it ldap-0 -- bash
 
-#. Run LDAP search command
+#. Run the LDAP search command:
 
    ::
 
      ldapsearch -LLL -x -H ldap://ldap.confluent.svc.cluster.local:389 -b 'dc=test,dc=com' -D "cn=mds,dc=test,dc=com" -w 'Developer!'
 
+#. Exit out of the LDAP pod:
+
+   ::
+   
+     exit 
+     
 ============================
 Deploy configuration secrets
 ============================
@@ -191,13 +197,9 @@ Deploy Confluent Platform
 
    ::
    
-     kubectl get confluent
-
-#. Get the status of any component. For example, to check the status of Control Center:
-
-   ::
-   
-     kubectl describe controlcenter
+     kubectl get pods
+     
+#. In the output from the previous step, note that the ``READY`` column for ``controlcenter-0`` pod is ``0/1``. The Control Center service cannot be ready until RBAC is configure.
 
 ========================
 Configure a role binding
@@ -242,6 +244,14 @@ Configure a role binding
        --principal User:c3 \
        --role SystemAdmin \
        --kafka-cluster-id $KAFKA_ID
+       
+#. Control Center will restart in 50 seconds. Run the following command to verify that Control Center is up and ready:
+
+   ::
+   
+     kubectl get provides
+     
+   The ``READY`` column for ``controlcenter-0`` should have ``1/1``.
 
 ========
 Validate
@@ -259,7 +269,7 @@ and data.
 
      kubectl port-forward controlcenter-0 9021:9021
 
-#. Browse to Control Center and log in as the ``c3`` user with the ``c3-secret`` password:
+#. Browse to Control Center. You will log in as the ``c3`` user as set in ``$TUTORIAL_HOME/creds-control-center-users.txt``:
 
    ::
    

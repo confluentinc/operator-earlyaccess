@@ -93,6 +93,10 @@ Configure Early Access credentials
        --username $USER \
        --password $APIKEY
 
+   :: 
+   
+     helm repo update
+     
 .. _download_tutorials:
 
 ============================================

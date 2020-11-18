@@ -42,6 +42,24 @@ To use this Confluent Operator Early Access, you’ll need:
 * Helm 3 installed on your local machine
 * Kubectl installed on your local machine
 
+=============================
+Set up the Kubernetes cluster
+=============================
+
+Set up the Kubernetes cluster for this tutorial.
+
+#. Add or get access to a Kubernetes cluster.
+
+#. Create the namespace and set it to the current namespace. In this tutorial, we will deploy Confluent Platform in the ``confluent`` namespace.
+
+   ::
+   
+     kubectl create namespace confluent
+   
+   ::
+
+     kubectl config set-context --current --namespace=confluent
+
 ==================================
 Configure Early Access credentials
 ==================================
@@ -86,5 +104,3 @@ Download the tutorial package from the Git Hub repo:
 ::
 
   git clone git@github.com:confluentinc/operator-earlyaccess.git
-
-

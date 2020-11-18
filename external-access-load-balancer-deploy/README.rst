@@ -9,13 +9,17 @@ Before you begin this tutorial:
 
 * `Set up the prerequisites <https://github.com/confluentinc/operator-earlyaccess#pre-requisites>`__.
 
+* `Create the namespace for the tutorials <https://github.com/confluentinc/operator-earlyaccess#set-up-the-kubernetes-cluster>`__.
+
 * `Configure the Early Access credentials <https://github.com/confluentinc/operator-earlyaccess#configure-early-access-credentials>`__.
 
 * `Clone the tutorial repo <https://github.com/confluentinc/operator-earlyaccess#download-confluent-operator-tutorial-package>`__.
  
 To complete this tutorial, you'll follow these steps:
 
-#. Set up a Kubernetes cluster for this tutorial.
+#. Set up the Kubernetes cluster for this tutorial.
+
+#. Set the current tutorial directory.
 
 #. Deploy Confluent Operator.
 
@@ -31,8 +35,6 @@ Set up a Kubernetes cluster
 
 Set up a Kubernetes cluster for this tutorial.
 
-#. Add or get access to a Kubernetes cluster.
-
 #. Save the Kubernetes cluster domain name. 
  
    In this document, ``$DOMAIN`` will be used to denote your Kubernetes cluster
@@ -41,16 +43,6 @@ Set up a Kubernetes cluster for this tutorial.
    ::
 
      export DOMAIN=<Your Kubernetes cluster domain name>
-
-#. Create the namespace and set it to the current namespace. In this tutorial, we will deploy Confluent Platform in the ``confluent`` namespace.
-
-   ::
-   
-     kubectl create namespace confluent
-   
-   ::
-
-     kubectl config set-context --current --namespace=confluent
 
 #. Create a namespace for the test client to deploy the producer application: 
 
@@ -292,9 +284,4 @@ Shut down Confluent Platform and the data:
 ::
 
   kubectl delete namespace myclient
-
-::
-
-  kubectl delete namespace confluent
-
 

@@ -15,13 +15,15 @@ Before you begin this tutorial:
 
 * `Set up the prerequisites <https://github.com/confluentinc/operator-earlyaccess#pre-requisites>`__.
 
+* `Create the namespace for the tutorials <https://github.com/confluentinc/operator-earlyaccess#set-up-the-kubernetes-cluster>`__.
+
 * `Configure the Early Access credentials <https://github.com/confluentinc/operator-earlyaccess#configure-early-access-credentials>`__.
 
 * `Clone the tutorial repo <https://github.com/confluentinc/operator-earlyaccess#download-confluent-operator-tutorial-package>`__.
 
 To complete this scenario, you'll follow these steps:
 
-#. Set up a Kubernetes cluster for this tutorial.
+#. Set the current tutorial directory.
 
 #. Deploy Confluent Operator.
 
@@ -30,24 +32,6 @@ To complete this scenario, you'll follow these steps:
 #. Deploy the Producer application.
 
 #. Tear down Confluent Platform.
-
-===========================
-Set up a Kubernetes cluster
-===========================
-
-Set up a Kubernetes cluster for this tutorial.
-
-#. Add or get access to a Kubernetes cluster.
-
-#. Create the namespace and set it to the current namespace. In this tutorial, we will deploy Confluent Platform in the ``confluent`` namespace.
-
-   ::
-   
-     kubectl create namespace confluent
-     
-   ::
-
-     kubectl config set-context --current --namespace=confluent
 
 ==================================
 Set the current tutorial directory
@@ -210,6 +194,3 @@ Shut down Confluent Platform and the data:
 
   helm delete operator
   
-::
-
-  kubectl delete namespace confluent

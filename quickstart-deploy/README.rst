@@ -58,7 +58,7 @@ the tutorial files:
 
 ::
    
-  export TUTORIAL_HOME=<Tutorial directory>/secure-authz-encrypt-deploy
+  export TUTORIAL_HOME=<Tutorial directory>/quickstart-deploy
 
 =========================
 Deploy Confluent Operator

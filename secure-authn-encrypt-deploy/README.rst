@@ -329,5 +329,4 @@ Tear down
   
 ::
   
-  kubectl delete ns confluent
-
+  kubectl delete namespace confluent

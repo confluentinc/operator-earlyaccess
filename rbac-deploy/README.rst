@@ -2,7 +2,8 @@ Deploy RBAC authorization for Confluent Platform
 ================================================
 
 In this workflow scenario, you'll set up secure Confluent Platform clusters with
-SASL_PLAIN authentication, RBAC authorization, and inter-component TLS.
+SASL PLAIN authentication, role-based access control (RBAC) authorization, and
+inter-component TLS.
 
 Before you begin this tutorial:
 
@@ -22,6 +23,35 @@ To complete this scenario, you'll follow these steps:
 
 #. Tear down Confluent Platform.
 
+===========================
+Set up a Kubernetes cluster
+===========================
+
+Set up a Kubernetes cluster for this tutorial.
+
+#. Add or get access to a Kubernetes cluster.
+
+#. Create the namespace and set it to the current namespace. In this tutorial, we will deploy Confluent Platform in the ``confluent`` namespace.
+
+   ::
+   
+     kubectl create namespace confluent
+     
+   ::
+
+     kubectl config set-context --current --namespace=confluent
+
+==================================
+Set the current tutorial directory
+==================================
+
+Set the tutorial directory for this tutorial under the directory you downloaded
+the tutorial files:
+
+::
+   
+  export TUTORIAL_HOME=<Tutorial directory>/rbac-deploy
+  
 =========================
 Deploy Confluent Operator
 =========================
@@ -46,8 +76,10 @@ instruction
 Deploy OpenLDAP
 ===============
 
-This repo includes a Helm chart for OpenLdap (https://github.com/osixia/docker-openldap) 
-The chart values.yaml includes the set of principal definitions that are needed for Confluent Platform to run with RBAC.
+This repo includes a Helm chart for `OpenLdap
+<https://github.com/osixia/docker-openldap>`__. The chart ``values.yaml``
+includes the set of principal definitions that Confluent Platform needs for
+RBAC.
 
 #. Deploy OpenLdap
 
@@ -55,17 +87,24 @@ The chart values.yaml includes the set of principal definitions that are needed 
 
      helm upgrade --install -f ./openldap/ldaps-rbac.yaml test-ldap ./openldap --namespace confluent
 
-#. Validate that OpenLDAP is running. Log in to the pod
+
+#. Validate that OpenLDAP is running:  
+   
+   ::
+
+     kubectl exec -it ldap-0 -- bash
+
+#. Log in to the LDAP pod:
 
    ::
 
-     kubectl exec -it ldap-0 bash -n confluent
+     kubectl exec -it ldap-0 -- bash
 
 #. Run LDAP search command
 
    ::
 
-     ldapsearch -LLL -x -H ldap://ldap.operator.svc.cluster.local:389 -b 'dc=test,dc=com' -D "cn=mds,dc=test,dc=com" -w 'Developer!'
+     ldapsearch -LLL -x -H ldap://ldap.confluent.svc.cluster.local:389 -b 'dc=test,dc=com' -D "cn=mds,dc=test,dc=com" -w 'Developer!'
 
 ============================
 Deploy configuration secrets
@@ -114,38 +153,45 @@ Root Certificate Authority (CA).
 
    ::
 
-     kubectl create secret tls ca-pair-sslcerts -n confluent \
+     kubectl create secret tls ca-pair-sslcerts \
        --cert=$TUTORIAL_HOME/ca.pem \
        --key=$TUTORIAL_HOME/ca-key.pem
   
 Provide authentication credentials
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Create a Kubernetes secret object for Zookeeper, Kafka, and Control Center. This
-secret object contains file based properties. These files are in the format that
-each respective Confluent component requires for authentication credentials.
+#. Create a Kubernetes secret object for Zookeeper, Kafka, and Control Center. 
 
-::
-  kubectl create secret generic credential -n confluent \
-   --from-file=plain-users.json=$TUTORIAL_HOME/creds-kafka-sasl-users.json \
-   --from-file=digest-users.json=$TUTORIAL_HOME/creds-zookeeper-sasl-digest-users.json \
-   --from-file=digest.txt=$TUTORIAL_HOME/creds-kafka-zookeeper-credentials.txt \
-   --from-file=plain.txt=$TUTORIAL_HOME/creds-client-kafka-sasl-user.txt \
-   --from-file=basic.txt=$TUTORIAL_HOME/creds-control-center-users.txt \
-   --from-file=ldap.txt=$TUTORIAL_HOME/ldap.txt
+   This secret object contains file based properties. These files are in the
+   format that each respective Confluent component requires for authentication
+   credentials.
 
-In this tutorial, we use one credential for authenticating all client and server
-communication to Kafka brokers. In production scenarios, you'll want to specify
-different credentials for each of them.
+   ::
+   
+     kubectl create secret generic credential \
+      --from-file=plain-users.json=$TUTORIAL_HOME/creds-kafka-sasl-users.json \
+      --from-file=digest-users.json=$TUTORIAL_HOME/creds-zookeeper-sasl-digest-users.json \
+      --from-file=digest.txt=$TUTORIAL_HOME/creds-kafka-zookeeper-credentials.txt \
+      --from-file=plain.txt=$TUTORIAL_HOME/creds-client-kafka-sasl-user.txt \
+      --from-file=basic.txt=$TUTORIAL_HOME/creds-control-center-users.txt \
+      --from-file=ldap.txt=$TUTORIAL_HOME/ldap.txt
 
-Create Kubernetes secret objects for MDS.
+   In this tutorial, we use one credential for authenticating all client and
+   server communication to Kafka brokers. In production scenarios, you'll want
+   to specify different credentials for each of them.
 
-::
+#. Create Kubernetes secret objects for MDS:
 
-  kubectl create secret generic mds-token --from-file=mdsPublicKey.pem=$TUTORIAL_HOME/mds-publickey.txt --from-file=mdsTokenKeyPair.pem=$TUTORIAL_HOME/mds-tokenkeypair.txt
-::
-
-  kubectl create secret generic mds-client --from-file=bearer.txt=$TUTORIAL_HOME/bearer.txt
+   ::
+   
+     kubectl create secret generic mds-token \
+       --from-file=mdsPublicKey.pem=$TUTORIAL_HOME/mds-publickey.txt \
+       --from-file=mdsTokenKeyPair.pem=$TUTORIAL_HOME/mds-tokenkeypair.txt
+   
+   ::
+   
+     kubectl create secret generic mds-client \
+       --from-file=bearer.txt=$TUTORIAL_HOME/bearer.txt
 
 =========================
 Deploy Confluent Platform
@@ -163,53 +209,55 @@ Deploy Confluent Platform
    
      kubectl get confluent
 
-#. Get the status of any component. For example, to check Control Center:
+#. Get the status of any component. For example, to check the status of Control Center:
 
    ::
    
      kubectl describe controlcenter
 
-=======================
-Configure Role Bindings
-=======================
+========================
+Configure a role binding
+========================
 
-#. Set up port forwarding:
-
-   ::
-   
-     kubectl -n confluent port-forward kafka-0 8090:8091
-
-#. Set up DNS access from your local machine:
+#. Set up port forwarding to the MDS server:
 
    ::
    
-     vi /etc/hosts
-     # Add Kafka URL <> localhost mapping
+     kubectl port-forward kafka-0 8090:8090
+
+#. Add the following in your local ``/etc/hosts`` file. This is a workaround for the self-signed certificate we are using in this tutorial.
+
+   ::
+   
      127.0.0.1	kafka.confluent.svc.cluster.local
 
-#. MDS commands:
+#. Log into MDS with the ``kafka`` user and the ``kafka-secret`` password:
 
    ::
    
-     confluent login --url https://kafka.confluent.svc.cluster.local:8090 --ca-cert-path $TUTORIAL_HOME/ca.pem
-     # Log in with superuser credentials - user: kafka and pass: kafka-secret
+     confluent login --url https://kafka.confluent.svc.cluster.local:8090 \
+       --ca-cert-path $TUTORIAL_HOME/ca.pem
 
 #. Get Kafka cluster id:
 
    ::
    
      curl -ik https://kafka.confluent.svc.cluster.local:8090/v1/metadata/id 
-     # Take the id value and set an environment variable as below:
-     export KAFKA_ID=____
+     
+#. Take the id value in the above output and save it as an environment variable:
 
-#. Create Control Center Role Binding:
+   ::
+   
+     export KAFKA_ID=<Kafka cluster id>
+
+#. Create Control Center Role Binding for the ``c3`` user:
 
    ::
    
      confluent iam rolebinding create \
-     --principal User:c3 \
-     --role SystemAdmin \
-     --kafka-cluster-id $KAFKA_ID
+       --principal User:c3 \
+       --role SystemAdmin \
+       --kafka-cluster-id $KAFKA_ID
 
 ========
 Validate
@@ -227,11 +275,14 @@ and data.
 
      kubectl port-forward controlcenter-0 9021:9021
 
-#. Browse to Control Center and log in as admin with the ``Developer1`` password:
+#. Browse to Control Center and log in as the ``c3`` user with the ``c3-secret`` password:
 
    ::
    
      https://localhost:9021
+
+The ``c3`` user has the ``SystemAdmin`` role granted and will have access to the
+cluster and broker information.
 
 =========
 Tear down
@@ -260,4 +311,4 @@ Tear down
   
 ::
   
-  kubectl delete ns confluent
+  kubectl delete namespace confluent

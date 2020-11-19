@@ -62,8 +62,6 @@ spec:
           type: simple
           simple:
             secretRef: credential
-        tls:
-          enabled: true
         configurations:
           groupNameAttribute: cn
           groupObjectClass: group

@@ -238,8 +238,6 @@ Kafka RBAC configuration
             type: simple
             simple:
               secretRef: credential                               --- [8]
-          tls:
-            enabled: true
           configurations:                                         --- [9]
             groupNameAttribute: cn
             groupObjectClass: group

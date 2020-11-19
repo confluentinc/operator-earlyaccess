@@ -42,7 +42,7 @@ the tutorial files:
 
 ::
    
-  export TUTORIAL_HOME=<Tutorial directory>/rbac-deploy
+  export TUTORIAL_HOME=<Tutorial directory>/cp-rbac-deploy
   
 =========================
 Deploy Confluent Operator

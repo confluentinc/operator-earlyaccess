@@ -195,7 +195,7 @@ Provide authentication credentials
 Review Confluent Platform configurations
 ========================================
 
-You install Confluent Platform components as custom resources (CRs). 
+You install Confluent Platform components as custom resources (CRs).
 
 The Confluent Platform components are configured in one file for secure
 authentication and encryption for:
@@ -371,7 +371,7 @@ Configure a role binding
 
    ::
    
-     kubectl get provides
+     kubectl get pods
      
    The ``READY`` column for ``controlcenter-0`` should have ``1/1``.
 

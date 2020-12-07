@@ -293,11 +293,11 @@ Tear down
 
 ::
 
-  kubectl delete -f secure-producer-app-data.yaml
+  kubectl delete -f $TUTORIAL_HOME/secure-producer-app-data.yaml
 
 ::
 
-  kubectl delete -f confluent-platform-secure.yaml
+  kubectl delete -f $TUTORIAL_HOME/confluent-platform-secure.yaml
 
 ::
 

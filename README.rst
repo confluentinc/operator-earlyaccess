@@ -79,7 +79,7 @@ Configure Early Access credentials
    ::
    
      kubectl create secret docker-registry confluent-registry \
-       --docker-server=confluent-docker.jfrog.io \   
+       --docker-server=confluent-docker-internal-early-access-operator-2.jfrog.io \   
        --docker-username=$USER \
              --docker-password=$APIKEY \
              --docker-email=$EMAIL

@@ -16,7 +16,7 @@ the tutorial files:
   export TUTORIAL_HOME=<Tutorial directory>/rackawareness
 
 ===========================================================
-Pre-requisites: Node Labels and Service Account Rolebinging
+Pre-requisites: Node Labels and Service Account Rolebinding
 ===========================================================
 
 The Kubernetes cluster must have Node Labels set. Each zone should have a node label.
@@ -48,7 +48,7 @@ instruction
 
    ::
 
-     helm upgrade --install operator confluentinc/confluent-operator
+     helm upgrade --install operator confluentinc/confluent-operator --set image.registry=confluent-docker-internal-early-access-operator-2.jfrog.io
   
 #. Check that the Confluent Operator pod comes up and is running:
 
@@ -60,7 +60,7 @@ instruction
 Configure and Deploy Confluent Platform
 =========================
 
-Configure rack awareness:
+#. Configure rack awareness - see the example file `rackawareness/confluent-platform.yaml`
 
    ::
 
@@ -70,11 +70,25 @@ Configure rack awareness:
      spec:
        replicas: 6
        rackAssignment:
-         nodeLabels: [failure-domain.beta.kubernetes.io/zone=us-west1-a, failure-domain.beta.kubernetes.io/zone=us-west1-b, failure-domain.beta.kubernetes.io/zone=us-west1-c]
+         nodeLabels: failure-domain.beta.kubernetes.io/zone
        ...
 
-Deploy the Confluent Platform
+#. Deploy the Confluent Platform
 
    ::
+
+  kubectl apply -f $TUTORIAL_HOME/confluent-platform.yaml
+
+#. Check that all Confluent Platform resources are deployed:
+
+   ::
+   
+     kubectl get confluent
+
+#. Get the status of any component. For example, to check Kafka:
+
+   ::
+   
+     kubectl describe kafka
 
      

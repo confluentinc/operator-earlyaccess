@@ -20,7 +20,10 @@ metadata:
 spec:
   replicas: 6
   rackAssignment:
-    nodeLabels: [failure-domain.beta.kubernetes.io/zone=us-west1-a, failure-domain.beta.kubernetes.io/zone=us-west1-b, failure-domain.beta.kubernetes.io/zone=us-west1-c]
+    nodeLabels:
+    - failure-domain.beta.kubernetes.io/zone
+  podTemplate:
+    serviceAccountName: kafka
   image:
     application: confluentinc/cp-server-operator:6.0.0.0
     init: confluentinc/cp-init-container-operator:6.0.0.0

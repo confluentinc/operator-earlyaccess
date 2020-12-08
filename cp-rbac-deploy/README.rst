@@ -406,7 +406,7 @@ Tear down
 
 ::
 
-  kubectl delete -f confluent-platform-rbac-secure.yaml
+  kubectl delete -f $TUTORIAL_HOME/confluent-platform-rbac-secure.yaml
 
 ::
 

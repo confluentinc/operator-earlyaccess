@@ -1,8 +1,12 @@
 Configure Rack Awareness
 =========================
 
-In this workflow scenario, you'll deploy Confluent Platform to a multi-zone Kubernetes cluster,
-with Kafka rack awareness configured.
+In this workflow scenario, you'll deploy Confluent Platform to a multi-zone Kubernetes cluster, with Kafka rack awareness configured.
+
+Each zone will be treated as a rack. Kafka brokers will be round-robin scheduled across the zones. 
+Each Kafka broker will be configured with it's broker.rack setting to the corresponding zone it's scheduled on.
+
+Read more about Kafka rack awareness: `Confluent Docs <https://docs.confluent.io/platform/current/kafka/post-deployment.html#balancing-replicas-across-racks>`__.
 
 ==================================
 Set the current tutorial directory
@@ -19,7 +23,7 @@ the tutorial files:
 Pre-requisites: Node Labels and Service Account Rolebinding
 ===========================================================
 
-The Kubernetes cluster must have Node Labels set. Each zone should have a node label.
+The Kubernetes cluster must have node labels set for the fault domain. The nodes in each zone should have the same node label.
 
 Check the Node Labels:
 
@@ -27,10 +31,9 @@ Check the Node Labels:
 
      kubectl get nodes --show-labels
 
-The Kubernetes cluster must have a service account that is configured with a clusterrole/role that provides 
+Configure your Kubernetes cluster with a service account that is configured with a clusterrole/role that provides 
 get/list access to both the pods and nodes resources.
-
-Kafka pods will curl kubernetes api for the node it is scheduled using the mounted serviceAccountToken.
+This is required as Kafka pods will curl kubernetes api for the node it is scheduled on using the mounted serviceAccountToken.
 
    ::
 
@@ -70,7 +73,11 @@ Configure and Deploy Confluent Platform
      spec:
        replicas: 6
        rackAssignment:
-         nodeLabels: failure-domain.beta.kubernetes.io/zone
+         nodeLabels:
+         - failure-domain.beta.kubernetes.io/zone # <-- The node label that your Kubernetes uses for the rack fault domain
+       podTemplate:
+        serviceAccountName: kafka # <-- The service account with the needed clusterrole/role
+       oneReplicaPerNode: true # <-- Ensures that only one Kafka broker per node is scheduled
        ...
 
 #. Deploy the Confluent Platform

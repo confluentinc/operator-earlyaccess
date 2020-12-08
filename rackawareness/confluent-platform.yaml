@@ -18,7 +18,13 @@ metadata:
   name: kafka
   namespace: confluent
 spec:
-  replicas: 3
+  replicas: 6
+  rackAssignment:
+    nodeLabels:
+    - failure-domain.beta.kubernetes.io/zone
+  podTemplate:
+    serviceAccountName: kafka
+  oneReplicaPerNode: true
   image:
     application: confluentinc/cp-server-operator:6.0.0.0
     init: confluentinc/cp-init-container-operator:6.0.0.0

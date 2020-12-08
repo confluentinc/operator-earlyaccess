@@ -72,7 +72,6 @@ spec:
   dataVolumeCapacity: 10Gi
   dependencies:
     schemaRegistry:
-    #- name: schemaregistry
       url: http://schemaregistry.confluent.svc.cluster.local:8081
     ksqldb:
     - name: ksqldb

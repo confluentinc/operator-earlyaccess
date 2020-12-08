@@ -56,7 +56,7 @@ instruction
 
    ::
 
-     helm upgrade --install operator confluentinc/confluent-operator
+     helm upgrade --install operator confluentinc/confluent-operator --set image.registry=confluent-docker-internal-early-access-operator-2.jfrog.io
   
 #. Check that the Confluent Operator pod comes up and is running:
 

@@ -88,8 +88,8 @@ Configure Early Access credentials
 
    ::
 
-     helm repo add confluentinc \   
-       https://confluent.jfrog.io/confluent/helm-cloud \
+     helm repo add confluentinc_earlyaccess \
+       https://confluent.jfrog.io/confluent/helm-early-access-operator-2 \
        --username $USER \
        --password $APIKEY
 

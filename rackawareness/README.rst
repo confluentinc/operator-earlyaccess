@@ -27,17 +27,17 @@ The Kubernetes cluster must have node labels set for the fault domain. The nodes
 
 Check the Node Labels:
 
-   ::
+::
 
-     kubectl get nodes --show-labels
+  kubectl get nodes --show-labels
 
 Configure your Kubernetes cluster with a service account that is configured with a clusterrole/role that provides 
 get/list access to both the pods and nodes resources.
 This is required as Kafka pods will curl kubernetes api for the node it is scheduled on using the mounted serviceAccountToken.
 
-   ::
+::
 
-     kubectl apply -f rackawareness/service-account-rolebinding.yaml
+  kubectl apply -f rackawareness/service-account-rolebinding.yaml
 
 =========================
 Deploy Confluent Operator
@@ -85,7 +85,7 @@ Configure and Deploy Confluent Platform
 
    ::
 
-  kubectl apply -f $TUTORIAL_HOME/confluent-platform.yaml
+     kubectl apply -f $TUTORIAL_HOME/confluent-platform.yaml
 
 #. Check that all Confluent Platform resources are deployed:
 

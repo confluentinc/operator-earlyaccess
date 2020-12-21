@@ -40,7 +40,7 @@ the tutorial files:
 
 ::
    
-  export TUTORIAL_HOME=<Tutorial directory>/secure-authn-encrypt-deploy
+  export TUTORIAL_HOME=<Tutorial directory>/contolcenter-multi-ksql-connect
 
 =========================
 Deploy Confluent Operator
@@ -54,7 +54,8 @@ instruction
 
    ::
 
-     helm upgrade --install operator confluentinc/confluent-operator --set image.registry=confluent-docker-internal-early-access-operator-2.jfrog.io
+     helm upgrade --install operator confluentinc_earlyaccess/confluent-operator \
+        --set image.registry=confluent-docker-internal-early-access-operator-2.jfrog.io
   
 #. Check that the Confluent Operator pod comes up and is running:
 
@@ -97,7 +98,7 @@ Root Certificate Authority (CA).
      openssl req -new -key $TUTORIAL_HOME/ca-key.pem -x509 \
        -days 1000 \
        -out $TUTORIAL_HOME/ca.pem \
-       -subj "/C=US/ST=CA/L=MountainView/O=Confluent/OU=Opeator/CN=TestCA"
+       -subj "/C=US/ST=CA/L=MountainView/O=Confluent/OU=Operator/CN=TestCA"
 
 #. Create a Kuebernetes Secret for inter-component TLS:
 

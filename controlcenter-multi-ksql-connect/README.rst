@@ -40,7 +40,7 @@ the tutorial files:
 
 ::
    
-  export TUTORIAL_HOME=<Tutorial directory>/contolcenter-multi-ksql-connect
+  export TUTORIAL_HOME=<Tutorial directory>/controlcenter-multi-ksql-connect
 
 =========================
 Deploy Confluent Operator

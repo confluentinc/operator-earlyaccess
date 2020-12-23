@@ -145,7 +145,7 @@ Root Certificate Authority (CA).
      openssl req -new -key $TUTORIAL_HOME/ca-key.pem -x509 \
        -days 1000 \
        -out $TUTORIAL_HOME/ca.pem \
-       -subj "/C=US/ST=CA/L=MountainView/O=Confluent/OU=Opeator/CN=TestCA"
+       -subj "/C=US/ST=CA/L=MountainView/O=Confluent/OU=Operator/CN=TestCA"
 
 #. Create a Kuebernetes secret for inter-component TLS:
 

@@ -1,0 +1,71 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: kafka-client-config
+  namespace: confluent
+type: Opaque
+data:
+  kafka.properties: Ym9vdHN0cmFwLnNlcnZlcnM9a2Fma2EucGxhdGZvcm1vcHMuZGV2LmdjcC5kZXZlbC5jcGRldi5jbG91ZDo0NDMKc2VjdXJpdHkucHJvdG9jb2w9U1NMCnNzbC50cnVzdHN0b3JlLmxvY2F0aW9uPS9tbnQvdHJ1c3RzdG9yZS5qa3MKc3NsLnRydXN0c3RvcmUucGFzc3dvcmQ9bXlzdG9yZXBhc3N3b3JkCg==
+  truststore.jks: "MIIExgIBAzCCBH8GCSqGSIb3DQEHAaCCBHAEggRsMIIEaDCCBGQGCSqGSIb3DQEHBqCCBFUwggRRAgEAMIIESgYJKoZIhvcNAQcBMCkGCiqGSIb3DQEMAQYwGwQUibPQpxRDFEDtHKG5/bhDiL3MBCECAwDDUICCBBBQ2AtzPNuBcj/pUmdB5O5hgB7DJoxUFi/L6xEO7mRLWdhSDuoWftUysfNi5WOM6V+iVDFasD+eVWYKJs4a4HTIvaL2p8iZdxzAELfInT4VbVDWuwFJiDqsjmLW9J99jtFgOtMFDQ9a+nk7nvNagOv7TenGAboXv4IBRbUcfGNn0ClYimUpTM+nsqp4LmihR35x9fMYZPdmJQ6SMiPZMOluhXZkD81E07nH5NFLjGnrkNjyxfZE4mk1JjZ+6czsy7wF4kZ0TfDRNZhC9SP1B7r6d6hky+0tLOWJSV02VlU57FTCVTVhMdXX/KbA20ZDS7lODCf6aG2CncwQAeXtZoDFi5V4g0TuABtdxl64AHtsS0ld3EiZY9aG90+zC0JJMVg962yM1ZvV6mlaMf9AFVu7foDhKLL5G7G0dJ/0g5Xv08liiw+gujdWtFo6UFBoB+j3UQCGbLyD1uDtZwubjRhjlomkPisKTHsQ4iyjuwyE3RnajHGygrk5PIB3peuf2xjfjD1pYB8CHxOyxOJvtfXCFodObx3gGxoLhvjy9vFxljZww9473Vh3RlDDtYLuHjdMzG1REQisraRILptSErCPWOsisnHV/p/fN0XjDtEQDpapDlVm5eVENR+LcBvTlhWNJMZ5hNXxPNNTwqlAA6zqo3A6u7BJApmv4LhLi3cS4yP/iisnjUkdgajx2L1BTagQU3+IVYALT3RtG5EWMaURPH7zFRW+Mtu0DYMs5Wii3MqzU77TJA9V9suMJIiWSo0yyIEYAN5tXrfPabcaccQ0aNHQw2Hg0qhMnDomkUIGfvha2CDcKdV/m7rA6BYTc/K7ZkskecGL7cjSKH2DXa+xgaQ+qwb5vL9Fgv/eAhl/NoKRuDD4KRyKI4Col77puyCtxYXXa0xRQlNZt72UPCDVMlkes5Czk3/21HV7XzqYHE54G80F5tXM5xhVgFGnZoWWeL6K3A4e6Qp83kjyWcI/dXCTmTvxp/2Dr+O0/NK+V9/dKODvTk8GxHdHq0C6ODAtUKbSToa6THjkmfrpuqH5ENcSWjUtsN545jUTamP0T7mEMxlpWUPoKFtXdjDa3T5cvrDAc+e5S7oYhd8+xIOZdbSXIEjb2L2WCMlI1qj+BNEKmSRzY6g5l+B/X92Mhnqga7SN5wIwYr2IzERCzsXw5PZ9etHcgvIJDB8gJ42bbxvNCcaFx2LWd5ECrchSM8URNSnf+osIAOtKSt1udulbeyDZkzBu0RdBaWFzjsbpZsXqb84EUeK4PSPuTFitLf7szIpYZCpn2xsAbKsW75/yNRanQkK8UtVohFDUeGaUbBkY5zKaAe2tRZGYnsObDhXWSvgc2Bureg/u1O3Re1TemjwUhtHtI1oTLtM9/KsrKzA+MCEwCQYFKw4DAhoFAAQUAp6wwYlez1YiSwmPlrxcenygnEsEFJSllfZzxbCfh+13SyFSaKWuzX19AgMBhqA="
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: elastic
+  namespace: confluent 
+spec:
+  serviceName: elastic
+  podManagementPolicy: Parallel
+  replicas: 1
+  selector:
+    matchLabels:
+      app: elastic
+  template:
+    metadata:
+      labels:
+        app: elastic
+    spec:
+      containers:
+      - name: elastic
+        image: confluentinc/cp-kafka:latest
+        command:
+        - /bin/sh
+        - -c
+        - |
+          kafka-producer-perf-test \
+            --topic ${HOSTNAME}  \
+            --record-size 64 \
+            --throughput 1 \
+            --producer.config /mnt/kafka.properties \
+            --num-records 230400
+        volumeMounts:
+        - name: kafka-properties
+          mountPath: /mnt
+          readOnly: true
+        resources:
+          requests:
+            memory: 512Mi # 768Mi
+            cpu: 500m # 1000m
+      volumes:
+        - name: kafka-properties # Create secret with name `kafka-client-config` with client configurations
+          secret:
+            secretName: kafka-client-config
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: elastic
+  namespace: confluent 
+spec:
+  clusterIP: None
+---
+apiVersion: platform.confluent.io/v1beta1
+kind: KafkaTopic
+metadata:
+  name: elastic-0
+  namespace: confluent 
+spec:
+  replicas: 1
+  partitionCount: 1
+  configs:
+    cleanup.policy: "delete"

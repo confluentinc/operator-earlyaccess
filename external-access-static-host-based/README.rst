@@ -100,7 +100,7 @@ allocations.
 Edit the Confluent Platform CR file: ``$TUTORIAL_HOME/confluent-platform.yaml``
 
 Specifically, note that external accesses to Confluent Platform components are
-configured using the host-based static routing.
+configured using host-based static routing.
 
 The Kafka section of the file is set as follow for external access:
 
@@ -117,17 +117,17 @@ The Kafka section of the file is set as follow for external access:
         tls:
           enabled: true
 
-* [1] Set this to the value of ``$DOMAIN``, your Kubernetes cluster domain. You need to provide this value for this tutorial.
+* [1] Set this to the value of ``$DOMAIN``, your Kubernetes cluster domain.
 
 * The prefixes are used for external DNS hostnames. In this tutorial, Kafka bootstrap server will use the default prefix, ``kafka``, and the brokers will use the default prefix, ``b``. 
 
-As Kafka is configured with 3 replicas in this tutorial, the access endpoints of
-Kafka will be:
-
-* kafka.$DOMAIN for the bootstrap server
-* b0.$DOMAIN for the broker #1
-* b1.$DOMAIN for the broker #2
-* b2.$DOMAIN for the broker #3
+  As Kafka is configured with 3 replicas in this tutorial, the access endpoints of
+  Kafka will be:
+  
+  * kafka.$DOMAIN for the bootstrap server
+  * b0.$DOMAIN for the broker #1
+  * b1.$DOMAIN for the broker #2
+  * b2.$DOMAIN for the broker #3
 
 =========================
 Deploy Confluent Platform

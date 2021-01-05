@@ -151,6 +151,28 @@ routing. In this tutorial, we will use Nginx Ingress controller.
         --set tcp.9096="operator/kafka-2-internal:9092" \
         --set tcp.9093="operator/kafka-bootstrap:9092"
        
+================================
+Create a Kafka bootstrap service
+================================
+
+When using staticForPortBasedRouting as externalAccess type, the bootstrap
+endpoint is not configured to access Kafka. 
+
+If you want to have a bootstrap endpoint to access Kafka instead of using each
+broker's endpoint, you need to provide the bootstrap endpoint, create a
+DNS record pointing to Ingress controller load balancer's external IP, and
+define the Ingress rule for it.
+
+Create the Kafka bootstrap service to access Kafka:
+
+::
+
+  kubectl apply -f $TUTORIAL_HOME/kafka-bootstrap-service.yaml
+  
+Note that this bootstrap service will use the port 9093 as set using the ``--set
+tcp.9093="operator/kafka-bootstrap:9092"`` flag while installing the Ingress
+controller in the previous section. 
+
 ======================  
 Create Ingress service
 ======================

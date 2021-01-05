@@ -273,11 +273,35 @@ In a single configuration file, you do all of the following:
       configs:
         cleanup.policy: "delete"
   
-Deploy the producer app:
+#. Generate an encrypted ``kafka.properties`` file content:
 
-::
+   ::
    
-  kubectl apply -f $TUTORIAL_HOME/producer-app-data.yaml
+     echo bootstrap.servers=kafka.$DOMAIN:443 \
+       security.protocol=SSL \
+       ssl.truststore.location=/mnt/truststore.jks \
+       ssl.truststore.password=mystorepassword \ 
+     |base64
+   
+#. Provide the output from the previous step in the 
+   ``$TUTORIAL_HOME/producer-app-data.yaml`` file:
+
+   ::
+   
+     apiVersion: v1
+     kind: Secret
+     metadata:
+       name: kafka-client-config
+       namespace: confluent
+     type: Opaque
+     data:
+       kafka.properties: # Provide the base64-encoded kafka.properties
+
+#. Deploy the producer app:
+
+   ::
+   
+     kubectl apply -f $TUTORIAL_HOME/producer-app-data.yaml
 
 Validate in Control Center
 ^^^^^^^^^^^^^^^^^^^^^^^^^^

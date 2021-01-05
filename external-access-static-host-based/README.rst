@@ -198,7 +198,7 @@ Create an Ingress resource that includes a collection of rules that the Ingress
 control uses to route the inbound traffic to Kafka:
 
 #. In the resource file, ``ingress-service-hostbased.yaml``, replace ``$DOMAIN`` 
-   with the value of your ``$DOMAIN`` and uncomment the ``hosts:`` and ``host:``.
+   with the value of your ``$DOMAIN`` and uncomment the ``hosts:`` and ``host:`` settings.
 
 #. Create the Ingress resource:
 
@@ -280,10 +280,9 @@ In a single configuration file, you do all of the following:
      echo bootstrap.servers=kafka.$DOMAIN:443 \
        security.protocol=SSL \
        ssl.truststore.location=/mnt/truststore.jks \
-       ssl.truststore.password=mystorepassword \ 
-     |base64
+       ssl.truststore.password=mystorepassword | base64
    
-#. Provide the output from the previous step in the 
+#. Provide the output from the previous step for ``kafka.properties`` in the 
    ``$TUTORIAL_HOME/producer-app-data.yaml`` file:
 
    ::

@@ -288,7 +288,7 @@ Use Control Center to monitor the Confluent Platform, and see the created topic 
 
      kubectl port-forward controlcenter-0 9021:9021
 
-#. Browse to `Control Center <https://localhost:9021>`__.
+#. Browse to `Control Center <http://localhost:9021>`__.
 
 #. Check that the ``elastic-0`` topic was created and that messages are being produced to the topic.
 

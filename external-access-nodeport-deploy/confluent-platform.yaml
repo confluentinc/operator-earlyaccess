@@ -32,9 +32,6 @@ spec:
           nodePort:
             host: myoperator2.<Kubernetes cluster domain> 
             nodePortOffset: 30000
-            annotations:
-              foo: bar
-              baz: test
 ---
 apiVersion: platform.confluent.io/v1beta1
 kind: Connect

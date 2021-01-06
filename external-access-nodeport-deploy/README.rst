@@ -49,12 +49,6 @@ Set up a Kubernetes cluster for this tutorial.
      export NPHOST=myoperator2.<Your Kubernetes cluster domain name>
 
 #. Create a firewall rule in your Kubernetes cloud provider to allow the ports used in this tutorial, 30000 through 30500, to be reachable from outside of your Kubernetes cluster.
-
-#. Create a namespace for the test client to deploy the producer application:
-
-   ::
-   
-     kubectl create namespace myclient
      
 ==================================
 Set the current tutorial directory
@@ -146,9 +140,9 @@ Deploy Confluent Platform
 
 #. Deploy Confluent Platform with the above configuration:
 
-::
+   ::
 
-  kubectl apply -f $TUTORIAL_HOME/confluent-platform.yaml
+     kubectl apply -f $TUTORIAL_HOME/confluent-platform.yaml
 
 #. Check that all Confluent Platform resources are deployed:
 
@@ -174,7 +168,7 @@ Add DNS records
 
 Create DNS records for the externally exposed components:
 
-#. Get the node IPs of your cluster. 
+#. Get the node IP addresses of your cluster. 
 
    For example, on Google Cloud, use the following command to retrieve you node IPs:
 
@@ -233,12 +227,34 @@ follows:
     partitionCount: 1
     configs:
       cleanup.policy: "delete"
-  
-Deploy the producer app:
+      
+**To deploy the producer application:**
 
-::
+#. Generate an encrypted ``kafka.properties`` file content:
+
+   ::
    
-  kubectl apply -f $TUTORIAL_HOME/producer-app-data.yaml
+     echo bootstrap.servers=$NPHOST:30000 | base64
+   
+#. Provide the output from the previous step for ``kafka.properties`` in the 
+   ``$TUTORIAL_HOME/producer-app-data.yaml`` file:
+
+   ::
+   
+     apiVersion: v1
+     kind: Secret
+     metadata:
+       name: kafka-client-config
+       namespace: confluent
+     type: Opaque
+     data:
+       kafka.properties: # Provide the base64-encoded kafka.properties
+  
+#. Deploy the producer app:
+
+   ::
+   
+     kubectl apply -f $TUTORIAL_HOME/producer-app-data.yaml
 
 Validate in Control Center
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -271,7 +287,3 @@ Shut down Confluent Platform and the data:
 
   helm delete operator
   
-::
-
-  kubectl delete namespace myclient
-

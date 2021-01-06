@@ -251,6 +251,8 @@ In a single configuration file, you do all of the following:
       configs:
         cleanup.policy: "delete"
   
+**To deploy the producer application:**
+
 #. Generate an encrypted ``kafka.properties`` file content:
 
    ::

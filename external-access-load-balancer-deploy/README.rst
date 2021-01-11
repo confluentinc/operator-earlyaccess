@@ -116,7 +116,7 @@ Component section of the file is set as follows for load balancer access:
     externalAccess:
       type: loadBalancer
       loadBalancer:
-        Domain:          --- [1]
+        domain:          --- [1]
 
 * [1]  Set this to the value of ``$DOMAIN``, Your Kubernetes cluster domain. You need to provide this value for this tutorial.
 

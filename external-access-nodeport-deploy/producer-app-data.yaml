@@ -2,16 +2,16 @@ apiVersion: v1
 kind: Secret
 metadata:
   name: kafka-client-config
-  namespace: myclient 
+  namespace: confluent
 type: Opaque
 data:
-  kafka.properties: Ym9vdHN0cmFwLnNlcnZlcnM9a2Fma2EuY29uZmx1ZW50LnN2Yy5jbHVzdGVyLmxvY2FsOjkwNzEKc2VjdXJpdHkucHJvdG9jb2w9UExBSU5URVhU
+  kafka.properties: # Provide the base64-encoded kafka.properties
 ---
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
   name: elastic
-  namespace: myclient 
+  namespace: confluent 
 spec:
   serviceName: elastic
   podManagementPolicy: Parallel
@@ -54,7 +54,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: elastic
-  namespace: myclient 
+  namespace: confluent 
 spec:
   clusterIP: None
 ---

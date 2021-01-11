@@ -236,9 +236,9 @@ created topic and data.
    
      https://localhost:9021
 
-#. Browse to **ksqlDB** and see two ksqlDB clusters are available for you to manage.
+#. Navigate to **ksqlDB** and see two ksqlDB clusters are available for you to manage.
 
-#. Browse to **Connect** and see two Connect clusters are available for you to manage.
+#. Navigate to **Connect** and see two Connect clusters are available for you to manage.
 
 =========
 Tear down

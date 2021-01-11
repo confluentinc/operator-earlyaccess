@@ -37,7 +37,7 @@ Set up a Kubernetes cluster for this tutorial.
 
 #. Save the Kubernetes cluster domain name. 
  
-   In this document, ``$DOMAIN`` will be used to denote your Kubernetes cluster
+   In this document, ``$DOMAIN`` is used to denote your Kubernetes cluster
    domain name.
   
    ::
@@ -116,7 +116,7 @@ Component section of the file is set as follows for load balancer access:
     externalAccess:
       type: loadBalancer
       loadBalancer:
-        Domain:          --- [1]
+        domain:          --- [1]
 
 * [1]  Set this to the value of ``$DOMAIN``, Your Kubernetes cluster domain. You need to provide this value for this tutorial.
 
@@ -130,11 +130,13 @@ of Kafka will be:
 * b1.$DOMAIN for the broker #2
 * b2.$DOMAIN for the broker #3
 
-The access endpoint of each Confluent Platform component will be:
+The access endpoint of each Confluent Platform component will be: 
 
-<Component CR name>.$DOMAIN
+::
 
-For example, you will access Control Center at:
+  <Component CR name>.$DOMAIN
+
+For example, in a brower, you will access Control Center at:
 
 ::
 
@@ -243,12 +245,34 @@ follows:
     partitionCount: 1
     configs:
       cleanup.policy: "delete"
-  
-Deploy the producer app:
 
-::
+**To deploy the producer application:**
+
+#. Generate an encrypted ``kafka.properties`` file content:
+
+   ::
    
-  kubectl apply -f $TUTORIAL_HOME/producer-app-data.yaml
+     echo bootstrap.servers=kafka.$DOMAN:9092 | base64
+   
+#. Provide the output from the previous step for ``kafka.properties`` in the 
+   ``$TUTORIAL_HOME/producer-app-data.yaml`` file:
+
+   ::
+   
+     apiVersion: v1
+     kind: Secret
+     metadata:
+       name: kafka-client-config
+       namespace: confluent
+     type: Opaque
+     data:
+       kafka.properties: # Provide the base64-encoded kafka.properties
+
+#. Deploy the producer app:
+
+   ::
+   
+     kubectl apply -f $TUTORIAL_HOME/producer-app-data.yaml
 
 Validate in Control Center
 ^^^^^^^^^^^^^^^^^^^^^^^^^^

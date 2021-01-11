@@ -108,3 +108,27 @@ Download the tutorial package from the Git Hub repo:
 ::
 
   git clone git@github.com:confluentinc/operator-earlyaccess.git
+  
+.. _remove_tutorials:
+  
+==============================================
+Remove Confluent Operator tutorial environment
+==============================================
+
+When you finish running the scenarios in the Confluent Operator tutorial
+packages, remove the namespace, the secret, and the Helm repo with the following
+command:
+
+::
+
+  kubectl delete secret docker-registry
+  
+:: 
+
+  helm repo remove confluentinc_earlyaccess
+  
+::
+
+  kubectl delete namespace confluent
+  
+

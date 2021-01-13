@@ -34,7 +34,7 @@ The documentation is organized as scenario workflows. Clone this repo to get the
 Pre-requisites
 ==============
 
-This Confluent Operator Early Access is compatible with Confluent Platform 1.6.0.
+This Confluent Operator Early Access is compatible with Confluent Platform 6.0.
 
 To use this Confluent Operator Early Access, you’ll need:
 

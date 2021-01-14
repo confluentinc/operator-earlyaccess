@@ -16,17 +16,23 @@ Get early access by registering interest here: `Confluent Operator Early Access 
 Scenario workflows
 ==================
 
-The documentation is organized as scenario workflows. Clone this repo to get the files needed for each workflow:
+Clone the following repo to get the files needed for each workflow:
 
 ::
 
   git clone git@github.com:confluentinc/operator-earlyaccess.git
+  
+The documentation is organized as scenario workflows:
 
 * `Deploy simple non-secure Confluent Platform <./quickstart-deploy>`_
 * `Deploy Confluent Platform with encryption and authentication <./secure-authn-encrypt-deploy>`_
 * `Deploy Confluent Platform with RBAC authorization <./cp-rbac-deploy>`_
-* `Deploy Confluent Platform with external access through Load Balancer <external-access-load-balancer-deploy>`_
-* `Deploy Confluent Platform with external access through NodePorts <external-access-nodeport-deploy>`_
+* `Deploy Confluent Platform with external access through Load Balancer <./external-access-load-balancer-deploy>`_
+* `Deploy Confluent Platform with external access through NodePorts <./external-access-nodeport-deploy>`_
+* `Deploy Confluent Platform with external access using static host-based routing <./external-access-static-host-based>`_
+* `Deploy Confluent Platform with external access using static port-based routing <./external-access-static-port-based>`_
+* `Deploy Confluent Platform to a multi-zone Kubernetes cluster, with Kafka rack awareness configured <./rackawareness>`_
+* `Deploy Confluent Platform to connect and monitor multiple Connect and ksqlDB clusters <./controlcenter-multi-ksql-connect>`_
 
 .. _ea-credentials:
 

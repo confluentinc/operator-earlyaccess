@@ -279,7 +279,7 @@ and data.
 
      kubectl port-forward controlcenter-0 9021:9021
 
-#. Browse to Control Center and log in as admin with the ``Developer1`` password:
+#. Browse to Control Center and log in as the ``admin`` user with the ``Developer1`` password:
 
    ::
    

@@ -70,7 +70,7 @@ Root Certificate Authority (CA).
 Provide authentication credentials
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-#. Create a Kubernetes secret object for Zookeeper, Kafka, and Control Center. 
+#. Create a Kubernetes secret object for Confluent Cloud Kafka access.
 
    This secret object contains file based properties. These files are in the
    format that each respective Confluent component requires for authentication
@@ -80,6 +80,11 @@ Provide authentication credentials
    
      kubectl create secret generic cloud-plain \
       --from-file=plain.txt=$TUTORIAL_HOME/creds-client-kafka-sasl-user.txt
+
+   ::
+   
+     kubectl create secret generic cloud-sr-access \
+      --from-file=plain.txt=$TUTORIAL_HOME/creds-schemaRegistry-user-mine.txt
 
 =========================
 Deploy Confluent Platform

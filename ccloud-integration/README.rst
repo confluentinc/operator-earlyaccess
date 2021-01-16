@@ -84,7 +84,12 @@ Provide authentication credentials
    ::
    
      kubectl create secret generic cloud-sr-access \
-      --from-file=plain.txt=$TUTORIAL_HOME/creds-schemaRegistry-user-mine.txt
+      --from-file=basic.txt=$TUTORIAL_HOME/creds-schemaRegistry-user-mine.txt
+   
+   ::
+   
+     kubectl create secret generic control-center-user \
+      --from-file=basic.txt=$TUTORIAL_HOME/creds-control-center-users.txt
 
 =========================
 Deploy Confluent Platform

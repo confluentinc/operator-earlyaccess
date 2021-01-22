@@ -1,7 +1,7 @@
 Deploy Connectors and KsqlDB using managed Confluent Cloud Kafka
 ================================================================
 
-
+You can use Confluent Operator to deploy and manage Connectors and KsqlDB against a Confluent Cloud Kafka and Schema Registry.
 
 ==================================
 Set the current tutorial directory
@@ -70,6 +70,9 @@ Root Certificate Authority (CA).
 Provide authentication credentials
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Confluent Cloud provides an user and API key for both Kafka and Schema Registry. You'll need to get these,
+and configure Confluent Operator to use them to configure Connect and KsqlDB to connect.
+
 #. Create a Kubernetes secret object for Confluent Cloud Kafka access.
 
    This secret object contains file based properties. These files are in the
@@ -95,6 +98,13 @@ Provide authentication credentials
 Deploy Confluent Platform
 =========================
 
+Edit the `confluent-platform.yaml` deployment YAML, and add your respective Confluent Cloud URLs in the following places:
+
+- `<cloudSR_url>`
+- `<cloudKafka_url>`
+
+
+
 #. Deploy Confluent Platform with the above configuration:
 
    ::
@@ -106,3 +116,45 @@ Deploy Confluent Platform
    ::
    
      kubectl get pods
+
+========
+Validate
+========
+
+Validate in Control Center
+^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Use Control Center to monitor the Confluent Platform, and see the created topic
+and data.
+
+#. Set up port forwarding to Control Center web UI from local machine:
+
+   ::
+
+     kubectl port-forward controlcenter-0 9021:9021
+
+#. Browse to Control Center and log in as the ``admin`` user with the ``Developer1`` password:
+
+   ::
+   
+     https://localhost:9021
+
+=========
+Tear down
+=========
+
+::
+
+  kubectl delete -f $TUTORIAL_HOME/confluent-platform.yaml
+
+::
+
+  kubectl delete secrets cloud-plain cloud-sr-access control-center-user
+
+::
+
+  kubectl delete secret ca-pair-sslcerts
+
+::
+
+  helm delete operator

@@ -70,8 +70,8 @@ Root Certificate Authority (CA).
 Provide authentication credentials
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Confluent Cloud provides an user and API key for both Kafka and Schema Registry. You'll need to get these,
-and configure Confluent Operator to use them to configure Connect and KsqlDB to connect.
+Confluent Cloud provides you an API key for both Kafka and Schema Registry.
+Configure Confluent Operator to use the API key when setting up Connect and KsqlDB to connect.
 
 #. Create a Kubernetes secret object for Confluent Cloud Kafka access.
 
@@ -98,10 +98,10 @@ and configure Confluent Operator to use them to configure Connect and KsqlDB to 
 Deploy Confluent Platform
 =========================
 
-Edit the `confluent-platform.yaml` deployment YAML, and add your respective Confluent Cloud URLs in the following places:
+Edit the ``confluent-platform.yaml`` deployment YAML, and add your respective Confluent Cloud URLs in the following places:
 
 - `<cloudSR_url>`
-- `<cloudKafka_url>`
+- ``<cloudKafka_url>``
 
 
 

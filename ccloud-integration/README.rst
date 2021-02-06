@@ -48,24 +48,24 @@ Root Certificate Authority (CA).
 
 #. Generate a CA pair to use in this tutorial:
 
-   ::
-
-     openssl genrsa -out $TUTORIAL_HOME/ca-key.pem 2048
+::
+   
+  openssl genrsa -out $TUTORIAL_HOME/ca-key.pem 2048
     
-   ::
+::
 
-     openssl req -new -key $TUTORIAL_HOME/ca-key.pem -x509 \
-       -days 1000 \
-       -out $TUTORIAL_HOME/ca.pem \
-       -subj "/C=US/ST=CA/L=MountainView/O=Confluent/OU=Operator/CN=TestCA"
+  openssl req -new -key $TUTORIAL_HOME/ca-key.pem -x509 \
+    -days 1000 \
+    -out $TUTORIAL_HOME/ca.pem \
+    -subj "/C=US/ST=CA/L=MountainView/O=Confluent/OU=Operator/CN=TestCA"
 
 #. Create a Kuebernetes secret for inter-component TLS:
 
-   ::
+::
 
-     kubectl create secret tls ca-pair-sslcerts \
-       --cert=$TUTORIAL_HOME/ca.pem \
-       --key=$TUTORIAL_HOME/ca-key.pem
+  kubectl create secret tls ca-pair-sslcerts \
+    --cert=$TUTORIAL_HOME/ca.pem \
+    --key=$TUTORIAL_HOME/ca-key.pem
 
 Provide authentication credentials
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

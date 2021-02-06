@@ -73,11 +73,10 @@ Provide authentication credentials
 Confluent Cloud provides you an API key for both Kafka and Schema Registry.
 Configure Confluent Operator to use the API key when setting up Connect and KsqlDB to connect.
 
-#. Create a Kubernetes secret object for Confluent Cloud Kafka access.
-
-   This secret object contains file based properties. These files are in the
-   format that each respective Confluent component requires for authentication
-   credentials.
+Create a Kubernetes secret object for Confluent Cloud Kafka access.
+This secret object contains file based properties. These files are in the
+format that each respective Confluent component requires for authentication
+credentials:
 
    ::
    

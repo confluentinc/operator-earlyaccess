@@ -100,7 +100,7 @@ Deploy Confluent Platform
 
 Edit the ``confluent-platform.yaml`` deployment YAML, and add your respective Confluent Cloud URLs in the following places:
 
-- `<cloudSR_url>`
+- ``<cloudSR_url>``
 - ``<cloudKafka_url>``
 
 

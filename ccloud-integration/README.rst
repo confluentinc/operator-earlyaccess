@@ -48,24 +48,24 @@ Root Certificate Authority (CA).
 
 #. Generate a CA pair to use in this tutorial:
 
-::
-   
-  openssl genrsa -out $TUTORIAL_HOME/ca-key.pem 2048
-    
-::
+   ::
 
-  openssl req -new -key $TUTORIAL_HOME/ca-key.pem -x509 \
-    -days 1000 \
-    -out $TUTORIAL_HOME/ca.pem \
-    -subj "/C=US/ST=CA/L=MountainView/O=Confluent/OU=Operator/CN=TestCA"
+     openssl genrsa -out $TUTORIAL_HOME/ca-key.pem 2048
+    
+   ::
+
+     openssl req -new -key $TUTORIAL_HOME/ca-key.pem -x509 \
+       -days 1000 \
+       -out $TUTORIAL_HOME/ca.pem \
+       -subj "/C=US/ST=CA/L=MountainView/O=Confluent/OU=Operator/CN=TestCA"
 
 #. Create a Kuebernetes secret for inter-component TLS:
 
-::
+   ::
 
-  kubectl create secret tls ca-pair-sslcerts \
-    --cert=$TUTORIAL_HOME/ca.pem \
-    --key=$TUTORIAL_HOME/ca-key.pem
+     kubectl create secret tls ca-pair-sslcerts \
+       --cert=$TUTORIAL_HOME/ca.pem \
+       --key=$TUTORIAL_HOME/ca-key.pem
 
 Provide authentication credentials
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -76,22 +76,22 @@ Configure Confluent Operator to use the API key when setting up Connect and Ksql
 Create a Kubernetes secret object for Confluent Cloud Kafka access.
 This secret object contains file based properties. These files are in the
 format that each respective Confluent component requires for authentication
-credentials:
+credentials.
 
-   ::
-   
-     kubectl create secret generic cloud-plain \
-      --from-file=plain.txt=$TUTORIAL_HOME/creds-client-kafka-sasl-user.txt
+::
 
-   ::
-   
-     kubectl create secret generic cloud-sr-access \
-      --from-file=basic.txt=$TUTORIAL_HOME/creds-schemaRegistry-user-mine.txt
-   
-   ::
-   
-     kubectl create secret generic control-center-user \
-      --from-file=basic.txt=$TUTORIAL_HOME/creds-control-center-users.txt
+  kubectl create secret generic cloud-plain \
+  --from-file=plain.txt=$TUTORIAL_HOME/creds-client-kafka-sasl-user.txt
+
+::
+
+  kubectl create secret generic cloud-sr-access \
+  --from-file=basic.txt=$TUTORIAL_HOME/creds-schemaRegistry-user-mine.txt
+
+::
+
+  kubectl create secret generic control-center-user \
+  --from-file=basic.txt=$TUTORIAL_HOME/creds-control-center-users.txt
 
 =========================
 Deploy Confluent Platform

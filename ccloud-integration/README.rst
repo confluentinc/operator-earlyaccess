@@ -59,7 +59,7 @@ Root Certificate Authority (CA).
        -out $TUTORIAL_HOME/ca.pem \
        -subj "/C=US/ST=CA/L=MountainView/O=Confluent/OU=Operator/CN=TestCA"
 
-#. Create a Kuebernetes secret for inter-component TLS:
+#. Create a Kubernetes secret for inter-component TLS:
 
    ::
 
@@ -86,7 +86,7 @@ credentials.
 ::
 
   kubectl create secret generic cloud-sr-access \
-  --from-file=basic.txt=$TUTORIAL_HOME/creds-schemaRegistry-user-mine.txt
+  --from-file=basic.txt=$TUTORIAL_HOME/creds-schemaRegistry-user.txt
 
 ::
 

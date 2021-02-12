@@ -14,13 +14,13 @@ Manage Helm packages in repository
 ==================================
 
 A Helm chart repository is a location where packaged charts are stored and shared. The Confluent Operator Helm chart is 
-stored at https://confluent.jfrog.io/confluent/helm-cloud
+stored at https://confluent.jfrog.io/confluent/helm-early-access-operator-2
 
 Add the Confluent chart repository to your Helm repository:
 
 ::
-   helm repo add confluentinc \   
-       https://confluent.jfrog.io/confluent/helm-cloud \
+   helm repo add confluentinc_earlyaccess \   
+       https://confluent.jfrog.io/confluent/helm-early-access-operator-2 \
        --username $USER \
        --password $APIKEY
   
@@ -34,6 +34,11 @@ Update all Helm charts in repository to get latest versions:
 ::
    helm repo update
 
+Remove a specific helm chart from your Helm repository
+
+::
+   helm repo remove confluentinc_earlyaccess
+
 =============================
 Deploy and Manage Helm charts
 =============================
@@ -46,15 +51,15 @@ There are two ways to deploy Confluent Operator chart to your Kubernetes:
 
 ::
    # Install for the first time to release name "operator"
-   helm install operator confluentinc/confluent-operator
+   helm install operator confluentinc_earlyaccess/confluent-operator
 
    # Upgrade to latest version, or install if the release does not exist
-   helm upgrade --install operator confluentinc/confluent-operator
+   helm upgrade --install operator confluentinc_earlyaccess/confluent-operator
 
 Install a specific version of the Helm chart:
 
 ::
-   helm install operator confluentinc/confluent-operator --version 0.72.0
+   helm install operator confluentinc_earlyaccess/confluent-operator --version 0.72.0
 
 View all installed Helm releases on your Kubernetes:
 

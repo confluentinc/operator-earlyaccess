@@ -87,6 +87,7 @@ spec:
             secretRef: cloud-plain
         tls:
           enabled: true
+          ignoreTrustStoreConfig: true 
       schemaRegistry:
         url: https://<cloudSR_url>
         authentication:

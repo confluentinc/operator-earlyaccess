@@ -19,14 +19,16 @@ stored at https://confluent.jfrog.io/confluent/helm-early-access-operator-2
 Add the Confluent chart repository to your Helm repository:
 
 ::
+
    helm repo add confluentinc_earlyaccess \   
        https://confluent.jfrog.io/confluent/helm-early-access-operator-2 \
        --username $USER \
        --password $APIKEY
   
-View all helm charts in your Helm repository:
+View all Helm charts in your Helm repository:
 
 ::
+
    helm repo list
 
 Update all Helm charts in repository to get latest versions:
@@ -34,9 +36,10 @@ Update all Helm charts in repository to get latest versions:
 ::
    helm repo update
 
-Remove a specific helm chart from your Helm repository
+Remove a specific Helm chart from your Helm repository
 
 ::
+
    helm repo remove confluentinc_earlyaccess
 
 =============================
@@ -45,11 +48,15 @@ Deploy and Manage Helm charts
 
 You deploy Helm charts to a release on your Kubernetes.
 
-helm install <release> <chart>
+::
+
+   helm install <release> <chart>
+   
 
 There are two ways to deploy Confluent Operator chart to your Kubernetes:
 
 ::
+
    # Install for the first time to release name "operator"
    helm install operator confluentinc_earlyaccess/confluent-operator
 
@@ -59,16 +66,19 @@ There are two ways to deploy Confluent Operator chart to your Kubernetes:
 Install a specific version of the Helm chart:
 
 ::
+
    helm install operator confluentinc_earlyaccess/confluent-operator --version 0.72.0
 
 View all installed Helm releases on your Kubernetes:
 
 ::
+
    helm list
 
 Delete the Helm release from your Kubernetes:
 
 ::
+
    helm delete operator
 
 View the Helm docs for all available Helm commands: https://helm.sh/docs/helm/helm/

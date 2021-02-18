@@ -3,7 +3,7 @@ apiVersion: platform.confluent.io/v1beta1
 kind: Zookeeper
 metadata:
   name: zookeeper
-  namespace: confluent
+  namespace: operator
 spec:
   replicas: 3
   image:
@@ -16,7 +16,7 @@ apiVersion: platform.confluent.io/v1beta1
 kind: Kafka
 metadata:
   name: kafka
-  namespace: confluent
+  namespace: operator
 spec:
   replicas: 3
   image:
@@ -34,9 +34,9 @@ spec:
       externalAccess:
         type: staticForHostBasedRouting
         staticForHostBasedRouting:
-          domain: ## Domain
-          bootstrapPrefix: ## Bootstrap prefix
-          brokerPrefix:  ## Bootstrap prefix
+          domain: platformops.dev.gcp.devel.cpdev.cloud
+          bootstrapPrefix: rbakhshi
+          brokerPrefix: rbakhshi
           port: 443
       tls:
         enabled: true
@@ -45,7 +45,7 @@ apiVersion: platform.confluent.io/v1beta1
 kind: ControlCenter
 metadata:
   name: controlcenter
-  namespace: confluent
+  namespace: operator
 spec:
   replicas: 1
   image:

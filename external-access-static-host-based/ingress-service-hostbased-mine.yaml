@@ -11,30 +11,30 @@ metadata:
 spec:
   tls:
     - hosts:
-        - # b0.$DOMAIN 
-        - # b1.$DOMAIN
-        - # b2.$DOMAIN
-        - # kafka.$DOMAIN
+        - rbakhshi0.platformops.dev.gcp.devel.cpdev.cloud
+        - rbakhshi1.platformops.dev.gcp.devel.cpdev.cloud
+        - rbakhshi2.platformops.dev.gcp.devel.cpdev.cloud
+        - rbakhshi.platformops.dev.gcp.devel.cpdev.cloud
   rules:
-    - host: # b0.$DOMAIN
+    - host: rbakhshi0.platformops.dev.gcp.devel.cpdev.cloud
       http:
         paths:
           - backend:
               serviceName: kafka-0-internal
               servicePort: 9092
-    - host: # b1.$DOMAIN
+    - host: rbakhshi1.platformops.dev.gcp.devel.cpdev.cloud
       http:
         paths:
           - backend:
               serviceName: kafka-1-internal
               servicePort: 9092
-    - host: # b2.$DOMAIN
+    - host: rbakhshi2.platformops.dev.gcp.devel.cpdev.cloud
       http:
         paths:
           - backend:
               serviceName: kafka-2-internal
               servicePort: 9092
-    - host: # kafka.$DOMAIN
+    - host: rbakhshi.platformops.dev.gcp.devel.cpdev.cloud
       http:
         paths:
           - backend:

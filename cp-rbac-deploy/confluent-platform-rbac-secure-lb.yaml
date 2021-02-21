@@ -49,6 +49,8 @@ spec:
           domain: platformops.dev.gcp.devel.cpdev.cloud
           brokerPrefix: rb1
           bootstrapPrefix: rb1
+      tls:
+        enabled: true
   authorization:
     type: rbac
     superUsers:

@@ -343,7 +343,7 @@ Shut down Confluent Platform and the data:
 
 ::
 
-  kubectl delete -f $TUTORIAL_HOM/confluent-platform.yaml
+  kubectl delete -f $TUTORIAL_HOME/confluent-platform.yaml
   
 ::
 

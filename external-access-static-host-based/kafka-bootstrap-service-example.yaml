@@ -3,12 +3,12 @@ kind: Service
 metadata:
   annotations:
     platform.confluent.io/cr-name: kafka
-    platform.confluent.io/namespace: confluent
+    platform.confluent.io/namespace: operator
     platform.confluent.io/type: kafka
     prometheus.io/port: "7778"
     prometheus.io/scrape: "true"
   name: kafka-bootstrap
-  namespace: confluent 
+  namespace: operator 
   labels:
     confluent-platform: "true"
     cr-name: kafka

@@ -158,6 +158,10 @@ Deploy Ingress controller
 An Ingress controller is required to access Kafka using the static host-based
 routing. In this tutorial, we will use Nginx Ingress controller.
 
+SSL passthrough is the action of passing data through a load balancer to a server without decrypting it. 
+In many load balancer use cases, the decryption or SSL termination happens at the load balancer and data is passed along to the endpoint. 
+But SSL passthrough keeps the data encrypted as it travels through the load balancer - and this is what Kafka expects.
+
 #. Clone the Nginx Github repo:
 
    ::
@@ -190,7 +194,7 @@ Create the Kafka bootstrap service to access Kafka:
 
   kubectl apply -f $TUTORIAL_HOME/kafka-bootstrap-service.yaml
 
-======================  
+======================
 Create Ingress service
 ======================
 
@@ -339,7 +343,7 @@ Shut down Confluent Platform and the data:
 
 ::
 
-  kubectl delete -f $TUTORIAL_HOM/confluent-platform.yaml
+  kubectl delete -f $TUTORIAL_HOME/confluent-platform.yaml
   
 ::
 

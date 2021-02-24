@@ -313,7 +313,11 @@ Deploy Confluent Platform
 
    ::
 
+     # This deployment spec offers internal access only
      kubectl apply -f $TUTORIAL_HOME/confluent-platform-rbac-secure.yaml
+
+     # This deployment spec offers external access through a load balancer
+     kubectl apply -f $TUTORIAL_HOME/confluent-platform-rbac-secure-lb.yaml
 
 #. Check that all Confluent Platform resources are deployed:
 

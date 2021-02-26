@@ -1,7 +1,7 @@
 Production recommended secure setup
 ===================================
 
-Confluent strongly recommends these security mechanisms for a "Confluent Secure Deployment":
+Confluent recommends these security mechanisms for a production deployment:
 
 - Enable Kafka client authentication. Choose one of:
 
@@ -12,6 +12,8 @@ Confluent strongly recommends these security mechanisms for a "Confluent Secure 
 - Enable Confluent Role Based Access Control for authorization, with user/group identity coming from LDAP server
 
 - Enable TLS for network encryption - both internal (between CP components) and external (Clients to CP components)
+
+In this deployment scenario, we will set this up, choosing SASL/Plain for authentication, and providing own custom certificates.
 
 ==================================
 Set the current tutorial directory
@@ -102,9 +104,15 @@ credentials:
 * Component TLS Certificates
 
 * Authentication credentials for Zookeeper, Kafka, Control Center, remaining CP components
+
+* RBAC principal credentials
   
 Provide component TLS certificates
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+You can either provide your own certificates, or generate test certificates. Follow instructions
+in the below "Appendix: Create your own certificates" section to see how to generate certificates
+and set the appropriate SANs. 
 
    ::
    
@@ -136,6 +144,9 @@ Provide authentication credentials
    In this tutorial, we use one credential for authenticating all client and
    server communication to Kafka brokers. In production scenarios, you'll want
    to specify different credentials for each of them.
+
+Provide RBAC principal credentials
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 #. Create Kubernetes secret objects for MDS:
 
@@ -175,10 +186,6 @@ Deploy Confluent Platform
 ========================
 Create Rolebindings
 ========================
-
-::
-   
-   confluent login --url https://$USER.$DOMAIN --ca-cert-path $TUTORIAL_HOME/../assets/certs/generated/ca.pem
 
 #. Set up port forwarding to the MDS server:
 
@@ -276,7 +283,8 @@ Validate in Control Center
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Use Control Center to monitor the Confluent Platform, and see the created topic
-and data.
+and data. You can visit the external URL you set up for Control Center, or visit the URL
+through a local port forwarding like below:
 
 #. Set up port forwarding to Control Center web UI from local machine:
 
@@ -284,7 +292,7 @@ and data.
 
      kubectl port-forward controlcenter-0 9021:9021
 
-#. Browse to Control Center. You will log in as the ``c3`` user as set in ``$TUTORIAL_HOME/creds-control-center-users.txt``:
+#. Browse to Control Center. You will log in as the ``testadmin`` user, with ``testadmin`` password.
 
    ::
    
@@ -292,34 +300,6 @@ and data.
 
 The ``c3`` user has the ``SystemAdmin`` role granted and will have access to the
 cluster and broker information.
-
-=========
-Tear down
-=========
-
-::
-
-  kubectl delete -f $TUTORIAL_HOME/confluent-platform-rbac-secure.yaml
-
-::
-
-  kubectl delete secret mds-token
-  
-::
-
-  kubectl delete secret mds-client
-
-::
-
-  kubectl delete secret credential
-
-::
-
-  kubectl delete secret ca-pair-sslcerts
-
-::
-
-  helm delete operator
   
 
 ======================================

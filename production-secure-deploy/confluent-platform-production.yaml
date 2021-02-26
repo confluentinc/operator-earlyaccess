@@ -14,6 +14,8 @@ spec:
     type: digest
     jaasConfig:
       secretRef: credential
+  tls:
+    secretRef: tls-group1
 ---
 apiVersion: platform.confluent.io/v1beta1
 kind: Kafka
@@ -92,7 +94,9 @@ spec:
           userSearchBase: dc=test,dc=com
   dependencies:
     zookeeper:
-      endpoint: zookeeper.confluent.svc.cluster.local:2181
+      endpoint: zookeeper.confluent.svc.cluster.local:2182
+    tls:
+      enabled: true
   metricReporter:
     enabled: true
     bootstrapEndpoint: kafka.confluent.svc.cluster.local:9071

@@ -95,8 +95,8 @@ spec:
   dependencies:
     zookeeper:
       endpoint: zookeeper.confluent.svc.cluster.local:2182
-    tls:
-      enabled: true
+      tls:
+        enabled: true
   metricReporter:
     enabled: true
     bootstrapEndpoint: kafka.confluent.svc.cluster.local:9071

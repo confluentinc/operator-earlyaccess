@@ -13,7 +13,7 @@ Confluent recommends these security mechanisms for a production deployment:
 
 - Enable TLS for network encryption - both internal (between CP components) and external (Clients to CP components)
 
-In this deployment scenario, we will set this up, choosing SASL/Plain for authentication, and providing own custom certificates.
+In this deployment scenario, we will set this up, choosing SASL/Plain for authentication, using user provided custom certificates.
 
 ==================================
 Set the current tutorial directory
@@ -107,12 +107,12 @@ credentials:
 
 * RBAC principal credentials
   
-Provide component TLS certificates
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
 You can either provide your own certificates, or generate test certificates. Follow instructions
 in the below "Appendix: Create your own certificates" section to see how to generate certificates
 and set the appropriate SANs. 
+
+Provide component TLS certificates
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
    ::
    
@@ -184,7 +184,7 @@ Deploy Confluent Platform
 #. In the output from the previous step, note that the ``READY`` column for ``controlcenter-0`` pod is ``0/1``. The Control Center service cannot be ready until RBAC is configure.
 
 ========================
-Create Rolebindings
+Create RBAC Rolebindings
 ========================
 
 #. Set up port forwarding to the MDS server:
@@ -216,7 +216,7 @@ Create Rolebindings
    ::
    
      export KAFKA_ID=<Kafka cluster id>
-     export KAFKA_ID=suUCfjllQJiyBbzvibuN5Q
+     export KAFKA_ID=D3ipPujvRRa9IFE2dxuJLA
 
 #. Create Schema Registry Role Binding for the `sr` user:
 
@@ -331,13 +331,13 @@ The internal Kubernetes domain name depends on the namespace you deploy to. If y
   openssl x509 -in $TUTORIAL_HOME/../assets/certs/generated/ca.pem -text -noout
 
 ::
-  # Create server certificates
+  # Create server certificates with the appropriate SANs (SANs listed in server-domain.json)
   cfssl gencert -ca=$TUTORIAL_HOME/../assets/certs/generated/ca.pem \
   -ca-key=$TUTORIAL_HOME/../assets/certs/generated/ca-key.pem \
   -config=$TUTORIAL_HOME/../assets/certs/ca-config.json \
   -profile=server $TUTORIAL_HOME/../assets/certs/server-domain.json | cfssljson -bare $TUTORIAL_HOME/../assets/certs/generated/server
 
-  # Validate server certificate
+  # Validate server certificate and SANs
   openssl x509 -in $TUTORIAL_HOME/../assets/certs/generated/server.pem -text -noout
 
 =========================

@@ -5,7 +5,7 @@
     "*.confluent.svc.cluster.local",
     "*.kafka.confluent.svc.cluster.local",
     "controlcenter.confluent.svc.cluster.local",
-    "zookeeper.confluent.svc.cluster.local",
+    "*.zookeeper.confluent.svc.cluster.local",
     "connect.confluent.svc.cluster.local",
     "ksqldb.confluent.svc.cluster.local"
   ],
@@ -15,9 +15,9 @@
   },
   "names": [
     {
-      "C": "US",
-      "ST": "CA",
-      "L": "Palo Alto"
+      "C": "Universe",
+      "ST": "Pangea",
+      "L": "Earth"
     }
   ]
 }

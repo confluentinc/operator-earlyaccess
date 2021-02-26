@@ -221,6 +221,7 @@ Create RBAC Rolebindings
 #. Create Schema Registry Role Binding for the `sr` user:
 
    ::
+
      # Here, Schema Registry is deployed in namespace `confluent` with name `schemaregistry` and MDS user `sr`
      # User: sr
      # Group/Cluster ID pattern: id_`<schemaregistry.name>`_`<namespace>` where schemaregistry.name=`schemaregistry` and namespace=`confluent`
@@ -238,6 +239,7 @@ Create RBAC Rolebindings
 #. Create Connect Role Binding for the `connect` user:
 
    ::
+
      # Here, Connect is deployed in namespace `confluent` with name `connect` and MDS user `connect`
      # User: connect
      # Group/Cluster ID pattern: `<namespace>.<connect.name>` where namespace=`confluent` and connect.name=`connect`
@@ -252,6 +254,7 @@ Create RBAC Rolebindings
 #. Create Control Center Role Binding for the ``c3`` user:
 
    ::
+
      # Here, Control Center is deployed in namespace `confluent` with name `controlcenter` and MDS user `c3`
 
      # Allow `c3`, system user for Control Center, to use Kafka cluster for storing data
@@ -309,6 +312,7 @@ Appendix: Create your own certificates
 When testing, it's often helpful to generate your own certificates to validate the architecture and deployment.
 
 You'll want both these to be represented in the certificate SAN:
+
 - external domain names
 - internal Kubernetes domain names
 
@@ -328,10 +332,12 @@ The internal Kubernetes domain name depends on the namespace you deploy to. If y
   cfssl gencert -initca $TUTORIAL_HOME/../assets/certs/ca-csr.json | cfssljson -bare $TUTORIAL_HOME/../assets/certs/generated/ca -
 
 ::
+
   # Validate Certificate Authority
   openssl x509 -in $TUTORIAL_HOME/../assets/certs/generated/ca.pem -text -noout
 
 ::
+
   # Create server certificates with the appropriate SANs (SANs listed in server-domain.json)
   cfssl gencert -ca=$TUTORIAL_HOME/../assets/certs/generated/ca.pem \
   -ca-key=$TUTORIAL_HOME/../assets/certs/generated/ca-key.pem \

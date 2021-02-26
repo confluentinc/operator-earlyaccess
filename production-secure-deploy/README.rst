@@ -315,6 +315,7 @@ You'll want both these to be represented in the certificate SAN:
 The internal Kubernetes domain name depends on the namespace you deploy to. If you deploy to `confluent` namespace, then the internal domain names will be: 
 - <component>.confluent.svc.cluster.local
 - *.kafka.confluent.svc.cluster.local
+- *.zookeeper.confluent.svc.cluster.local
 
 ::
 

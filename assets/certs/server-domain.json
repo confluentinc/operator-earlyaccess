@@ -1,0 +1,22 @@
+{
+  "CN": "*.platformops.dev.gcp.devel.cpdev.cloud",
+  "hosts": [
+    "*.platformops.dev.gcp.devel.cpdev.cloud",
+    "*.confluent.svc.cluster.local",
+    "*.kafka.confluent.svc.cluster.local",
+    "controlcenter.confluent.svc.cluster.local",
+    "connect.confluent.svc.cluster.local",
+    "ksqldb.confluent.svc.cluster.local"
+  ],
+  "key": {
+    "algo": "rsa",
+    "size": 2048
+  },
+  "names": [
+    {
+      "C": "US",
+      "ST": "CA",
+      "L": "Palo Alto"
+    }
+  ]
+}

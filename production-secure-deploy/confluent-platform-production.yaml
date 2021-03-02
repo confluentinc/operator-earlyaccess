@@ -86,17 +86,12 @@ spec:
   dependencies:
     zookeeper:
       endpoint: zookeeper.confluent.svc.cluster.local:2182
+      authentication:
+        type: digest
+        jaasConfig:
+          secretRef: credential
       tls:
         enabled: true
-  metricReporter:
-    enabled: true
-    bootstrapEndpoint: kafka.confluent.svc.cluster.local:9071
-    authentication:
-      type: plain
-      jaasConfig:
-        secretRef: credential
-    tls:
-      enabled: true
 ---
 apiVersion: platform.confluent.io/v1beta1
 kind: Connect

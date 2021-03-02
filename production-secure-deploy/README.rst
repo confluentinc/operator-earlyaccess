@@ -155,10 +155,16 @@ Provide RBAC principal credentials
    
    ::
    
+     # Kafka RBAC credential
+     kubectl create secret generic mds-client \
+       --from-file=bearer.txt=$TUTORIAL_HOME/bearer.txt
+     # Control Center RBAC credential
      kubectl create secret generic c3-mds-client \
        --from-file=bearer.txt=$TUTORIAL_HOME/c3-mds-client.txt
+     # Connect RBAC credential
      kubectl create secret generic connect-mds-client \
        --from-file=bearer.txt=$TUTORIAL_HOME/connect-mds-client.txt
+     # Schema Registry RBAC credential
      kubectl create secret generic sr-mds-client \
        --from-file=bearer.txt=$TUTORIAL_HOME/sr-mds-client.txt
 
@@ -313,11 +319,12 @@ You'll want both these to be represented in the certificate SAN:
 - external domain names
 - internal Kubernetes domain names
 
-The internal Kubernetes domain name depends on the namespace you deploy to. If you deploy to `confluent` namespace, then the internal domain names will be: 
+The internal Kubernetes domain name depends on the namespace you deploy to. If you deploy to `confluent` namespace, 
+then the internal domain names will be: 
 
 - *.kafka.confluent.svc.cluster.local
 - *.zookeeper.confluent.svc.cluster.local
-- <component>.confluent.svc.cluster.local
+- *.confluent.svc.cluster.local
 
 ::
 

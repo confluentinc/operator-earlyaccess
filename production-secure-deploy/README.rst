@@ -111,11 +111,11 @@ and set the appropriate SANs.
 Provide component TLS certificates
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-   ::
+::
    
      kubectl create secret generic tls-group1 \
-      --from-file=fullchain.pem=$TUTORIAL_HOME/../assets/certs/generated/server.pem \
-      --from-file=cacerts.pem=$TUTORIAL_HOME/../assets/certs/generated/ca.pem \
+   --from-file=fullchain.pem=$TUTORIAL_HOME/../assets/certs/generated/server.pem \
+   --from-file=cacerts.pem=$TUTORIAL_HOME/../assets/certs/generated/ca.pem \
       --from-file=privkey.pem=$TUTORIAL_HOME/../assets/certs/generated/server-key.pem
 
 
@@ -145,7 +145,7 @@ Provide authentication credentials
 Provide RBAC principal credentials
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-#. Create Kubernetes secret objects for MDS:
+#. Create a Kubernetes secret object for MDS:
 
    ::
    

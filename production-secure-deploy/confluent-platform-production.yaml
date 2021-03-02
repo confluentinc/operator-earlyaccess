@@ -57,6 +57,13 @@ spec:
     - User:kafka
     - User:ANONYMOUS
   services:
+    restProxy:
+      enabled: true
+      mds:
+        authentication:
+          type: bearer
+          bearer:
+            secretRef: mds-client
     mds:
       tls:
         enabled: true

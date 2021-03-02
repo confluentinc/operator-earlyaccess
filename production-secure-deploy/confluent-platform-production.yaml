@@ -38,7 +38,6 @@ spec:
           secretRef: credential
       tls:
         enabled: true
-        secretRef: tls-group1
     external:
       authentication:
         type: plain
@@ -52,20 +51,12 @@ spec:
           bootstrapPrefix: rb
       tls:
         enabled: true
-        secretRef: tls-group1
   authorization:
     type: rbac
     superUsers:
     - User:kafka
     - User:ANONYMOUS
   services:
-    restProxy:
-      enabled: true
-      mds:
-        authentication:
-          type: bearer
-          bearer:
-            secretRef: mds-client
     mds:
       tls:
         enabled: true

@@ -17,20 +17,14 @@ Kubernetes Infrastructure
 Confluent Operator supports Kubernetes versions 1.16 to 1.19 with any Cloud Native Computing Foundation (CNCF) conformant offering. 
 A full list of CNCF conformant Kubernetes offerings can be found `here <https://docs.google.com/spreadsheets/d/1LxSqBzjOxfGx3cmtZ4EbB_BGCxT_wlxW_xgHVVa23es/edit#gid=0>`__.
 
-The following API must be present in your Kubernetes:
-
-apiextensions.k8s.io/v1beta1
-You can run the following command to check. The output should include apiextensions.k8s.io/v1beta1:
-
-kubectl api-versions | grep apiextensions.k8s.io
-
 ==============
 Cluster Sizing
 ==============
 
 Decide the Confluent components needed and the sizing (RAM, CPU and storage) for each component.
 
-For recommendations, read:
+For sizing recommendations, use the following:
+
 - https://docs.confluent.io/operator/current/co-plan.html#sizing-recommendations
 - https://eventsizer.io/
 
@@ -39,6 +33,7 @@ Storage
 =======
 
 You'll need to provide persistent storage for the following:
+
 - Kafka
 - Zookeeper
 
@@ -48,6 +43,7 @@ For (1) - Confluent supports the use of `Storage Classes <https://kubernetes.io/
 persistent storage volumes. Kafka requires Block level storage solutions - AWS EBS, Azure Disk, GCE Disk, Ceph RBD, Portworx are examples.
 
 For (2) - Confluent supports various Object Storage solutions:
+
 - AWS S3
 - GCP GCS
 - Pure Storage FlashBlade
@@ -59,6 +55,7 @@ Kubernetes Security
 ===================
 
 With Kubernetes RBAC and namespaces, you can deploy in either of two ways:
+
 - Provide Confluent Operator with access to provision and manage Confluent resources across all namespaces 
 in the Kubernetes cluster
 - Provide Confluent Operator with access to provision and manage Confluent resources in one specific namespace
@@ -68,6 +65,7 @@ Confluent Security
 ==================
 
 Security for a Confluent deployment covers the following dimensions:
+
 - Authentication
 - Authorization
 - Network Encryption
@@ -86,10 +84,14 @@ The Confluent services can be exposed for access to users and client application
 2. External to the Kubernetes network
 
 To expose externally, you have a few options:
+
 - Load Balancers
+
     - For Kafka: A Layer 4 load balancer that supports TLS passthrough
     - For other Confluent services with HTTP endpoints: A Layer 4/7 load balancer
+
 - Ingress Controller
+
     - For Kafka: An Ingress controller that supports TLS passthrough and routes TCP traffic
 
 When exposing services externally, Confluent services will be made available at externally resolvable domain names. You'll need

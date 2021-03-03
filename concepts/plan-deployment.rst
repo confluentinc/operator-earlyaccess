@@ -40,7 +40,9 @@ You'll need to provide persistent storage for the following:
 Kafka can be provisioned with (1) persistent storage volumes and (2) tiered storage. 
 
 For (1) - Confluent supports the use of `Storage Classes <https://kubernetes.io/docs/concepts/storage/dynamic-provisioning/>`__ to provision 
-persistent storage volumes. Kafka requires Block level storage solutions - AWS EBS, Azure Disk, GCE Disk, Ceph RBD, Portworx are examples.
+persistent storage volumes. 
+
+Kafka requires Block level storage solutions - AWS EBS, Azure Disk, GCE Disk, Ceph RBD, Portworx are examples.
 
 For (2) - Confluent supports various Object Storage solutions:
 
@@ -56,8 +58,7 @@ Kubernetes Security
 
 With Kubernetes RBAC and namespaces, you can deploy in either of two ways:
 
-- Provide Confluent Operator with access to provision and manage Confluent resources across all namespaces 
-in the Kubernetes cluster
+- Provide Confluent Operator with access to provision and manage Confluent resources across all namespaces in the Kubernetes cluster
 - Provide Confluent Operator with access to provision and manage Confluent resources in one specific namespace
 
 ==================
@@ -71,7 +72,7 @@ Security for a Confluent deployment covers the following dimensions:
 - Network Encryption
 - Configuration Secrets
 
-Confluent recommends a `secure configuration for production: <../production-secure-deploy>`_
+For production deployments, Confluent recommends: `secure configuration for production: <../production-secure-deploy>`_
 
 You can choose other options for each dimension.
 
@@ -87,12 +88,12 @@ To expose externally, you have a few options:
 
 - Load Balancers
 
-    - For Kafka: A Layer 4 load balancer that supports TLS passthrough
-    - For other Confluent services with HTTP endpoints: A Layer 4/7 load balancer
+  - For Kafka: A Layer 4 load balancer that supports TLS passthrough
+  - For other Confluent services with HTTP endpoints: A Layer 4/7 load balancer
 
 - Ingress Controller
 
-    - For Kafka: An Ingress controller that supports TLS passthrough and routes TCP traffic
+  - For Kafka: An Ingress controller that supports TLS passthrough and routes TCP traffic
 
 When exposing services externally, Confluent services will be made available at externally resolvable domain names. You'll need
 to manage DNS entries to facilitate these domains.

@@ -12,7 +12,7 @@ Check out the product in action: `Kubernetes-Native DevOps with Confluent Operat
 
 Get early access by registering interest here: `Confluent Operator Early Access Registration <https://events.confluent.io/confluentoperatorearlyaccess>`_
 
-This documentation repository is structured into Concepts and Scenario workflows:
+This repository is structured into Concepts and Scenario workflows:
 
 * Read Concepts to understand how Confluent on Kubernetes works, and should be architected.
 * Use Scenario workflows to deploy and manage Confluent on Kubernetes for various use cases.

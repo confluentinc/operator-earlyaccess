@@ -5,6 +5,7 @@ To prepare for a deployment, it's useful to have a plan along the following dime
 
 - Kubernetes Infrastructure
 - Cluster Sizing
+- Docker Registry
 - Storage
 - Kubernetes Security
 - Confluent Platform Security
@@ -27,6 +28,17 @@ For sizing recommendations, use the following:
 
 - https://docs.confluent.io/operator/current/co-plan.html#sizing-recommendations
 - https://eventsizer.io/
+
+===============
+Docker Registry
+===============
+
+Confluent Operator pulls Confluent Docker images from a Docker registry and deploys those on to your Kubernetes cluster.
+
+By default, Confluent Operator deploys publicly-available Docker images hosted on Docker Hub from the ``confluentinc`` repositories.
+
+You can choose to use your own Docker registry and repositories. In that case, you'll need to pull the images from the Confluent repositories 
+and upload to your Docker registry repositories.
 
 =======
 Storage

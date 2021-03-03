@@ -93,6 +93,7 @@ Networking
 ==========
 
 The Confluent services can be exposed for access to users and client applications that can either be:
+
 1. In the internal Kubernetes network
 2. External to the Kubernetes network
 

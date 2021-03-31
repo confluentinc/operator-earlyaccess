@@ -167,6 +167,9 @@ Provide RBAC principal credentials
      # Schema Registry RBAC credential
      kubectl create secret generic sr-mds-client \
        --from-file=bearer.txt=$TUTORIAL_HOME/sr-mds-client.txt
+     # ksqlDB RBAC credential
+     kubectl create secret generic ksqldb-mds-client \
+       --from-file=bearer.txt=$TUTORIAL_HOME/ksqldb-mds-client.txt
 
 =========================
 Deploy Confluent Platform
@@ -219,7 +222,8 @@ Create RBAC Rolebindings
    ::
    
      export KAFKA_ID=<Kafka cluster id>
-     export KAFKA_ID=D3ipPujvRRa9IFE2dxuJLA
+     # For example:
+     export KAFKA_ID=JuqyQ-MOSaGqJaNZgkO-Ag
 
 #. Create Schema Registry Role Binding for the `sr` user:
 
@@ -253,6 +257,20 @@ Create RBAC Rolebindings
      confluent iam rolebinding create --kafka-cluster-id $KAFKA_ID --principal User:connect --role DeveloperWrite --resource Topic:_confluent-monitoring --prefix
 
      confluent iam rolebinding create --kafka-cluster-id $KAFKA_ID --principal User:connect --role ResourceOwner --resource Topic:confluent.connect --prefix
+
+
+#. Create ksqlDB Role Binding for the `ksql` user:
+
+   ::
+
+     # Here, ksqlDB is deployed in namespace `confluent` with name `ksql` and MDS user `ksql`
+     # User: ksql
+     # Group/Cluster ID pattern: `<namespace>.<ksql.name>_`
+     # Internal Topic Pattern: `_confluent-ksql-<namespace>.<ksql.name>_` where namespace=`confluent` and ksql.name=`ksql`
+
+     confluent iam rolebinding create --kafka-cluster-id $KAFKA_ID --principal User:ksql --role ResourceOwner  --ksql-cluster-id confluent.ksql_ --resource KsqlCluster:ksql-cluster
+
+     confluent iam rolebinding create --kafka-cluster-id $KAFKA_ID --principal User:ksql --role ResourceOwner  --resource Topic:_confluent-ksql-confluent.ksqldb__command_topic --prefix
 
 #. Create Control Center Role Binding for the ``c3`` user:
 
@@ -351,6 +369,32 @@ then the internal domain names will be:
 
   # Validate server certificate and SANs
   openssl x509 -in $TUTORIAL_HOME/../assets/certs/generated/server.pem -text -noout
+
+=====================================
+Appendix: Update authentication users
+=====================================
+
+In order to add users to the authenticated users list, you'll need to update the list in the following files:
+
+- For Kafka users, update the list in ``creds-kafka-sasl-users.json``.
+- For Control Center users, update the list in ``creds-control-center-users.txt``.
+
+After updating the list of users, you'll update the Kubernetes secret.
+
+::
+
+  kubectl create secret generic credential \
+      --from-file=plain-users.json=$TUTORIAL_HOME/creds-kafka-sasl-users.json \
+      --from-file=digest-users.json=$TUTORIAL_HOME/creds-zookeeper-sasl-digest-users.json \
+      --from-file=digest.txt=$TUTORIAL_HOME/creds-kafka-zookeeper-credentials.txt \
+      --from-file=plain.txt=$TUTORIAL_HOME/creds-client-kafka-sasl-user.txt \
+      --from-file=basic.txt=$TUTORIAL_HOME/creds-control-center-users.txt \
+      --from-file=ldap.txt=$TUTORIAL_HOME/ldap.txt \ 
+      --save-config --dry-run=client -oyaml | k apply -f -
+
+In this above CLI command, you are generating the YAML for the secret, and applying it as an update to the existing secret ``credential``.
+
+There's no need to restart the Kafka brokers or Control Center. The updates users list is picked up by the services.
 
 =========================
 Appendix: Troubleshooting

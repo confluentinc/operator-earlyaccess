@@ -12,6 +12,11 @@ Check out the product in action: `Kubernetes-Native DevOps with Confluent Operat
 
 Get early access by registering interest here: `Confluent Operator Early Access Registration <https://events.confluent.io/confluentoperatorearlyaccess>`_
 
+This repository is structured into Concepts and Scenario workflows:
+
+* Read Concepts to understand how Confluent on Kubernetes works, and should be architected.
+* Use Scenario workflows to deploy and manage Confluent on Kubernetes for various use cases.
+
 ==================
 Scenario workflows
 ==================
@@ -24,15 +29,30 @@ Clone the following repo to get the files needed for each workflow:
   
 The documentation is organized as scenario workflows:
 
-* `Deploy simple non-secure Confluent Platform <./quickstart-deploy>`_
-* `Deploy Confluent Platform with encryption and authentication <./secure-authn-encrypt-deploy>`_
-* `Deploy Confluent Platform with RBAC authorization <./cp-rbac-deploy>`_
-* `Deploy Confluent Platform with external access through Load Balancer <./external-access-load-balancer-deploy>`_
-* `Deploy Confluent Platform with external access through NodePorts <./external-access-nodeport-deploy>`_
-* `Deploy Confluent Platform with external access using static host-based routing <./external-access-static-host-based>`_
-* `Deploy Confluent Platform with external access using static port-based routing <./external-access-static-port-based>`_
-* `Deploy Confluent Platform to a multi-zone Kubernetes cluster, with Kafka rack awareness configured <./rackawareness>`_
-* `Deploy Confluent Platform to connect and monitor multiple Connect and ksqlDB clusters <./controlcenter-multi-ksql-connect>`_
+* Quickstart
+
+  * `Deploy simple non-secure Confluent Platform <./quickstart-deploy>`_
+
+* Secure deployment
+
+  * `Production recommended secure deployment <./production-secure-deploy>`_
+  * `Deploy Confluent Platform with encryption and authentication <./secure-authn-encrypt-deploy>`_
+  * `Deploy Confluent Platform with RBAC authorization <./cp-rbac-deploy>`_
+
+* External Access
+
+  * `Deploy Confluent Platform with external access through Load Balancer <./external-access-load-balancer-deploy>`_
+  * `Deploy Confluent Platform with external access through NodePorts <./external-access-nodeport-deploy>`_
+  * `Deploy Confluent Platform with external access using static host-based routing <./external-access-static-host-based>`_
+  * `Deploy Confluent Platform with external access using static port-based routing <./external-access-static-port-based>`_
+
+* Multi-AZ deployment
+
+  * `Deploy Confluent Platform to a multi-zone Kubernetes cluster, with Kafka rack awareness configured <./rackawareness>`_
+
+* Connect to Confluent Cloud
+
+  * `Deploy Confluent Platform to connect and monitor multiple Connect and ksqlDB clusters <./controlcenter-multi-ksql-connect>`_
 
 .. _ea-credentials:
 

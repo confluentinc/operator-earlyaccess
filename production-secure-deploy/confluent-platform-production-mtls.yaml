@@ -15,7 +15,7 @@ spec:
     jaasConfig:
       secretRef: credential
   tls:
-    secretRef: tls-group1
+    secretRef: tls-zookeeper
 ---
 apiVersion: platform.confluent.io/v1beta1
 kind: Kafka
@@ -38,19 +38,21 @@ spec:
           secretRef: credential
       tls:
         enabled: true
+        secretRef: tls-kafka-internal
     external:
       authentication:
-        type: plain
-        jaasConfig:
-          secretRef: credential
+        type: mtls
+        principalMappingRules:
+          - RULE:.*CN[\s]?=[\s]?([a-zA-Z0-9.]*)?.*/$1/
+      tls:
+        enabled: true
+        secretRef: tls-kafka-external
       externalAccess:
         type: loadBalancer
         loadBalancer:
           domain: platformops.dev.gcp.devel.cpdev.cloud
           brokerPrefix: rb
           bootstrapPrefix: rb
-      tls:
-        enabled: true
   authorization:
     type: rbac
     superUsers:
@@ -111,7 +113,7 @@ spec:
     application: confluentinc/cp-server-connect-operator:6.1.0.0
     init: confluentinc/cp-init-container-operator:6.1.0.0
   tls:
-    secretRef: tls-group1
+    secretRef: tls-connect
   externalAccess:
     type: loadBalancer
     loadBalancer:
@@ -150,7 +152,7 @@ spec:
     application: confluentinc/cp-schema-registry-operator:6.1.0.0
     init: confluentinc/cp-init-container-operator:6.1.0.0
   tls:
-    secretRef: tls-group1
+    secretRef: tls-schemaregistry
   externalAccess:
     type: loadBalancer
     loadBalancer:
@@ -197,7 +199,7 @@ spec:
       domain: platformops.dev.gcp.devel.cpdev.cloud
       prefix: rb-ksql
   tls:
-    secretRef: tls-group1
+    secretRef: tls-ksqldb
   dependencies:
     kafka:
       bootstrapEndpoint: kafka.confluent.svc.cluster.local:9071
@@ -230,7 +232,7 @@ spec:
       liveness:
         periodSeconds: 10
         failureThreshold: 1
-        timeoutSeconds: 5 
+        timeoutSeconds: 5
   image:
     application: confluentinc/cp-enterprise-control-center-operator:6.1.0.0
     init: confluentinc/cp-init-container-operator:6.1.0.0
@@ -243,14 +245,12 @@ spec:
       domain: platformops.dev.gcp.devel.cpdev.cloud
       prefix: rb-c3
   tls:
-    secretRef: tls-group1
+    secretRef: tls-controlcenter
   dependencies:
     kafka:
       bootstrapEndpoint: kafka.confluent.svc.cluster.local:9071
       authentication:
-        type: plain
-        jaasConfig:
-          secretRef: credential
+        type: mtls
       tls:
         enabled: true
     mds:

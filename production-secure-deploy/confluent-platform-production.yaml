@@ -112,6 +112,11 @@ spec:
     init: confluentinc/cp-init-container-operator:6.1.0.0
   tls:
     secretRef: tls-group1
+  externalAccess:
+    type: loadBalancer
+    loadBalancer:
+      domain: platformops.dev.gcp.devel.cpdev.cloud
+      prefix: rb-connect
   authorization:
     type: rbac
   dependencies:
@@ -146,6 +151,11 @@ spec:
     init: confluentinc/cp-init-container-operator:6.1.0.0
   tls:
     secretRef: tls-group1
+  externalAccess:
+    type: loadBalancer
+    loadBalancer:
+      domain: platformops.dev.gcp.devel.cpdev.cloud
+      prefix: rb-sr
   authorization:
     type: rbac
   dependencies:
@@ -181,6 +191,11 @@ spec:
   dataVolumeCapacity: 10Gi
   authorization:
     type: rbac
+  externalAccess:
+    type: loadBalancer
+    loadBalancer:
+      domain: platformops.dev.gcp.devel.cpdev.cloud
+      prefix: rb-ksql
   tls:
     secretRef: tls-group1
   dependencies:

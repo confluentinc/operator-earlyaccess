@@ -253,6 +253,11 @@ spec:
         url:  https://connect.confluent.svc.cluster.local:8083
         tls:
           enabled: true
+    ksqldb:
+      - name: ksqldb
+        url:  https://ksqldb.confluent.svc.cluster.local:8088
+        tls:
+          enabled: true
     schemaRegistry:
       url: https://schemaregistry.confluent.svc.cluster.local:8081
       tls:

@@ -223,7 +223,7 @@ Create RBAC Rolebindings
    
      export KAFKA_ID=<Kafka cluster id>
      # For example:
-     export KAFKA_ID=JuqyQ-MOSaGqJaNZgkO-Ag
+     export KAFKA_ID=-KW0pHJJRMW6NdDlayJlQw
 
 #. Create Schema Registry Role Binding for the `sr` user:
 
@@ -268,7 +268,7 @@ Create RBAC Rolebindings
      # Group/Cluster ID pattern: `<namespace>.<ksql.name>_`
      # Internal Topic Pattern: `_confluent-ksql-<namespace>.<ksql.name>_` where namespace=`confluent` and ksql.name=`ksql`
 
-     confluent iam rolebinding create --kafka-cluster-id $KAFKA_ID --principal User:ksql --role ResourceOwner  --ksql-cluster-id confluent.ksql_ --resource KsqlCluster:ksql-cluster
+     confluent iam rolebinding create --kafka-cluster-id $KAFKA_ID --principal User:ksql --role ResourceOwner  --ksql-cluster-id confluent.ksqldb_ --resource KsqlCluster:ksql-cluster
 
      confluent iam rolebinding create --kafka-cluster-id $KAFKA_ID --principal User:ksql --role ResourceOwner  --resource Topic:_confluent-ksql-confluent.ksqldb__command_topic --prefix
 
@@ -286,6 +286,9 @@ Create RBAC Rolebindings
 
      # Allow `testadmin` to see connectcluster
      confluent iam rolebinding create --kafka-cluster-id $KAFKA_ID --connect-cluster-id confluent.connect  --principal User:testadmin --role SystemAdmin
+
+     # Allow `testadmin` to see ksqlDB cluster
+     confluent iam rolebinding create --kafka-cluster-id $KAFKA_ID --ksql-cluster-id confluent.ksqldb_  --principal User:testadmin --role SystemAdmin
 
      # Allow `testadmin` to see Schema Registry 
      confluent iam rolebinding create --kafka-cluster-id $KAFKA_ID --schema-registry-cluster-id id_schemaregistry_confluent --principal User:testadmin --role SystemAdmin

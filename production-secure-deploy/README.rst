@@ -399,6 +399,20 @@ In this above CLI command, you are generating the YAML for the secret, and apply
 
 There's no need to restart the Kafka brokers or Control Center. The updates users list is picked up by the services.
 
+=======================================
+Appendix: Configure mTLS authentication
+=======================================
+
+Kafka supports mutual TLS (mTLS) authentication for client applications. With mTLS, principals are taken from the 
+Common Name of the certificate used by the client application.
+
+This example deployment spec ($TUTORIAL_HOME/confluent-platform-production-mtls.yaml) configures the Kafka external listener 
+for mTLS authentication.
+
+When using mTLS, you'll need to provide a different certificate for each component, so that each component
+has the principal in the Common Name. In the example deployment spec, each component refers to a different
+TLS certificate secret.
+
 =========================
 Appendix: Troubleshooting
 =========================

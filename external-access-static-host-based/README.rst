@@ -71,37 +71,83 @@ Deploy Confluent Operator
    
      kubectl get pods
       
-===============================
-Generate and Deploy TLS Secrets
-===============================
+===========================================
+Generate and Deploy TLS Secrets for Servers
+===========================================
 
 This tutorial uses mutual TLS (mTLS) for encryption and authentication between
-Confluent Server (inside the Kubernetes cluster) and Kafka clients (outside the Kubernetes cluster).
+Confluent Servers (inside the Kubernetes cluster) and Kafka clients (outside the Kubernetes cluster).
 In production, you would need to provide your own valid certificates,
-but for this tutorial, you will generate your own. You will create:
+but for this tutorial, you will generate your own.
+Here are the important files you will create:
 
 * ``cacerts.pem`` -- Certificate authority (CA) certificate
-* ``privkey.pem`` -- Private key for Confluent Server
-* ``fullchain.pem`` -- Certificate for Confluent Server
+* ``privkey.pem`` -- Private key for Confluent Servers
+* ``fullchain.pem`` -- Certificate for Confluent Servers
 * ``privkey-client.pem`` -- Private key for Kafka client
 * ``fullchain-client.pem`` -- Certificate for Kafka client
 * ``client.truststore.p12`` -- Truststore for Kafka client
 * ``client.keystore.p12`` -- Keystore for Kafka client
 
-Notice that you will not generate the keystore or truststore for Confluent Server.
+Notice that you will not generate the keystore or truststore for Confluent Servers.
 Confluent Operator will generate those for Confluent Server from
 ``cacerts.pem``, ``privkey.pem``, and ``fullchain.pem``.
+
+#. Generate a private key called ``rootCAkey.pem`` for the root certificate authority.
+
+   ::
+
+     openssl genrsa -out $TUTORIAL_HOME/certs/rootCAkey.pem 2048
+
+#. Generate the CA certificate.
+
+   ::
+
+     openssl req -x509  -new -nodes \
+       -key $TUTORIAL_HOME/certs/rootCAkey.pem \
+       -days 3650 \
+       -out $TUTORIAL_HOME/certs/cacerts.pem \
+       -subj "/C=US/ST=CA/L=MVT/O=TestOrg/OU=Cloud/CN=TestCA"
+
+#. Generate a private key called ``privkey.pem`` for Confluent Servers.
+
+   ::
+
+     openssl genrsa -out $TUTORIAL_HOME/certs/privkey.pem 2048
+
+#. Create a certificate signing request (CSR) called ``server.csr`` for Confluent Servers. Note the ``*`` wildcard for the ``CN`` common name. Later, this will allow for Subject Alternate Names (SANs) for all of the brokers.
+
+   ::
+
+     openssl req -new -key $TUTORIAL_HOME/certs/privkey.pem \
+       -out $TUTORIAL_HOME/certs/server.csr \
+       -subj "/C=US/ST=CA/L=MVT/O=TestOrg/OU=Cloud/CN=*.$DOMAIN"
+
+#. Create the ``fullchain.pem`` certificate for Confluent Servers. Notice the extension file includes a ``*`` wildcard for SANs.
+
+   ::
+
+     openssl x509 -req \
+       -in $TUTORIAL_HOME/certs/server.csr \
+       -extensions server_ext \
+       -CA $TUTORIAL_HOME/certs/cacerts.pem \
+       -CAkey $TUTORIAL_HOME/certs/rootCAkey.pem \
+       -CAcreateserial \
+       -out $TUTORIAL_HOME/certs/fullchain.pem \
+       -days 365 \
+       -extfile \
+       <(echo "[server_ext]"; echo "extendedKeyUsage=serverAuth,clientAuth"; echo "subjectAltName=DNS:*.$DOMAIN")
 
 #. 
 
 #. Create a Kubernetes secret using the provided PEM files:
  
-  ::
+   ::
 
-    kubectl create secret generic tls-group1 \
-      --from-file=fullchain.pem=$TUTORIAL_HOME/certs/fullchain.pem \
-      --from-file=cacerts.pem=$TUTORIAL_HOME/certs/cacerts.pem \
-      --from-file=privkey.pem=$TUTORIAL_HOME/certs/privkey.pem
+     kubectl create secret generic tls-group1 \
+       --from-file=fullchain.pem=$TUTORIAL_HOME/certs/fullchain.pem \
+       --from-file=cacerts.pem=$TUTORIAL_HOME/certs/cacerts.pem \
+       --from-file=privkey.pem=$TUTORIAL_HOME/certs/privkey.pem
        
 ============================
 Configure Confluent Platform
@@ -259,8 +305,75 @@ Create DNS records for Kafka brokers using the ingress controller load balancer 
 Validate
 ========
 
-Deploy producer application
-^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Configure Kafka Client Certificates, Keystore, and Truststore
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+The Confluent Servers are configured to authenticate clients with mTLS, 
+so you must create a keystore **and** truststore for the Kafka client.
+Here are the important files you will create:
+
+* ``privkey-client.pem`` -- Private key for Kafka client
+* ``fullchain-client.pem`` -- Certificate for Kafka client
+* ``client.keystore.p12`` -- Keystore for Kafka client
+* ``client.truststore.p12`` -- Truststore for Kafka client
+
+You made the CA certificate earlier when generating the certificates for the Confluent Servers.
+You will use the same CA certificate to create a certificate for the Kafka client, 
+as well as a keystore and a truststore.
+
+
+#. Generate a private key called ``privkey-client.pem`` for the Kafka client.
+
+   ::
+
+     openssl genrsa -out $TUTORIAL_HOME/certs/privkey.pem 2048
+
+#. Create a certificate signing request (CSR) called ``client.csr`` for the Kafka client.
+
+   ::
+
+     openssl req -new -key $TUTORIAL_HOME/certs/privkey.pem \
+       -out $TUTORIAL_HOME/certs/client.csr \
+       -subj "/C=US/ST=CA/L=MVT/O=TestOrg/OU=Cloud/CN=kafka-client"
+
+#. Create the ``fullchain-client.pem`` certificate for the Kafka client.
+
+   ::
+
+     openssl x509 -req \
+       -in $TUTORIAL_HOME/certs/client.csr \
+       -CA $TUTORIAL_HOME/certs/cacerts.pem \
+       -CAkey $TUTORIAL_HOME/certs/rootCAkey.pem \
+       -CAcreateserial \
+       -out $TUTORIAL_HOME/certs/fullchain-client.pem \
+       -days 365
+
+#. Create the Kafka client's keystore. This keystore is used to authenticate to brokers.
+
+   ::
+
+     openssl pkcs12 -export \
+       -in $TUTORIAL_HOME/certs/fullchain-client.pem \
+       -inkey $TUTORIAL_HOME/certs/privkey-client.pem \
+       -out $TUTORIAL_HOME/client/client.keystore.p12 \
+       -name kafka-client \
+       -passout pass:mystorepassword
+
+#. Create the Kafka client's truststore from the CA. This truststore allows the client to trust the broker's certificate, which is necessary for transport encryption.
+
+   ::
+
+     keytool -import -trustcacerts -noprompt \
+       -alias rootCA \
+       -file $TUTORIAL_HOME/certs/cacerts.pem \
+       -keystore $TUTORIAL_HOME/client/client.truststore.p12 \
+       -deststorepass mystorepassword \
+       -deststoretype pkcs12
+
+
+
+Create Client Properties File
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Now that we've got the Confluent Platform set up, let's deploy the producer
 client app.

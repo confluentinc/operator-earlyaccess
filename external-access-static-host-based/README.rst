@@ -71,18 +71,37 @@ Deploy Confluent Operator
    
      kubectl get pods
       
-==================
-Deploy TLS secrets
-==================
+===============================
+Generate and Deploy TLS Secrets
+===============================
 
-Create a Kubernetes secret using the provided PEM files:
+This tutorial uses mutual TLS (mTLS) for encryption and authentication between
+Confluent Server (inside the Kubernetes cluster) and Kafka clients (outside the Kubernetes cluster).
+In production, you would need to provide your own valid certificates,
+but for this tutorial, you will generate your own. You will create:
+
+* ``cacerts.pem`` -- Certificate authority (CA) certificate
+* ``privkey.pem`` -- Private key for Confluent Server
+* ``fullchain.pem`` -- Certificate for Confluent Server
+* ``privkey-client.pem`` -- Private key for Kafka client
+* ``fullchain-client.pem`` -- Certificate for Kafka client
+* ``client.truststore.p12`` -- Truststore for Kafka client
+* ``client.keystore.p12`` -- Keystore for Kafka client
+
+Notice that you will not generate the keystore or truststore for Confluent Server.
+Confluent Operator will generate those for Confluent Server from
+``cacerts.pem``, ``privkey.pem``, and ``fullchain.pem``.
+
+#. 
+
+#. Create a Kubernetes secret using the provided PEM files:
  
-::
+  ::
 
-  kubectl create secret generic tls-group1 \
-    --from-file=fullchain.pem=$TUTORIAL_HOME/certs/fullchain.pem \
-    --from-file=cacerts.pem=$TUTORIAL_HOME/certs/cacerts.pem \
-    --from-file=privkey.pem=$TUTORIAL_HOME/certs/privkey.pem
+    kubectl create secret generic tls-group1 \
+      --from-file=fullchain.pem=$TUTORIAL_HOME/certs/fullchain.pem \
+      --from-file=cacerts.pem=$TUTORIAL_HOME/certs/cacerts.pem \
+      --from-file=privkey.pem=$TUTORIAL_HOME/certs/privkey.pem
        
 ============================
 Configure Confluent Platform

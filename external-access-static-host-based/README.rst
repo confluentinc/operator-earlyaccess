@@ -162,18 +162,18 @@ SSL passthrough is the action of passing data through a load balancer to a serve
 In many load balancer use cases, the decryption or SSL termination happens at the load balancer and data is passed along to the endpoint. 
 But SSL passthrough keeps the data encrypted as it travels through the load balancer - and this is what Kafka expects.
 
-#. Clone the Nginx Github repo:
+#. Add the Kubernetes NginX Helm repo and update the repo.
 
    ::
    
-     git clone https://github.com/helm/charts/tree/master/stable/nginx-ingress
+     helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
+     helm repo update
 
 #. Install the Ngix controller:
 
    ::
    
-     helm upgrade --install nginx-operator stable/nginx-ingress \
-       --set controller.publishService.enabled=true \
+     helm upgrade  --install ingress-nginx ingress-nginx/ingress-nginx \
        --set controller.extraArgs.enable-ssl-passthrough="true"
        
 ================================

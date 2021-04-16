@@ -437,7 +437,7 @@ Produce to the Topic and View the Results in Control Center
 
      kubectl port-forward controlcenter-0 9021:9021
      
-#. Browse to `Control Center <https://localhost:9021>`__.
+#. Browse to `Control Center <https://localhost:9021>`__. Your browser will complain about the self-signed certificate. Bypass this in whatever way your browser requires. For example, in Google Chrome, go to Advanced -> Proceed to localhost (unsafe).
 
 #. Navigate to Cluster 1 -> Topics -> elastic-0 -> Messages in Control Center.
      

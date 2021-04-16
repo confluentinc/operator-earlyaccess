@@ -14,6 +14,8 @@ Before you begin this tutorial:
 * `Configure the Early Access credentials <https://github.com/confluentinc/operator-earlyaccess#configure-early-access-credentials>`__.
 
 * `Clone the tutorial repo <https://github.com/confluentinc/operator-earlyaccess#download-confluent-operator-tutorial-package>`__.
+
+* This tutorial assumes your local machine has a Java Runtime Environment (JRE) and ``kafka-console-producer`` installed. The command line producer tool comes with `Confluent Platform <https://docs.confluent.io/platform/current/installation/installing_cp/zip-tar.html#manual-install-using-zip-and-tar-archives>`__ TARball under the ``bin/`` directory.
  
 To complete this tutorial, you'll follow these steps:
 

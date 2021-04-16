@@ -394,9 +394,9 @@ Create the Topic
 
 #. Create the topic called ``elastic-0`` for the Kafka producer to write to.
 
-  ::
+   ::
 
-    kubectl apply -f $TUTORIAL_HOME/topic.yaml
+     kubectl apply -f $TUTORIAL_HOME/topic.yaml
 
 Create Client Properties File
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -423,8 +423,15 @@ Confluent Secret Protection.
 Produce to the Topic and View the Results in Control Center
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+#. Start the ``kafka-console-producer`` command line utility. Don't enter any messages at the ``>`` prompt yet.
 
-#. Set up port forwarding to the Confluent Control Center web UI from the local machine:
+   ::
+
+     kafka-console-producer --bootstrap-server kafka.$DOMAIN:443 \
+       --topic elastic-0 \
+       --producer.config $TUTORIAL_HOME/client/kafka.properties
+
+#. In a new terminal window, set up port forwarding to the Confluent Control Center web UI from the local machine:
 
    ::
 
@@ -434,18 +441,10 @@ Produce to the Topic and View the Results in Control Center
 
 #. Navigate to Cluster 1 -> Topics -> elastic-0 -> Messages in Control Center.
      
-#. Back in a terminal window, start the ``kafka-console-producer`` command line utility.
-    Enter a few messages at the ``>`` prompt.
 
-   ::
+#. Back at the console producer ``>`` prompt, enter some messages. Look in Confluent Control Center to see those messages show up.
 
-     kafka-console-producer --bootstrap-server kafka.$DOMAIN:443 \
-       --topic elastic-0 \
-       --producer.config $TUTORIAL_HOME/client/kafka.properties
-
-#. Back in Control Center, check that messages are flowing into the ``elastic-0`` topic.
-
-#. Celebrate! Your Confluent deployment can serve Kafka clients outside of your Kubernetes cluster!
+#. Celebrate! Your Confluent deployment can securely serve Kafka clients outside of your Kubernetes cluster!
 
 =========
 Tear Down

@@ -329,13 +329,13 @@ as well as a keystore and a truststore.
 
    ::
 
-     openssl genrsa -out $TUTORIAL_HOME/certs/privkey.pem 2048
+     openssl genrsa -out $TUTORIAL_HOME/certs/privkey-client.pem 2048
 
 #. Create a certificate signing request (CSR) called ``client.csr`` for the Kafka client.
 
    ::
 
-     openssl req -new -key $TUTORIAL_HOME/certs/privkey.pem \
+     openssl req -new -key $TUTORIAL_HOME/certs/privkey-client.pem \
        -out $TUTORIAL_HOME/certs/client.csr \
        -subj "/C=US/ST=CA/L=MVT/O=TestOrg/OU=Cloud/CN=kafka-client"
 

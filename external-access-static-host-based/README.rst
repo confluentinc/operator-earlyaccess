@@ -305,8 +305,11 @@ Create DNS records for Kafka brokers using the ingress controller load balancer 
 Validate
 ========
 
-Configure Kafka Client Certificates, Keystore, and Truststore
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+To validate, you will produce data to a topic from a Kafka client
+outside of the Kubernetes cluster.
+
+Generate Kafka Client Certificates, Keystore, and Truststore
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 The Confluent Servers are configured to authenticate clients with mTLS, 
 so you must create a keystore **and** truststore for the Kafka client.
@@ -370,96 +373,86 @@ as well as a keystore and a truststore.
        -deststorepass mystorepassword \
        -deststoretype pkcs12
 
+Create the Topic
+^^^^^^^^^^^^^^^^
 
+#. Inspect the ``$TUTORIAL_HOME/topic.yaml`` file, which defines the ``elastic-0`` topic as follows:
+
+   ::
+  
+     apiVersion: platform.confluent.io/v1beta1
+     kind: KafkaTopic
+     metadata:
+       name: elastic-0
+       namespace: confluent
+     spec:
+       replicas: 1
+       partitionCount: 1
+       configs:
+         cleanup.policy: "delete"
+
+#. Create the topic called ``elastic-0`` for the Kafka producer to write to.
+
+  ::
+
+    kubectl apply -f $TUTORIAL_HOME/topic.yaml
 
 Create Client Properties File
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Now that we've got the Confluent Platform set up, let's deploy the producer
-client app.
-
-The producer app is packaged and deployed as a pod on Kubernetes. The required
-topic is defined as a KafkaTopic custom resource in
-``$TUTORIAL_HOME/producer-app-data.yaml``.
-
-In a single configuration file, you do all of the following:
-
-* Provide client credentials.
-
-  Create a Kubernetes secret with the ``kafka.properties`` file and a pre-generated
-  keystore and trustore.
-  
-* Deploy the producer app.
-
-* Create a topic for it to write to.
-
-  The ``$TUTORIAL_HOME/producer-app-data.yaml`` defines the ``elastic-0`` topic as
-  follows:
+Create a configuration file for the client called ``kafka.properties``.
 
   ::
-  
-    apiVersion: platform.confluent.io/v1beta1
-    kind: KafkaTopic
-    metadata:
-      name: elastic-0
-      namespace: confluent
-    spec:
-      replicas: 1
-      partitionCount: 1
-      configs:
-        cleanup.policy: "delete"
-  
-**To deploy the producer application:**
 
-#. Generate an encrypted ``kafka.properties`` file content:
+    cat <<-EOF > $TUTORIAL_HOME/client/kafka.properties
+    bootstrap.servers=kafka.$DOMAIN:443
+    security.protocol=SSL
+    ssl.truststore.location=$TUTORIAL_HOME/client/client.truststore.p12
+    ssl.truststore.password=mystorepassword
+    ssl.truststore.type=PKCS12
+    ssl.keystore.location=$TUTORIAL_HOME/client/client.keystore.p12
+    ssl.keystore.password=mystorepassword
+    ssl.keystore.type=PKCS12
+    EOF
 
-   ::
-   
-     echo bootstrap.servers=kafka.$DOMAIN:443 \
-       security.protocol=SSL \
-       ssl.truststore.location=/mnt/truststore.jks \
-       ssl.truststore.password=mystorepassword | base64
-   
-#. Provide the output from the previous step for ``kafka.properties`` in the 
-   ``$TUTORIAL_HOME/producer-app-data.yaml`` file:
+Remember that in production, all properties files with sensitive credentials 
+should be locked down with elevated permissions and encrypted with 
+Confluent Secret Protection.
 
-   ::
-   
-     apiVersion: v1
-     kind: Secret
-     metadata:
-       name: kafka-client-config
-       namespace: confluent
-     type: Opaque
-     data:
-       kafka.properties: # Provide the base64-encoded kafka.properties
+Produce to the Topic and View the Results in Control Center
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-#. Deploy the producer app:
 
-   ::
-   
-     kubectl apply -f $TUTORIAL_HOME/producer-app-data.yaml
-
-Validate in Control Center
-^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-Use Control Center to monitor the Confluent Platform, and see the created topic and data.
-
-#. Set up port forwarding to Control Center web UI from local machine:
+#. Set up port forwarding to the Confluent Control Center web UI from the local machine:
 
    ::
 
      kubectl port-forward controlcenter-0 9021:9021
-
+     
 #. Browse to `Control Center <https://localhost:9021>`__.
 
-#. Check that the ``elastic-0`` topic was created and that messages are being produced to the topic.
+#. Navigate to Cluster 1 -> Topics -> elastic-0 -> Messages in Control Center.
+     
+#. Back in a terminal window, start the ``kafka-console-producer`` command line utility.
+    Enter a few messages at the ``>`` prompt.
+
+   ::
+
+     kafka-console-producer --bootstrap-server kafka.$DOMAIN:443 \
+       --topic elastic-0 \
+       --producer.config $TUTORIAL_HOME/client/kafka.properties
+
+#. Back in Control Center, check that messages are flowing into the ``elastic-0`` topic.
+
+#. Celebrate! Your Confluent deployment can serve Kafka clients outside of your Kubernetes cluster!
 
 =========
 Tear Down
 =========
 
 Shut down Confluent Platform and the data:
+
+``Ctrl+C`` on the ``kafka-console-producer`` command.
 
 ::
 

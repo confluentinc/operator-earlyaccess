@@ -355,6 +355,7 @@ as well as a keystore and a truststore.
 
    ::
 
+     mkdir $TUTORIAL_HOME/client && \
      openssl pkcs12 -export \
        -in $TUTORIAL_HOME/certs/fullchain-client.pem \
        -inkey $TUTORIAL_HOME/certs/privkey-client.pem \

@@ -202,7 +202,7 @@ Create an Ingress resource that includes a collection of rules that the Ingress
 control uses to route the inbound traffic to Kafka:
 
 #. In the resource file, ``ingress-service-hostbased.yaml``, replace ``$DOMAIN`` 
-   with the value of your ``$DOMAIN`` and uncomment the ``hosts:`` and ``host:`` settings.
+   with the value of your ``$DOMAIN``.
 
 #. Create the Ingress resource:
 

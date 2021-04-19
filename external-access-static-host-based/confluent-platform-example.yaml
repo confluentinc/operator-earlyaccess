@@ -35,7 +35,6 @@ spec:
         type: staticForHostBasedRouting
         staticForHostBasedRouting:
           domain: platformops.dev.gcp.devel.cpdev.cloud
-          bootstrapPrefix: rbakhshi
           brokerPrefix: rbakhshi
           port: 443
       tls:

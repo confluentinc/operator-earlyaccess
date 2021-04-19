@@ -35,7 +35,6 @@ spec:
         type: staticForHostBasedRouting
         staticForHostBasedRouting:
           domain: ## Domain
-          bootstrapPrefix: ## Bootstrap prefix
           brokerPrefix:  ## Bootstrap prefix
           port: 443
       tls:

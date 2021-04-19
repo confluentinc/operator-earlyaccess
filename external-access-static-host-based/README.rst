@@ -14,6 +14,8 @@ Before you begin this tutorial:
 * `Configure the Early Access credentials <https://github.com/confluentinc/operator-earlyaccess#configure-early-access-credentials>`__.
 
 * `Clone the tutorial repo <https://github.com/confluentinc/operator-earlyaccess#download-confluent-operator-tutorial-package>`__.
+
+* This tutorial assumes your local machine has a Java Runtime Environment (JRE) and ``kafka-console-producer`` installed. The command line producer tool comes with `Confluent Platform <https://docs.confluent.io/platform/current/installation/installing_cp/zip-tar.html#manual-install-using-zip-and-tar-archives>`__ TARball under the ``bin/`` directory.
  
 To complete this tutorial, you'll follow these steps:
 
@@ -71,18 +73,83 @@ Deploy Confluent Operator
    
      kubectl get pods
       
-==================
-Deploy TLS secrets
-==================
+===========================================
+Generate and Deploy TLS Secrets for Servers
+===========================================
 
-Create a Kubernetes secret using the provided PEM files:
+This tutorial uses mutual TLS (mTLS) for encryption and authentication between
+Confluent Servers (inside the Kubernetes cluster) and Kafka clients (outside the Kubernetes cluster).
+In production, you would need to provide your own valid certificates,
+but for this tutorial, you will generate your own.
+Here are the important files you will create:
+
+* ``cacerts.pem`` -- Certificate authority (CA) certificate
+* ``privkey.pem`` -- Private key for Confluent Servers
+* ``fullchain.pem`` -- Certificate for Confluent Servers
+* ``privkey-client.pem`` -- Private key for Kafka client
+* ``fullchain-client.pem`` -- Certificate for Kafka client
+* ``client.truststore.p12`` -- Truststore for Kafka client
+* ``client.keystore.p12`` -- Keystore for Kafka client
+
+Notice that you will not generate the keystore or truststore for Confluent Servers.
+Confluent Operator will generate those for Confluent Server from
+``cacerts.pem``, ``privkey.pem``, and ``fullchain.pem``.
+
+#. Generate a private key called ``rootCAkey.pem`` for the root certificate authority.
+
+   ::
+
+     openssl genrsa -out $TUTORIAL_HOME/certs/rootCAkey.pem 2048
+
+#. Generate the CA certificate.
+
+   ::
+
+     openssl req -x509  -new -nodes \
+       -key $TUTORIAL_HOME/certs/rootCAkey.pem \
+       -days 3650 \
+       -out $TUTORIAL_HOME/certs/cacerts.pem \
+       -subj "/C=US/ST=CA/L=MVT/O=TestOrg/OU=Cloud/CN=TestCA"
+
+#. Generate a private key called ``privkey.pem`` for Confluent Servers.
+
+   ::
+
+     openssl genrsa -out $TUTORIAL_HOME/certs/privkey.pem 2048
+
+#. Create a certificate signing request (CSR) called ``server.csr`` for Confluent Servers. Note the ``*`` wildcard for the ``CN`` common name. Later, this will allow for Subject Alternate Names (SANs) for all of the brokers.
+
+   ::
+
+     openssl req -new -key $TUTORIAL_HOME/certs/privkey.pem \
+       -out $TUTORIAL_HOME/certs/server.csr \
+       -subj "/C=US/ST=CA/L=MVT/O=TestOrg/OU=Cloud/CN=*.$DOMAIN"
+
+#. Create the ``fullchain.pem`` certificate for Confluent Servers. Notice the extension file includes a ``*`` wildcard for SANs.
+
+   ::
+
+     openssl x509 -req \
+       -in $TUTORIAL_HOME/certs/server.csr \
+       -extensions server_ext \
+       -CA $TUTORIAL_HOME/certs/cacerts.pem \
+       -CAkey $TUTORIAL_HOME/certs/rootCAkey.pem \
+       -CAcreateserial \
+       -out $TUTORIAL_HOME/certs/fullchain.pem \
+       -days 365 \
+       -extfile \
+       <(echo "[server_ext]"; echo "extendedKeyUsage=serverAuth,clientAuth"; echo "subjectAltName=DNS:*.$DOMAIN")
+
+#. 
+
+#. Create a Kubernetes secret using the provided PEM files:
  
-::
+   ::
 
-  kubectl create secret generic tls-group1 \
-    --from-file=fullchain.pem=$TUTORIAL_HOME/certs/fullchain.pem \
-    --from-file=cacerts.pem=$TUTORIAL_HOME/certs/cacerts.pem \
-    --from-file=privkey.pem=$TUTORIAL_HOME/certs/privkey.pem
+     kubectl create secret generic tls-group1 \
+       --from-file=fullchain.pem=$TUTORIAL_HOME/certs/fullchain.pem \
+       --from-file=cacerts.pem=$TUTORIAL_HOME/certs/cacerts.pem \
+       --from-file=privkey.pem=$TUTORIAL_HOME/certs/privkey.pem
        
 ============================
 Configure Confluent Platform
@@ -240,94 +307,154 @@ Create DNS records for Kafka brokers using the ingress controller load balancer 
 Validate
 ========
 
-Deploy producer application
-^^^^^^^^^^^^^^^^^^^^^^^^^^^
+To validate, you will produce data to a topic from a Kafka client
+outside of the Kubernetes cluster.
 
-Now that we've got the Confluent Platform set up, let's deploy the producer
-client app.
+Generate Kafka Client Certificates, Keystore, and Truststore
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-The producer app is packaged and deployed as a pod on Kubernetes. The required
-topic is defined as a KafkaTopic custom resource in
-``$TUTORIAL_HOME/producer-app-data.yaml``.
+The Confluent Servers are configured to authenticate clients with mTLS, 
+so you must create a keystore **and** truststore for the Kafka client.
+Here are the important files you will create:
 
-In a single configuration file, you do all of the following:
+* ``privkey-client.pem`` -- Private key for Kafka client
+* ``fullchain-client.pem`` -- Certificate for Kafka client
+* ``client.keystore.p12`` -- Keystore for Kafka client
+* ``client.truststore.p12`` -- Truststore for Kafka client
 
-* Provide client credentials.
+You made the CA certificate earlier when generating the certificates for the Confluent Servers.
+You will use the same CA certificate to create a certificate for the Kafka client, 
+as well as a keystore and a truststore.
 
-  Create a Kubernetes secret with the ``kafka.properties`` file and a pre-generated
-  keystore and trustore.
+
+#. Generate a private key called ``privkey-client.pem`` for the Kafka client.
+
+   ::
+
+     openssl genrsa -out $TUTORIAL_HOME/certs/privkey-client.pem 2048
+
+#. Create a certificate signing request (CSR) called ``client.csr`` for the Kafka client.
+
+   ::
+
+     openssl req -new -key $TUTORIAL_HOME/certs/privkey-client.pem \
+       -out $TUTORIAL_HOME/certs/client.csr \
+       -subj "/C=US/ST=CA/L=MVT/O=TestOrg/OU=Cloud/CN=kafka-client"
+
+#. Create the ``fullchain-client.pem`` certificate for the Kafka client.
+
+   ::
+
+     openssl x509 -req \
+       -in $TUTORIAL_HOME/certs/client.csr \
+       -CA $TUTORIAL_HOME/certs/cacerts.pem \
+       -CAkey $TUTORIAL_HOME/certs/rootCAkey.pem \
+       -CAcreateserial \
+       -out $TUTORIAL_HOME/certs/fullchain-client.pem \
+       -days 365
+
+#. Create the Kafka client's keystore. This keystore is used to authenticate to brokers.
+
+   ::
+
+     mkdir $TUTORIAL_HOME/client && \
+     openssl pkcs12 -export \
+       -in $TUTORIAL_HOME/certs/fullchain-client.pem \
+       -inkey $TUTORIAL_HOME/certs/privkey-client.pem \
+       -out $TUTORIAL_HOME/client/client.keystore.p12 \
+       -name kafka-client \
+       -passout pass:mystorepassword
+
+#. Create the Kafka client's truststore from the CA. This truststore allows the client to trust the broker's certificate, which is necessary for transport encryption.
+
+   ::
+
+     keytool -import -trustcacerts -noprompt \
+       -alias rootCA \
+       -file $TUTORIAL_HOME/certs/cacerts.pem \
+       -keystore $TUTORIAL_HOME/client/client.truststore.p12 \
+       -deststorepass mystorepassword \
+       -deststoretype pkcs12
+
+Create the Topic
+^^^^^^^^^^^^^^^^
+
+#. Inspect the ``$TUTORIAL_HOME/topic.yaml`` file, which defines the ``elastic-0`` topic as follows:
+
+   ::
   
-* Deploy the producer app.
+     apiVersion: platform.confluent.io/v1beta1
+     kind: KafkaTopic
+     metadata:
+       name: elastic-0
+       namespace: confluent
+     spec:
+       replicas: 1
+       partitionCount: 1
+       configs:
+         cleanup.policy: "delete"
 
-* Create a topic for it to write to.
+#. Create the topic called ``elastic-0`` for the Kafka producer to write to.
 
-  The ``$TUTORIAL_HOME/producer-app-data.yaml`` defines the ``elastic-0`` topic as
-  follows:
+   ::
+
+     kubectl apply -f $TUTORIAL_HOME/topic.yaml
+
+Create Client Properties File
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Create a configuration file for the client called ``kafka.properties``.
 
   ::
-  
-    apiVersion: platform.confluent.io/v1beta1
-    kind: KafkaTopic
-    metadata:
-      name: elastic-0
-      namespace: confluent
-    spec:
-      replicas: 1
-      partitionCount: 1
-      configs:
-        cleanup.policy: "delete"
-  
-**To deploy the producer application:**
 
-#. Generate an encrypted ``kafka.properties`` file content:
+    cat <<-EOF > $TUTORIAL_HOME/client/kafka.properties
+    bootstrap.servers=kafka.$DOMAIN:443
+    security.protocol=SSL
+    ssl.truststore.location=$TUTORIAL_HOME/client/client.truststore.p12
+    ssl.truststore.password=mystorepassword
+    ssl.truststore.type=PKCS12
+    ssl.keystore.location=$TUTORIAL_HOME/client/client.keystore.p12
+    ssl.keystore.password=mystorepassword
+    ssl.keystore.type=PKCS12
+    EOF
 
-   ::
-   
-     echo bootstrap.servers=kafka.$DOMAIN:443 \
-       security.protocol=SSL \
-       ssl.truststore.location=/mnt/truststore.jks \
-       ssl.truststore.password=mystorepassword | base64
-   
-#. Provide the output from the previous step for ``kafka.properties`` in the 
-   ``$TUTORIAL_HOME/producer-app-data.yaml`` file:
+Remember that in production, all properties files with sensitive credentials 
+should be locked down with elevated permissions and encrypted with 
+Confluent Secret Protection.
+
+Produce to the Topic and View the Results in Control Center
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+#. Start the ``kafka-console-producer`` command line utility. Don't enter any messages at the ``>`` prompt yet.
 
    ::
-   
-     apiVersion: v1
-     kind: Secret
-     metadata:
-       name: kafka-client-config
-       namespace: confluent
-     type: Opaque
-     data:
-       kafka.properties: # Provide the base64-encoded kafka.properties
 
-#. Deploy the producer app:
+     kafka-console-producer --bootstrap-server kafka.$DOMAIN:443 \
+       --topic elastic-0 \
+       --producer.config $TUTORIAL_HOME/client/kafka.properties
 
-   ::
-   
-     kubectl apply -f $TUTORIAL_HOME/producer-app-data.yaml
-
-Validate in Control Center
-^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-Use Control Center to monitor the Confluent Platform, and see the created topic and data.
-
-#. Set up port forwarding to Control Center web UI from local machine:
+#. In a new terminal window, set up port forwarding to the Confluent Control Center web UI from the local machine:
 
    ::
 
      kubectl port-forward controlcenter-0 9021:9021
+     
+#. Browse to `Control Center <https://localhost:9021>`__. Your browser will complain about the self-signed certificate. Bypass this in whatever way your browser requires. For example, in Google Chrome, go to Advanced -> Proceed to localhost (unsafe).
 
-#. Browse to `Control Center <https://localhost:9021>`__.
+#. Navigate to Cluster 1 -> Topics -> elastic-0 -> Messages in Control Center.
+     
 
-#. Check that the ``elastic-0`` topic was created and that messages are being produced to the topic.
+#. Back at the console producer ``>`` prompt, enter some messages. Look in Confluent Control Center to see those messages show up.
+
+#. Celebrate! Your Confluent deployment can securely serve Kafka clients outside of your Kubernetes cluster!
 
 =========
 Tear Down
 =========
 
 Shut down Confluent Platform and the data:
+
+``Ctrl+C`` on the ``kafka-console-producer`` command.
 
 ::
 

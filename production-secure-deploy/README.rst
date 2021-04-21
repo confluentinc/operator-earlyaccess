@@ -170,12 +170,16 @@ Provide RBAC principal credentials
      # ksqlDB RBAC credential
      kubectl create secret generic ksqldb-mds-client \
        --from-file=bearer.txt=$TUTORIAL_HOME/ksqldb-mds-client.txt
+     # Kafka REST credential
+     kubectl create secret generic rest-credential \
+       --from-file=bearer.txt=$TUTORIAL_HOME/bearer.txt \
+       --from-file=basic.txt=$TUTORIAL_HOME/bearer.txt
 
 =========================
 Deploy Confluent Platform
 =========================
 
-#. Deploy Confluent Platform with the above configuration:
+#. Deploy Confluent Platform:
 
    ::
 
@@ -186,121 +190,25 @@ Deploy Confluent Platform
    ::
    
      kubectl get pods
-     
-#. In the output from the previous step, note that the ``READY`` column for ``controlcenter-0`` pod is ``0/1``. The Control Center service cannot be ready until RBAC is configure.
 
-========================
-Create RBAC Rolebindings
-========================
-
-#. Set up port forwarding to the MDS server:
+Note: The default required RoleBindings for each Confluent component are created
+automatically, and maintained as `confluentrolebinding` custom resources.
 
    ::
+
+     kubectl get confluentrolebinding
    
-     kubectl port-forward kafka-0 8090:8090
-
-#. Add the following in your local ``/etc/hosts`` file. This is a workaround for the self-signed certificate we are using in this tutorial.
-
-   ::
-   
-     127.0.0.1	kafka.confluent.svc.cluster.local
-
-#. Log into MDS with the ``kafka`` user and the ``kafka-secret`` password:
-
-   ::
-   
-     confluent login --url https://kafka.confluent.svc.cluster.local:8090 --ca-cert-path $TUTORIAL_HOME/../assets/certs/generated/ca.pem
-
-#. Get Kafka cluster id:
-
-   ::
-   
-     curl -ik https://kafka.confluent.svc.cluster.local:8090/v1/metadata/id 
-     
-#. Take the id value in the above output and save it as an environment variable:
-
-   ::
-   
-     export KAFKA_ID=<Kafka cluster id>
-     # For example:
-     export KAFKA_ID=-KW0pHJJRMW6NdDlayJlQw
-
-#. Create Schema Registry Role Binding for the `sr` user:
-
-   ::
-
-     # Here, Schema Registry is deployed in namespace `confluent` with name `schemaregistry` and MDS user `sr`
-     # User: sr
-     # Group/Cluster ID pattern: id_`<schemaregistry.name>`_`<namespace>` where schemaregistry.name=`schemaregistry` and namespace=`confluent`
-     # Internal topic pattern: _schemas_`<schemaregistry.name>`_`<namespace>`, where schemaregistry.name=`schemaregistry` and namespace=`confluent`
-
-     confluent iam rolebinding create --kafka-cluster-id $KAFKA_ID --principal User:sr --role ResourceOwner  --resource Topic:_confluent-license
-      
-     confluent iam rolebinding create --kafka-cluster-id $KAFKA_ID --principal User:sr --role SecurityAdmin --schema-registry-cluster-id id_schemaregistry_confluent 
-
-     confluent iam rolebinding create --kafka-cluster-id $KAFKA_ID --principal User:sr --role ResourceOwner --resource Group:id_schemaregistry_confluent
-
-     confluent iam rolebinding create --kafka-cluster-id $KAFKA_ID --principal User:sr --role ResourceOwner --resource Topic:_schemas_schemaregistry_confluent
      
 
-#. Create Connect Role Binding for the `connect` user:
+=================================================
+Create RBAC Rolebindings for Control Center admin
+=================================================
+
+Create Control Center Role Binding for a Control Center ``testadmin`` user.
 
    ::
 
-     # Here, Connect is deployed in namespace `confluent` with name `connect` and MDS user `connect`
-     # User: connect
-     # Group/Cluster ID pattern: `<namespace>.<connect.name>` where namespace=`confluent` and connect.name=`connect`
-     # Internal topic pattern: `<namespace>.<connect.name>-` where namespace=`confluent` and connect.name=`connect`
-
-     confluent iam rolebinding create --kafka-cluster-id $KAFKA_ID --principal User:connect --role ResourceOwner --resource Group:confluent.connect
-
-     confluent iam rolebinding create --kafka-cluster-id $KAFKA_ID --principal User:connect --role DeveloperWrite --resource Topic:_confluent-monitoring --prefix
-
-     confluent iam rolebinding create --kafka-cluster-id $KAFKA_ID --principal User:connect --role ResourceOwner --resource Topic:confluent.connect --prefix
-
-
-#. Create ksqlDB Role Binding for the `ksql` user:
-
-   ::
-
-     # Here, ksqlDB is deployed in namespace `confluent` with name `ksql` and MDS user `ksql`
-     # User: ksql
-     # Group/Cluster ID pattern: `<namespace>.<ksql.name>_`
-     # Internal Topic Pattern: `_confluent-ksql-<namespace>.<ksql.name>_` where namespace=`confluent` and ksql.name=`ksql`
-
-     confluent iam rolebinding create --kafka-cluster-id $KAFKA_ID --principal User:ksql --role ResourceOwner  --ksql-cluster-id confluent.ksqldb_ --resource KsqlCluster:ksql-cluster
-
-     confluent iam rolebinding create --kafka-cluster-id $KAFKA_ID --principal User:ksql --role ResourceOwner  --resource Topic:_confluent-ksql-confluent.ksqldb__command_topic --prefix
-
-#. Create Control Center Role Binding for the ``c3`` user:
-
-   ::
-
-     # Here, Control Center is deployed in namespace `confluent` with name `controlcenter` and MDS user `c3`
-
-     # Allow `c3`, system user for Control Center, to use Kafka cluster for storing data
-     confluent iam rolebinding create --principal User:c3 --role SystemAdmin --kafka-cluster-id $KAFKA_ID
-
-     # Allow `testadmin` to see kafka cluster information
-     confluent iam rolebinding create --kafka-cluster-id $KAFKA_ID --role ClusterAdmin --principal User:testadmin
-
-     # Allow `testadmin` to see connectcluster
-     confluent iam rolebinding create --kafka-cluster-id $KAFKA_ID --connect-cluster-id confluent.connect  --principal User:testadmin --role SystemAdmin
-
-     # Allow `testadmin` to see ksqlDB cluster
-     confluent iam rolebinding create --kafka-cluster-id $KAFKA_ID --ksql-cluster-id confluent.ksqldb_  --principal User:testadmin --role SystemAdmin
-
-     # Allow `testadmin` to see Schema Registry 
-     confluent iam rolebinding create --kafka-cluster-id $KAFKA_ID --schema-registry-cluster-id id_schemaregistry_confluent --principal User:testadmin --role SystemAdmin
-
-       
-#. Control Center will restart in 50 seconds. Run the following command to verify that Control Center is up and ready:
-
-   ::
-   
-     kubectl get pods
-     
-   The ``READY`` column for ``controlcenter-0`` should have ``1/1``.
+     kubectl apply -f $TUTORIAL_HOME/controlcenter-testadmin-rolebindings.yaml
 
 ========
 Validate
@@ -325,7 +233,7 @@ through a local port forwarding like below:
    
      https://localhost:9021
 
-The ``c3`` user has the ``SystemAdmin`` role granted and will have access to the
+The ``testadmin`` user (``testadmin`` password) has the ``SystemAdmin`` role granted and will have access to the
 cluster and broker information.
   
 

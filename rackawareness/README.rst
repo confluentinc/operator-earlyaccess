@@ -35,6 +35,9 @@ Pre-requisites: Node Labels and Service Account Rolebinding
 
 The Kubernetes cluster must have node labels set for the fault domain. The nodes in each zone should have the same node label.
 
+  Note that Kubernetes v1.17 and newer use label ``topology.kubernetes.io/zone``. Older versions use the ``failure-domain.beta.kubernetes.io/zone`` label instead.
+
+
 #. Check the Node Labels for ``topology.kubernetes.io/zone``:
 
    ::
@@ -42,6 +45,7 @@ The Kubernetes cluster must have node labels set for the fault domain. The nodes
     kubectl get node \
      -o=custom-columns=NODE:.metadata.name,ZONE:.metadata.labels."topology\.kubernetes\.io/zone" \
        | sort -k2
+
 
 #. Configure your Kubernetes cluster with a service account that is configured with a clusterrole/role that provides get/list access to both the pods and nodes resources. This is required as Kafka pods will curl kubernetes api for the node it is scheduled on using the mounted serviceAccountToken.
 

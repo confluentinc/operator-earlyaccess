@@ -1,2 +1,2 @@
-username=c3
-password=c3-secret
+username=kafka
+password=kafka-secret

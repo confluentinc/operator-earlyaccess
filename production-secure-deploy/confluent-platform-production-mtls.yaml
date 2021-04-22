@@ -57,7 +57,6 @@ spec:
     type: rbac
     superUsers:
     - User:kafka
-    - User:ANONYMOUS
   services:
     restProxy:
       enabled: true
@@ -76,6 +75,8 @@ spec:
         loadBalancer:
           domain: platformops.dev.gcp.devel.cpdev.cloud
           prefix: rb-mds
+      provider:
+        type: ldap
       ldap:
         address: ldap://ldap.confluent.svc.cluster.local:389
         authentication:
@@ -93,6 +94,11 @@ spec:
           userObjectClass: organizationalRole
           userSearchBase: dc=test,dc=com
   dependencies:
+    kafkaRest:
+      authentication:
+        type: bearer
+        bearer:
+          secretRef: mds-client
     zookeeper:
       endpoint: zookeeper.confluent.svc.cluster.local:2182
       authentication:
@@ -231,8 +237,8 @@ spec:
     probe:
       liveness:
         periodSeconds: 10
-        failureThreshold: 1
-        timeoutSeconds: 5
+        failureThreshold: 5
+        timeoutSeconds: 500
   image:
     application: confluentinc/cp-enterprise-control-center-operator:6.1.0.0
     init: confluentinc/cp-init-container-operator:6.1.0.0
@@ -277,3 +283,15 @@ spec:
       url: https://schemaregistry.confluent.svc.cluster.local:8081
       tls:
         enabled: true
+---
+apiVersion: platform.confluent.io/v1beta1
+kind: KafkaRestClass
+metadata:
+  name: default
+  namespace: confluent
+spec:
+  kafkaRest:
+    authentication:
+      type: bearer
+      bearer:
+        secretRef: rest-credential

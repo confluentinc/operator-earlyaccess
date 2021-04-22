@@ -21,7 +21,7 @@ spec:
   replicas: 6
   rackAssignment:
     nodeLabels:
-    - failure-domain.beta.kubernetes.io/zone
+    - topology.kubernetes.io/zone
   podTemplate:
     serviceAccountName: kafka
   oneReplicaPerNode: true

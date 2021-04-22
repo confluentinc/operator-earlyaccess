@@ -35,7 +35,7 @@ Pre-requisites: Node Labels and Service Account Rolebinding
 
 The Kubernetes cluster must have node labels set for the fault domain. The nodes in each zone should have the same node label.
 
-Check the Node Labels:
+Check the Node Labels for ``topology.kubernetes.io/zone``:
 
 ::
 
@@ -70,9 +70,9 @@ instruction
      
      kubectl get pods
 
-=========================
+=======================================
 Configure and Deploy Confluent Platform
-=========================
+=======================================
 
 #. Configure rack awareness - see the example file `rackawareness/confluent-platform.yaml`
 
@@ -85,7 +85,7 @@ Configure and Deploy Confluent Platform
        replicas: 6
        rackAssignment:
          nodeLabels:
-         - failure-domain.beta.kubernetes.io/zone # <-- The node label that your Kubernetes uses for the rack fault domain
+         - topology.kubernetes.io/zone # <-- The node label that your Kubernetes uses for the rack fault domain
        podTemplate:
         serviceAccountName: kafka # <-- The service account with the needed clusterrole/role
        oneReplicaPerNode: true # <-- Ensures that only one Kafka broker per node is scheduled

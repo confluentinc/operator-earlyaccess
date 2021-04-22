@@ -35,19 +35,19 @@ Pre-requisites: Node Labels and Service Account Rolebinding
 
 The Kubernetes cluster must have node labels set for the fault domain. The nodes in each zone should have the same node label.
 
-Check the Node Labels for ``topology.kubernetes.io/zone``:
+#. Check the Node Labels for ``topology.kubernetes.io/zone``:
 
-::
+   ::
 
-  kubectl get nodes --show-labels | grep 'zone'
+    kubectl get node \
+     -o=custom-columns=NODE:.metadata.name,ZONE:.metadata.labels."topology\.kubernetes\.io/zone" \
+       | sort -k2
 
-Configure your Kubernetes cluster with a service account that is configured with a clusterrole/role that provides 
-get/list access to both the pods and nodes resources.
-This is required as Kafka pods will curl kubernetes api for the node it is scheduled on using the mounted serviceAccountToken.
+#. Configure your Kubernetes cluster with a service account that is configured with a clusterrole/role that provides get/list access to both the pods and nodes resources. This is required as Kafka pods will curl kubernetes api for the node it is scheduled on using the mounted serviceAccountToken.
 
-::
+   ::
 
-  kubectl apply -f rackawareness/service-account-rolebinding.yaml
+     kubectl apply -f TUTORIAL_HOME/service-account-rolebinding.yaml
 
 =========================
 Deploy Confluent Operator
@@ -109,4 +109,36 @@ Configure and Deploy Confluent Platform
    
      kubectl describe kafka
 
-     
+============================
+Check Pod and Rack Placement
+============================
+
+With rack awareness enabled, broker pods will be scheduled so
+there is one broker per node, and at the Kafka layer, Kafka will
+make smart decisions about where to place data for maximum fault tolerance.
+For example, Kafka will avoid placing all replicas for a partition on brokers
+in the same zone.
+
+#. Check the Node labels for ``topology.kubernetes.io/zone`` again:
+
+   ::
+
+    kubectl get node \
+     -o=custom-columns=NODE:.metadata.name,ZONE:.metadata.labels."topology\.kubernetes\.io/zone" \
+       | sort -k2
+
+#. Check that the ``broker.rack`` property has been set inside broker 0.
+
+   ::
+    
+     kubectl exec -it kafka-0 -- \
+       grep 'broker.rack' confluentinc/etc/kafka/kafka.properties
+
+#. Verify that there is only one broker per node.
+
+   ::
+
+     kubectl get pod \
+       -o=custom-columns=NODE:.spec.nodeName,NAME:.metadata.name \
+         | grep kafka | sort
+      

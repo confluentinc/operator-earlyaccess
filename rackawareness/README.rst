@@ -47,7 +47,7 @@ The Kubernetes cluster must have node labels set for the fault domain. The nodes
 
    ::
 
-     kubectl apply -f TUTORIAL_HOME/service-account-rolebinding.yaml
+     kubectl apply -f $TUTORIAL_HOME/service-account-rolebinding.yaml
 
 =========================
 Deploy Confluent Operator

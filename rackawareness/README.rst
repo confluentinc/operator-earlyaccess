@@ -39,7 +39,7 @@ Check the Node Labels for ``topology.kubernetes.io/zone``:
 
 ::
 
-  kubectl get nodes --show-labels
+  kubectl get nodes --show-labels | grep 'zone'
 
 Configure your Kubernetes cluster with a service account that is configured with a clusterrole/role that provides 
 get/list access to both the pods and nodes resources.

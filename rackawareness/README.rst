@@ -8,6 +8,16 @@ Each Kafka broker will be configured with it's broker.rack setting to the corres
 
 Read more about Kafka rack awareness: `Confluent Docs <https://docs.confluent.io/platform/current/kafka/post-deployment.html#balancing-replicas-across-racks>`__.
 
+Before you begin this tutorial:
+
+* `Set up the prerequisites <https://github.com/confluentinc/operator-earlyaccess#pre-requisites>`__.
+
+* `Create the namespace for the tutorials <https://github.com/confluentinc/operator-earlyaccess#set-up-the-kubernetes-cluster>`__.
+
+* `Configure the Early Access credentials <https://github.com/confluentinc/operator-earlyaccess#configure-early-access-credentials>`__.
+
+* `Clone the tutorial repo <https://github.com/confluentinc/operator-earlyaccess#download-confluent-operator-tutorial-package>`__.
+
 ==================================
 Set the current tutorial directory
 ==================================

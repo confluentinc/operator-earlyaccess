@@ -236,12 +236,14 @@ Create the Kafka bootstrap service to access Kafka:
 
   kubectl apply -f $TUTORIAL_HOME/kafka-bootstrap-service.yaml
 
-=========================
-Deploy Ingress controller
-=========================
+=====================================
+Deploy Ingress Controller and Ingress
+=====================================
 
 An Ingress controller is required to access Kafka using the static host-based
 routing. In this tutorial, we will use Nginx Ingress controller.
+Replace this section with the `<README.rst#Appendix: Use Istio Gateway instead of NginX Ingress Controller>`__ appendix if you would rather
+use Istio Gateway.
 
 SSL passthrough is the action of passing data through a load balancer to a server without decrypting it. 
 In many load balancer use cases, the decryption or SSL termination happens at the load balancer and data is passed along to the endpoint. 
@@ -486,3 +488,8 @@ Shut down Confluent Platform and the data:
 
   helm delete operator
   
+
+
+===============================================================
+Appendix: Use Istio Gateway instead of NginX Ingress Controller
+===============================================================

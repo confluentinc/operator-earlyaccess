@@ -8,7 +8,8 @@ spec:
     istio: ingressgateway
   servers:
   - hosts:
-    # confluent/ corresponds to the confluent namespace
+    # "confluent/" tells the ingress gateway
+    #   to look for services in the confluent namespace
     - confluent/kafka.$DOMAIN
     - confluent/b0.$DOMAIN
     - confluent/b1.$DOMAIN
@@ -18,4 +19,5 @@ spec:
       number: 443
       protocol: TLS
     tls:
+      # Important! Kafka brokers require TLS passthrough
       mode: PASSTHROUGH

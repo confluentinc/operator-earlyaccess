@@ -240,17 +240,22 @@ Create the Kafka bootstrap service to access Kafka:
 Deploy Ingress Controller and Ingress
 =====================================
 
+In many load balancer use cases, the decryption happens at the load balancer, and then unencrypted data is passed along to the endpoint.
+This is known as SSL termination.
+With the Kafka protocol, however, the broker expects to perform the SSL handshake directly with the client.
+To achieve this, SSL passthrough is required.
+SSL passthrough is the action of passing data through a load balancer to a server without decrypting it. 
+Therefore, whatever Ingress controller you choose must support SSL passthrough to access Kafka using static host-based routing.
+
+
+In this tutorial, we will use the Nginx Ingress controller.
+Replace this section with the `<#appendix-istio-gateway>`__ if you would rather
+use Istio Gateway. 
+
 Deploy Ingress Controller
 ^^^^^^^^^^^^^^^^^^^^^^^^^
 
-An Ingress controller is required to access Kafka using the static host-based
-routing. In this tutorial, we will use Nginx Ingress controller.
-Replace this section with the Istio Gateway appendix if you would rather
-use Istio Gateway. `<#appendix-istio-gateway>`__
 
-SSL passthrough is the action of passing data through a load balancer to a server without decrypting it. 
-In many load balancer use cases, the decryption or SSL termination happens at the load balancer and data is passed along to the endpoint. 
-But SSL passthrough keeps the data encrypted as it travels through the load balancer - and this is what Kafka expects.
 
 #. Add the Kubernetes NginX Helm repo and update the repo.
 
@@ -271,7 +276,7 @@ Create Ingress Resource
 ^^^^^^^^^^^^^^^^^^^^^^^
 
 Create an Ingress resource that includes a collection of rules that the Ingress
-control uses to route the inbound traffic to Kafka.
+controller uses to route the inbound traffic to Kafka.
 
 #. In the resource file, ``ingress-service-hostbased.yaml``, replace ``$DOMAIN`` 
    with the value of your ``$DOMAIN``.
@@ -495,4 +500,33 @@ Shut down Confluent Platform and the data:
 Appendix: Istio Gateway
 =======================
 
-hello
+Install Istio
+^^^^^^^^^^^^^
+
+#. Download Istio 1.9.4.
+
+#. Initialize the Custom Resource Definitions.
+#. Create the ``istio-system`` namespace.
+#. Inspect ``IstioOperator.spec.values.gateways`` definition in ``$TUTORIAL_HOME/istio/istio-operator.yaml``.
+#. Deploy the Istio operator.
+
+Create the Gateway
+^^^^^^^^^^^^^^^^^^
+With Istio installed, we must now create a ``Gateway`` object
+to tell istio's Ingress Gateway which services to send the Kafka traffic.
+
+#. Inspect the Gateway definition in ``$TUTORIAL_HOME/istio/istio-operator.yaml``.
+#. Create the Gateway.
+
+Create the VirtualServices
+^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+The services referenced in the ``confluent-gw`` Gateway don't
+actually exist yet. Let's look at the ``VirtualService`` objects
+that define our Kafka services and then create them.
+
+#. Inspect the ``VirtualServices`` in ``$TUTORIAL_HOME/istio/istio-operator.yaml``.
+#. Create the services
+
+With the Gateway and services in place, external Kafka clients
+will now be able to connect. Return to the `<#add-dns-records>`__ section.

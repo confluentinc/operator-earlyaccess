@@ -293,7 +293,7 @@ Add DNS records
 
 Create DNS records for Kafka brokers using the ingress controller load balancer externalIP.
 
-#. Retrieve the external IP addresses of Nginx load balancer:
+#. Retrieve the external IP addresses of the ingress load balancer:
 
    ::
    
@@ -307,10 +307,10 @@ Create DNS records for Kafka brokers using the ingress controller load balancer 
    ====================== ===============================================================
    DNS name               IP address
    ====================== ===============================================================
-   kafka.$DOMAIN          The ``EXTERNAL-IP`` value of the Nginx load balancer service
-   b0.$DOMAIN             The ``EXTERNAL-IP`` value of the Nginx load balancer service
-   b1.$DOMAIN             The ``EXTERNAL-IP`` value of the Nginx load balancer service
-   b2.$DOMAIN             The ``EXTERNAL-IP`` value of the Nginx load balancer service
+   kafka.$DOMAIN          The ``EXTERNAL-IP`` value of the ingress load balancer service
+   b0.$DOMAIN             The ``EXTERNAL-IP`` value of the ingress load balancer service
+   b1.$DOMAIN             The ``EXTERNAL-IP`` value of the ingress load balancer service
+   b2.$DOMAIN             The ``EXTERNAL-IP`` value of the ingress load balancer service
    ====================== ===============================================================
   
 ========

@@ -507,7 +507,8 @@ Install Istio
 
    ::
 
-     curl -L https://istio.io/downloadIstio | ISTIO_VERSION=1.9.4 sh -
+     (cd $TUTORIAL_HOME && \
+       curl -L https://istio.io/downloadIstio | ISTIO_VERSION=1.9.4 sh -)
 
 
 #. Initialize the Custom Resource Definitions with the ``istioctl`` tool.

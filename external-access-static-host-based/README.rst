@@ -217,7 +217,25 @@ Deploy Confluent Platform
    ::
    
      kubectl describe kafka
-     
+
+================================
+Create a Kafka bootstrap service
+================================
+
+When using staticForHostBasedRouting as externalAccess type, the bootstrap
+endpoint is not configured to access Kafka. 
+
+If you want to have a bootstrap endpoint to access Kafka instead of using each
+broker's endpoint, you need to provide the bootstrap endpoint, create a
+DNS record pointing to Ingress controller load balancer's external IP, and
+define the ingress rule for it.
+
+Create the Kafka bootstrap service to access Kafka:
+
+::
+
+  kubectl apply -f $TUTORIAL_HOME/kafka-bootstrap-service.yaml
+
 =========================
 Deploy Ingress controller
 =========================
@@ -243,23 +261,7 @@ But SSL passthrough keeps the data encrypted as it travels through the load bala
      helm upgrade  --install ingress-nginx ingress-nginx/ingress-nginx \
        --set controller.extraArgs.enable-ssl-passthrough="true"
        
-================================
-Create a Kafka bootstrap service
-================================
 
-When using staticForHostBasedRouting as externalAccess type, the bootstrap
-endpoint is not configured to access Kafka. 
-
-If you want to have a bootstrap endpoint to access Kafka instead of using each
-broker's endpoint, you need to provide the bootstrap endpoint, create a
-DNS record pointing to Ingress controller load balancer's external IP, and
-define the ingress rule for it.
-
-Create the Kafka bootstrap service to access Kafka:
-
-::
-
-  kubectl apply -f $TUTORIAL_HOME/kafka-bootstrap-service.yaml
 
 ======================
 Create Ingress service

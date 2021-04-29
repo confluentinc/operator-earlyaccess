@@ -42,7 +42,7 @@ spec:
           secretName: istio-ingressgateway-ca-certs
           mountPath: /etc/istio/ingressgateway-ca-certs    
         # Confluent ports added as an example.
-        # This tutorial only actually uses sni routing
+        # This tutorial only actually uses sni routing.
         ports:
         - port: 15021
           targetPort: 15021
@@ -72,7 +72,7 @@ spec:
           targetPort: 15012
           name: tcp-istiod
           protocol: TCP
-        # This is the port where sni routing happens
+        # This is the port where sni routing happens.
         - port: 15443
           targetPort: 15443
           name: tls

@@ -5,7 +5,7 @@ metadata:
   namespace: confluent
 spec:
   selector:
-    istio: ingressgateway
+    istio: ingressgateway # use istio's default ingress gateway
   servers:
   - hosts:
     # "confluent/" tells the ingress gateway

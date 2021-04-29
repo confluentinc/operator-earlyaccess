@@ -505,18 +505,65 @@ Install Istio
 
 #. Download Istio 1.9.4.
 
-#. Initialize the Custom Resource Definitions.
+   ::
+
+     curl -L https://istio.io/downloadIstio | ISTIO_VERSION=1.9.4 sh -
+
+
+#. Initialize the Custom Resource Definitions with the ``istioctl`` tool.
+
+   ::
+
+     $TUTORIAL_HOME/istio-1.9.4/bin/istioctl operator init
+
+
 #. Create the ``istio-system`` namespace.
+
+   ::
+
+     kubectl create namespace istio-system
+
 #. Inspect ``IstioOperator.spec.values.gateways`` definition in ``$TUTORIAL_HOME/istio/istio-operator.yaml``.
+
+   ::
+
+     spec:
+     ...
+       values:
+       ...
+         gateways:
+           istio-ingressgateway:
+             type: LoadBalancer
+             name: istio-ingressgateway
+             ...
+             # Confluent ports added as an example.
+             # This tutorial only actually uses sni routing.
+             ports:
+             ...
+             # This is the port where sni routing happens.
+             - port: 15443
+               targetPort: 15443
+               name: tls
+               protocol: TCP
+
 #. Deploy the Istio operator.
+
+   ::
+
+     kubectl apply -f $TUTORIAL_HOME/istio/istio-operator.yaml
 
 Create the Gateway
 ^^^^^^^^^^^^^^^^^^
 With Istio installed, we must now create a ``Gateway`` object
 to tell istio's Ingress Gateway which services to send the Kafka traffic.
 
-#. Inspect the Gateway definition in ``$TUTORIAL_HOME/istio/istio-operator.yaml``.
+#. In the ``$TUTORIAL_HOME/istio/istio-gateway.yaml`` file, replace ``$DOMAIN`` 
+   with the value of your ``$DOMAIN``.
+
 #. Create the Gateway.
+   ::
+
+     kubectl apply -f $TUTORIAL_HOME/istio/istio-gateway.yaml
 
 Create the VirtualServices
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -525,8 +572,15 @@ The services referenced in the ``confluent-gw`` Gateway don't
 actually exist yet. Let's look at the ``VirtualService`` objects
 that define our Kafka services and then create them.
 
-#. Inspect the ``VirtualServices`` in ``$TUTORIAL_HOME/istio/istio-operator.yaml``.
+#. In the ``$TUTORIAL_HOME/istio/istio-service.yaml`` file, replace ``$DOMAIN`` 
+   with the value of your ``$DOMAIN``.
+
 #. Create the services
 
+   ::
+
+     kubectl apply -f $TUTORIAL_HOME/istio/istio-service.yaml
+
 With the Gateway and services in place, external Kafka clients
-will now be able to connect. Return to the `<#add-dns-records>`__ section.
+will now be routed to the appropriate broker pods.
+Return to the `<#add-dns-records>`__ section.

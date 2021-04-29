@@ -173,7 +173,7 @@ The Kafka section of the file is set as follow for external access:
 
 :: 
 
-  Spec:
+  spec:
     listeners:
       external:
         externalAccess:

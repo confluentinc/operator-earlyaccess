@@ -41,7 +41,13 @@ spec:
         - name: ingressgateway-ca-certs
           secretName: istio-ingressgateway-ca-certs
           mountPath: /etc/istio/ingressgateway-ca-certs    
+        # Confluent ports added as an example.
+        # This tutorial only actually uses sni routing
         ports:
+        - port: 15021
+          targetPort: 15021
+          name: status-port
+          protocol: TCP
         - port: 8088
           targetPort: 8088
           name: ksqldb-port
@@ -53,10 +59,6 @@ spec:
         - port: 8081
           targetPort: 8081
           name: registry-port
-          protocol: TCP
-        - port: 15021
-          targetPort: 15021
-          name: status-port
           protocol: TCP
         - port: 80
           targetPort: 8080

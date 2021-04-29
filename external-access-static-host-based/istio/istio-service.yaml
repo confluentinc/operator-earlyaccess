@@ -6,14 +6,14 @@ metadata:
   namespace: confluent
 spec:
   hosts:
-    - kafka.confluent.edu
+    - kafka.$DOMAIN
   gateways: 
   - confluent-gw
   tls:
   - match:
     - port: 443
       sniHosts:
-      - kafka.confluent.edu
+      - kafka.$DOMAIN
       gateways:
         - confluent-gw
     route:
@@ -29,14 +29,14 @@ metadata:
   namespace: confluent
 spec:
   hosts:
-    - b0.confluent.edu
+    - b0.$DOMAIN
   gateways: 
   - confluent-gw
   tls:
   - match:
     - port: 443
       sniHosts:
-      - b0.confluent.edu
+      - b0.$DOMAIN
       gateways:
         - confluent-gw
     route:
@@ -52,14 +52,14 @@ metadata:
   namespace: confluent
 spec:
   hosts:
-    - b1.confluent.edu
+    - b1.$DOMAIN
   gateways: 
   - confluent-gw
   tls:
   - match:
     - port: 443
       sniHosts:
-      - b1.confluent.edu
+      - b1.$DOMAIN
       gateways:
         - confluent-gw
     route:
@@ -75,14 +75,14 @@ metadata:
   namespace: confluent
 spec:
   hosts:
-    - b2.confluent.edu
+    - b2.$DOMAIN
   gateways: 
   - confluent-gw
   tls:
   - match:
     - port: 443
       sniHosts:
-      - b2.confluent.edu
+      - b2.$DOMAIN
       gateways:
         - confluent-gw
     route:

@@ -8,10 +8,11 @@ spec:
     istio: ingressgateway
   servers:
   - hosts:
-    - confluent/kafka.confluent.edu
-    - confluent/b0.confluent.edu
-    - confluent/b1.confluent.edu
-    - confluent/b2.confluent.edu
+    # confluent/ corresponds to the confluent namespace
+    - confluent/kafka.$DOMAIN
+    - confluent/b0.$DOMAIN
+    - confluent/b1.$DOMAIN
+    - confluent/b2.$DOMAIN
     port:
       name: tls-kafka
       number: 443

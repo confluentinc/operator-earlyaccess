@@ -1,0 +1,20 @@
+apiVersion: networking.istio.io/v1beta1
+kind: Gateway
+metadata:
+  name: confluent-gw
+  namespace: confluent
+spec:
+  selector:
+    istio: ingressgateway
+  servers:
+  - hosts:
+    - confluent/kafka.confluent.edu
+    - confluent/b0.confluent.edu
+    - confluent/b1.confluent.edu
+    - confluent/b2.confluent.edu
+    port:
+      name: tls-kafka
+      number: 443
+      protocol: TLS
+    tls:
+      mode: PASSTHROUGH

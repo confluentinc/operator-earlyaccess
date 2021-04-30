@@ -173,7 +173,7 @@ The Kafka section of the file is set as follow for external access:
 
 :: 
 
-  Spec:
+  spec:
     listeners:
       external:
         externalAccess:
@@ -217,32 +217,7 @@ Deploy Confluent Platform
    ::
    
      kubectl describe kafka
-     
-=========================
-Deploy Ingress controller
-=========================
 
-An Ingress controller is required to access Kafka using the static host-based
-routing. In this tutorial, we will use Nginx Ingress controller.
-
-SSL passthrough is the action of passing data through a load balancer to a server without decrypting it. 
-In many load balancer use cases, the decryption or SSL termination happens at the load balancer and data is passed along to the endpoint. 
-But SSL passthrough keeps the data encrypted as it travels through the load balancer - and this is what Kafka expects.
-
-#. Add the Kubernetes NginX Helm repo and update the repo.
-
-   ::
-   
-     helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
-     helm repo update
-
-#. Install the Ngix controller:
-
-   ::
-   
-     helm upgrade  --install ingress-nginx ingress-nginx/ingress-nginx \
-       --set controller.extraArgs.enable-ssl-passthrough="true"
-       
 ================================
 Create a Kafka bootstrap service
 ================================
@@ -261,12 +236,47 @@ Create the Kafka bootstrap service to access Kafka:
 
   kubectl apply -f $TUTORIAL_HOME/kafka-bootstrap-service.yaml
 
-======================
-Create Ingress service
-======================
+=====================================
+Deploy Ingress Controller and Ingress
+=====================================
+
+In many load balancer use cases, the decryption happens at the load balancer, and then unencrypted data is passed along to the endpoint.
+This is known as SSL termination.
+With the Kafka protocol, however, the broker expects to perform the SSL handshake directly with the client.
+To achieve this, SSL passthrough is required.
+SSL passthrough is the action of passing data through a load balancer to a server without decrypting it. 
+Therefore, whatever Ingress controller you choose must support SSL passthrough to access Kafka using static host-based routing.
+
+
+In this tutorial, we will use the Nginx Ingress controller.
+Replace this section with the `<#appendix-istio-gateway>`__ if you would rather
+use Istio Gateway. 
+
+Deploy Ingress Controller
+^^^^^^^^^^^^^^^^^^^^^^^^^
+
+
+
+#. Add the Kubernetes NginX Helm repo and update the repo.
+
+   ::
+   
+     helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
+     helm repo update
+
+#. Install the Ngix controller:
+
+   ::
+   
+     helm upgrade  --install ingress-nginx ingress-nginx/ingress-nginx \
+       --set controller.extraArgs.enable-ssl-passthrough="true"
+       
+
+Create Ingress Resource
+^^^^^^^^^^^^^^^^^^^^^^^
 
 Create an Ingress resource that includes a collection of rules that the Ingress
-control uses to route the inbound traffic to Kafka:
+controller uses to route the inbound traffic to Kafka.
 
 #. In the resource file, ``ingress-service-hostbased.yaml``, replace ``$DOMAIN`` 
    with the value of your ``$DOMAIN``.
@@ -283,7 +293,7 @@ Add DNS records
 
 Create DNS records for Kafka brokers using the ingress controller load balancer externalIP.
 
-#. Retrieve the external IP addresses of Nginx load balancer:
+#. Retrieve the external IP addresses of the ingress load balancer:
 
    ::
    
@@ -297,10 +307,10 @@ Create DNS records for Kafka brokers using the ingress controller load balancer 
    ====================== ===============================================================
    DNS name               IP address
    ====================== ===============================================================
-   kafka.$DOMAIN          The ``EXTERNAL-IP`` value of the Nginx load balancer service
-   b0.$DOMAIN             The ``EXTERNAL-IP`` value of the Nginx load balancer service
-   b1.$DOMAIN             The ``EXTERNAL-IP`` value of the Nginx load balancer service
-   b2.$DOMAIN             The ``EXTERNAL-IP`` value of the Nginx load balancer service
+   kafka.$DOMAIN          The ``EXTERNAL-IP`` value of the ingress load balancer service
+   b0.$DOMAIN             The ``EXTERNAL-IP`` value of the ingress load balancer service
+   b1.$DOMAIN             The ``EXTERNAL-IP`` value of the ingress load balancer service
+   b2.$DOMAIN             The ``EXTERNAL-IP`` value of the ingress load balancer service
    ====================== ===============================================================
   
 ========
@@ -484,3 +494,94 @@ Shut down Confluent Platform and the data:
 
   helm delete operator
   
+
+
+=======================
+Appendix: Istio Gateway
+=======================
+
+Install Istio
+^^^^^^^^^^^^^
+
+#. Download Istio 1.9.4.
+
+   ::
+
+     (cd $TUTORIAL_HOME && \
+       curl -L https://istio.io/downloadIstio | ISTIO_VERSION=1.9.4 sh -)
+
+
+#. Initialize the Custom Resource Definitions with the ``istioctl`` tool.
+
+   ::
+
+     $TUTORIAL_HOME/istio-1.9.4/bin/istioctl operator init
+
+
+#. Create the ``istio-system`` namespace.
+
+   ::
+
+     kubectl create namespace istio-system
+
+#. Inspect ``IstioOperator.spec.values.gateways`` definition in ``$TUTORIAL_HOME/istio/istio-operator.yaml``.
+
+   ::
+
+     spec:
+     ...
+       values:
+       ...
+         gateways:
+           istio-ingressgateway:
+             type: LoadBalancer
+             name: istio-ingressgateway
+             ...
+             # Confluent ports added as an example.
+             # This tutorial only actually uses sni routing.
+             ports:
+             ...
+             # This is the port where sni routing happens.
+             - port: 15443
+               targetPort: 15443
+               name: tls
+               protocol: TCP
+
+#. Deploy the Istio operator.
+
+   ::
+
+     kubectl apply -f $TUTORIAL_HOME/istio/istio-operator.yaml
+
+Create the Gateway
+^^^^^^^^^^^^^^^^^^
+With Istio installed, we must now create a ``Gateway`` object
+to tell istio's Ingress Gateway which services to send the Kafka traffic.
+
+#. In the ``$TUTORIAL_HOME/istio/istio-gateway.yaml`` file, replace ``$DOMAIN`` 
+   with the value of your ``$DOMAIN``.
+
+#. Create the Gateway.
+   ::
+
+     kubectl apply -f $TUTORIAL_HOME/istio/istio-gateway.yaml
+
+Create the VirtualServices
+^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+The services referenced in the ``confluent-gw`` Gateway don't
+actually exist yet. Let's look at the ``VirtualService`` objects
+that define our Kafka services and then create them.
+
+#. In the ``$TUTORIAL_HOME/istio/istio-service.yaml`` file, replace ``$DOMAIN`` 
+   with the value of your ``$DOMAIN``.
+
+#. Create the services
+
+   ::
+
+     kubectl apply -f $TUTORIAL_HOME/istio/istio-service.yaml
+
+With the Gateway and services in place, external Kafka clients
+will now be routed to the appropriate broker pods.
+Return to the `<#add-dns-records>`__ section.

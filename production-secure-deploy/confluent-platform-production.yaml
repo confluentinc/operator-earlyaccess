@@ -69,11 +69,14 @@ spec:
       provider:
         type: ldap
         ldap:
-          address: ldap://ldap.confluent.svc.cluster.local:389
+          address: ldaps://ldap.confluent.svc.cluster.local:636
           authentication:
             type: simple
             simple:
               secretRef: credential
+          tls:
+            enabled: true
+            secretRef: ldap-trust
           configurations:
             groupNameAttribute: cn
             groupObjectClass: group

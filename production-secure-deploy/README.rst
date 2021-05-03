@@ -77,7 +77,7 @@ RBAC.
 
    ::
 
-     ldapsearch -LLL -x -H ldap://ldap.confluent.svc.cluster.local:389 -b 'dc=test,dc=com' -D "cn=mds,dc=test,dc=com" -w 'Developer!'
+   ldapsearch -LLL -x -H ldaps://ldap.confluent.svc.cluster.local:636 -b 'dc=test,dc=com' -D "cn=mds,dc=test,dc=com" -w 'Developer!'
 
 #. Exit out of the LDAP pod:
 

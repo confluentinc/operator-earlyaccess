@@ -159,17 +159,17 @@ Provide RBAC principal credentials
      kubectl create secret generic mds-client \
        --from-file=bearer.txt=$TUTORIAL_HOME/bearer.txt
      # Control Center RBAC credential
-     kubectl create secret generic c3-mds-client \
-       --from-file=bearer.txt=$TUTORIAL_HOME/c3-mds-client.txt
+     kubectl create secret generic mds-client-c3 \
+       --from-file=bearer.txt=$TUTORIAL_HOME/mds-client-c3.txt
      # Connect RBAC credential
-     kubectl create secret generic connect-mds-client \
-       --from-file=bearer.txt=$TUTORIAL_HOME/connect-mds-client.txt
+     kubectl create secret generic mds-client-connect \
+       --from-file=bearer.txt=$TUTORIAL_HOME/mds-client-connect.txt
      # Schema Registry RBAC credential
-     kubectl create secret generic sr-mds-client \
-       --from-file=bearer.txt=$TUTORIAL_HOME/sr-mds-client.txt
+     kubectl create secret generic mds-client-sr \
+       --from-file=bearer.txt=$TUTORIAL_HOME/mds-client-sr.txt
      # ksqlDB RBAC credential
-     kubectl create secret generic ksqldb-mds-client \
-       --from-file=bearer.txt=$TUTORIAL_HOME/ksqldb-mds-client.txt
+     kubectl create secret generic mds-client-ksqldb \
+       --from-file=bearer.txt=$TUTORIAL_HOME/mds-client-ksqldb.txt
      # Kafka REST credential
      kubectl create secret generic rest-credential \
        --from-file=bearer.txt=$TUTORIAL_HOME/bearer.txt \

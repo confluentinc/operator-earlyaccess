@@ -28,21 +28,24 @@ spec:
     application: confluentinc/cp-server-operator:6.1.0.0
     init: confluentinc/cp-init-container-operator:6.1.0.0
   dataVolumeCapacity: 10Gi
+  configOverrides:
+    server:
+      - sasl.server.callback.handler.class=io.confluent.security.auth.provider.ldap.LdapAuthenticateCallbackHandler
   tls:
     secretRef: tls-group1
   listeners:
     internal:
       authentication:
         type: plain
-        jaasConfig:
-          secretRef: credential
+        jaasConfigPassThrough:
+          secretRef: plain-login
       tls:
         enabled: true
     external:
       authentication:
         type: plain
-        jaasConfig:
-          secretRef: credential
+        jaasConfigPassThrough:
+          secretRef: plain-login
       externalAccess:
         type: loadBalancer
         loadBalancer:
@@ -76,7 +79,7 @@ spec:
               secretRef: credential
           tls:
             enabled: true
-            secretRef: ldap-trust
+            secretRef: tls-group1
           configurations:
             groupNameAttribute: cn
             groupObjectClass: group

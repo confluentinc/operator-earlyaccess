@@ -132,9 +132,10 @@ Provide authentication credentials
    ::
    
      kubectl create secret generic credential \
+      --from-file=plain.txt=$TUTORIAL_HOME/creds-broker-user.txt \
+      --from-file=plain-users.json=$TUTORIAL_HOME/creds-broker-users.json \
       --from-file=digest-users.json=$TUTORIAL_HOME/creds-zookeeper-sasl-digest-users.json \
       --from-file=digest.txt=$TUTORIAL_HOME/creds-kafka-zookeeper-credentials.txt \
-      --from-file=plain.txt=$TUTORIAL_HOME/creds-client-kafka-sasl-user.txt \
       --from-file=basic.txt=$TUTORIAL_HOME/creds-control-center-users.txt \
       --from-file=ldap.txt=$TUTORIAL_HOME/ldap.txt
 

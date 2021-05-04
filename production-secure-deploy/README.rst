@@ -5,15 +5,16 @@ Confluent recommends these security mechanisms for a production deployment:
 
 - Enable Kafka client authentication. Choose one of:
 
-  - SASL/Plain or mTLS
+  - SASL/PLAIN
+  - mTLS
 
-  - For SASL/Plain, the identity can come from LDAP server
+- For SASL/PLAIN, the identity can come from LDAP server
 
 - Enable Confluent Role Based Access Control for authorization, with user/group identity coming from LDAP server
 
 - Enable TLS for network encryption - both internal (between CP components) and external (Clients to CP components)
 
-In this deployment scenario, we will set this up, choosing SASL/Plain for authentication, using user provided custom certificates.
+In this deployment scenario, we will set this up, choosing SASL/Plain for authentication, using user-provided custom certificates.
 
 ==================================
 Set the current tutorial directory
@@ -136,6 +137,8 @@ Provide authentication credentials
       --from-file=plain.txt=$TUTORIAL_HOME/creds-client-kafka-sasl-user.txt \
       --from-file=basic.txt=$TUTORIAL_HOME/creds-control-center-users.txt \
       --from-file=ldap.txt=$TUTORIAL_HOME/ldap.txt
+
+      kubectl create secret generic plain-login --from-file=plain-jaas.conf=$TUTORIAL_HOME/plain-jaas.conf
 
    In this tutorial, we use one credential for authenticating all client and
    server communication to Kafka brokers. In production scenarios, you'll want

@@ -131,8 +131,6 @@ spec:
       bootstrapEndpoint: kafka.confluent.svc.cluster.local:9071
       authentication:
         type: plain
-        jaasConfig:
-          secretRef: credential
       tls:
         enabled: true
     mds:
@@ -170,8 +168,6 @@ spec:
       bootstrapEndpoint: kafka.confluent.svc.cluster.local:9071
       authentication:
         type: plain
-        jaasConfig:
-          secretRef: credential
       tls:
         enabled: true
     mds:
@@ -210,8 +206,6 @@ spec:
       bootstrapEndpoint: kafka.confluent.svc.cluster.local:9071
       authentication:
         type: plain
-        jaasConfig:
-          secretRef: credential
       tls:
         enabled: true
     mds:
@@ -256,8 +250,6 @@ spec:
       bootstrapEndpoint: kafka.confluent.svc.cluster.local:9071
       authentication:
         type: plain
-        jaasConfig:
-          secretRef: credential
       tls:
         enabled: true
     mds:

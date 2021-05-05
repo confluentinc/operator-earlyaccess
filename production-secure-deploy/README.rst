@@ -154,14 +154,14 @@ Provide authentication credentials
 Provide RBAC principal credentials
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-#. Create a Kubernetes secret object for the MDS public key:
+#. Create a Kubernetes secret object for the MDS public key. Components use this to validate the authorization tokens from MDS.
 
    ::
    
      kubectl create secret generic mds-public \
        --from-file=mdsPublicKey.pem=$TUTORIAL_HOME/../assets/certs/mds-publickey.txt 
 
-#. Create Kubernetes secrets for each Confluent component.
+#. Create Kubernetes secrets for each Confluent component to authenticate to MDS for RBAC.
 
    ::
    
@@ -179,8 +179,7 @@ Provide RBAC principal credentials
        --from-file=bearer.txt=$TUTORIAL_HOME/mds-client-ksqldb.txt
      # Kafka REST credential
      kubectl create secret generic rest-credential \
-       --from-file=bearer.txt=$TUTORIAL_HOME/bearer.txt \
-       --from-file=basic.txt=$TUTORIAL_HOME/bearer.txt
+       --from-file=bearer.txt=$TUTORIAL_HOME/bearer.txt 
 
 =========================
 Deploy Confluent Platform

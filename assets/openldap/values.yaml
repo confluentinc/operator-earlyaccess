@@ -16,6 +16,50 @@ env:
   LDAP_READONLY_USER_PASSWORD: "Developer!"
 
 ldifs:
+  groups.ldif: |-
+    dn: ou=groups,dc=test,dc=com
+    objectClass: organizationalUnit
+    objectClass: top
+    ou: groups
+  users.ldif: |-
+    dn: ou=users,dc=test,dc=com
+    objectClass: organizationalUnit
+    objectClass: top
+    ou: users
+  emmy.ldif: |-
+    dn: cn=emmy,ou=users,dc=test,dc=com
+    userPassword: emmy-secret
+    objectClass: top
+    objectClass: person
+    objectClass: OrganizationalPerson
+    objectClass: inetOrgPerson
+    objectClass: organizationalRole
+    givenName: Amelie
+    surname: Noether
+    displayName: Emmy Noether
+    description: Interested in action and conservation. If you like it, you should put a Noetherian Ring on it.
+    cn: emmy
+  alice.ldif: |-
+    dn: cn=alice,ou=users,dc=test,dc=com
+    userPassword: alice-secret
+    objectClass: top
+    objectClass: person
+    objectClass: OrganizationalPerson
+    objectClass: inetOrgPerson
+    objectClass: organizationalRole
+    givenName: Alice
+    surname: Lookingglass
+    displayName: Alice Lookingglass
+    description: Alice is great at changing perspectives, but sometimes chases down rabbit holes
+    cn: alice
+  developers.ldif: |-
+    dn: cn=developers,ou=groups,dc=test,dc=com
+    objectClass: top
+    objectClass: groupOfNames
+    description: A group of software developers and the apps they are responsible for
+    cn: developers
+    member: cn=emmy,ou=users,dc=test,dc=com
+    member: cn=alice,ou=users,dc=test,dc=com
   kafka.ldif: |-
     dn: cn=kafka,dc=test,dc=com
     userPassword: kafka-secret

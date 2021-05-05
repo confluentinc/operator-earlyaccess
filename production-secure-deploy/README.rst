@@ -125,21 +125,24 @@ Provide authentication credentials
 
 #. Create Kubernetes secrets for Zookeeper and Kafka.
 
-   This secret object contains file based properties. These files are in the
-   format that each respective Confluent component requires for authentication
-   credentials.
+   ZooKeeper expects to look for a file called ``digest-users.json`` to authenticate clients.
+   In this context, the brokers are the only ZooKeeper clients.
+
+   Brokers look for a file called ``digest.txt`` for credentials to access ZooKeeper.
+   
+   * Brokers look for a file s
 
    ::
 
      kubectl create secret generic zk-credential \
-     --from-file=digest-users.json=$TUTORIAL_HOME/creds-zookeeper-sasl-digest-users.json 
+       --from-file=digest-users.json=$TUTORIAL_HOME/creds-zookeeper-sasl-digest-users.json 
 
      kubectl create secret generic broker-credential \
-      --from-file=digest.txt=$TUTORIAL_HOME/creds-kafka-zookeeper-credentials.txt \
-      --from-file=ldap.txt=$TUTORIAL_HOME/ldap.txt \
-      --from-file=plain-jaas.conf=$TUTORIAL_HOME/plain-jaas.conf \
-      --from-file=mdsTokenKeyPair.pem=$TUTORIAL_HOME/../assets/certs/mds-tokenkeypair.txt \
-      --from-file=mdsPublicKey.pem=$TUTORIAL_HOME/../assets/certs/mds-publickey.txt
+       --from-file=digest.txt=$TUTORIAL_HOME/creds-kafka-zookeeper-credentials.txt \
+       --from-file=ldap.txt=$TUTORIAL_HOME/ldap.txt \
+       --from-file=plain-jaas.conf=$TUTORIAL_HOME/plain-jaas.conf \
+       --from-file=mdsTokenKeyPair.pem=$TUTORIAL_HOME/../assets/certs/mds-tokenkeypair.txt \
+       --from-file=mdsPublicKey.pem=$TUTORIAL_HOME/../assets/certs/mds-publickey.txt
 
 Provide RBAC principal credentials
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

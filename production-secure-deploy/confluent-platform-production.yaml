@@ -97,7 +97,7 @@ spec:
       authentication:
         type: bearer
         bearer:
-          secretRef: mds-client
+          secretRef: broker-credential
     zookeeper:
       endpoint: zookeeper.confluent.svc.cluster.local:2182
       authentication:

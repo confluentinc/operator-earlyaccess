@@ -128,9 +128,15 @@ Provide authentication credentials
    ZooKeeper expects to look for a file called ``digest-users.json`` to authenticate clients.
    In this context, the brokers are the only ZooKeeper clients.
 
-   Brokers look for a file called ``digest.txt`` for credentials to access ZooKeeper.
+   Brokers look for these files: 
    
-   * Brokers look for a file s
+   * ``digest.txt`` -- for credentials to access ZooKeeper
+   * ``ldap.txt`` -- for credentials to access the LDAP service
+   * ``plain-jaas.conf`` -- for securely setting the ``sasl.jaas.config`` property, which contains credentials to authenticate to other brokers for replication
+   * ``bearer.txt`` -- for the broker to authenticate to MDS
+   * ``mdsTokenKeyPair.pem`` -- private key for MDS to create authorization tokens
+   * ``mdsPublicKey.pem`` -- public key for MDS to validate tokens
+
 
    ::
 
@@ -141,24 +147,24 @@ Provide authentication credentials
        --from-file=digest.txt=$TUTORIAL_HOME/creds-kafka-zookeeper-credentials.txt \
        --from-file=ldap.txt=$TUTORIAL_HOME/ldap.txt \
        --from-file=plain-jaas.conf=$TUTORIAL_HOME/plain-jaas.conf \
+       --from-file=bearer.txt=$TUTORIAL_HOME/bearer.txt \
        --from-file=mdsTokenKeyPair.pem=$TUTORIAL_HOME/../assets/certs/mds-tokenkeypair.txt \
        --from-file=mdsPublicKey.pem=$TUTORIAL_HOME/../assets/certs/mds-publickey.txt
 
 Provide RBAC principal credentials
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-#. Create a Kubernetes secret object for MDS:
+#. Create a Kubernetes secret object for the MDS public key:
 
    ::
    
      kubectl create secret generic mds-public \
        --from-file=mdsPublicKey.pem=$TUTORIAL_HOME/../assets/certs/mds-publickey.txt 
-   
+
+#. Create Kubernetes secrets for each Confluent component.
+
    ::
    
-     # Kafka RBAC credential
-     kubectl create secret generic mds-client \
-       --from-file=bearer.txt=$TUTORIAL_HOME/bearer.txt
      # Control Center RBAC credential
      kubectl create secret generic mds-client-c3 \
        --from-file=bearer.txt=$TUTORIAL_HOME/mds-client-c3.txt

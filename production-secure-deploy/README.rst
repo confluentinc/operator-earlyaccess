@@ -5,16 +5,18 @@ Confluent recommends these security mechanisms for a production deployment:
 
 - Enable Kafka client authentication. Choose one of:
 
-  - SASL/PLAIN
+  - LDAP authentication over SASL/PLAIN (using the ``LdapAuthenticateCallbackHandler``)
   - mTLS
-
-- For SASL/PLAIN, the identity can come from LDAP server
 
 - Enable Confluent Role Based Access Control for authorization, with user/group identity coming from LDAP server
 
 - Enable TLS for network encryption - both internal (between CP components) and external (Clients to CP components)
 
-In this deployment scenario, we will set this up, choosing SASL/Plain for authentication, using user-provided custom certificates.
+In this deployment scenario, we will
+
+- Set up TLS transport encryption with user-provided certificates
+- Set up Kafka client authentication with LDAP authentication over SASL/PLAIN
+- Set up REST API client authentication and platform-wide authorization with Confluent Role Based Access Control (RBAC)
 
 ==================================
 Set the current tutorial directory
@@ -32,7 +34,7 @@ Deploy Confluent Operator
 =========================
 
 The assumption is that you’ve set up Early Access credentials following `the
-instruction
+instructions
 <https://github.com/confluentinc/operator-earlyaccess/blob/master/README.rst>`__.
 
 #. Install Confluent Operator using Helm:
@@ -61,6 +63,8 @@ RBAC.
    ::
 
      helm upgrade --install -f $TUTORIAL_HOME/../assets/openldap/ldaps-rbac.yaml test-ldap $TUTORIAL_HOME/../assets/openldap --namespace confluent
+
+   Note that the unsecured port 389 is provided for debugging purposes. Production LDAP deployments will have the insecure port disabled.
 
 #. Validate that OpenLDAP is running:  
    
@@ -106,7 +110,7 @@ credentials:
 * RBAC principal credentials
   
 You can either provide your own certificates, or generate test certificates. Follow instructions
-in the below "Appendix: Create your own certificates" section to see how to generate certificates
+in the `<#appendix-create-your-own-certificates>`__ section to see how to generate certificates
 and set the appropriate SANs. 
 
 Provide component TLS certificates
@@ -115,9 +119,9 @@ Provide component TLS certificates
 ::
    
      kubectl create secret generic tls-group1 \
-   --from-file=fullchain.pem=$TUTORIAL_HOME/../assets/certs/generated/server.pem \
-   --from-file=cacerts.pem=$TUTORIAL_HOME/../assets/certs/generated/ca.pem \
-      --from-file=privkey.pem=$TUTORIAL_HOME/../assets/certs/generated/server-key.pem
+       --from-file=fullchain.pem=$TUTORIAL_HOME/../assets/certs/generated/server.pem \
+       --from-file=cacerts.pem=$TUTORIAL_HOME/../assets/certs/generated/ca.pem \
+       --from-file=privkey.pem=$TUTORIAL_HOME/../assets/certs/generated/server-key.pem
 
 
 Provide authentication credentials
@@ -200,9 +204,9 @@ Deploy Confluent Platform
 Note: The default required RoleBindings for each Confluent component are created
 automatically, and maintained as `confluentrolebinding` custom resources.
 
-   ::
+::
 
-     kubectl get confluentrolebinding
+  kubectl get confluentrolebinding
    
      
 
@@ -212,9 +216,9 @@ Create RBAC Rolebindings for Control Center admin
 
 Create Control Center Role Binding for a Control Center ``testadmin`` user.
 
-   ::
+::
 
-     kubectl apply -f $TUTORIAL_HOME/controlcenter-testadmin-rolebindings.yaml
+  kubectl apply -f $TUTORIAL_HOME/controlcenter-testadmin-rolebindings.yaml
 
 ========
 Validate
@@ -264,12 +268,13 @@ then the internal domain names will be:
 ::
 
   # Install libraries on Mac OS
-  brew install cfssl
+   brew install cfssl
 
 ::
   
   # Create Certificate Authority
-  cfssl gencert -initca $TUTORIAL_HOME/../assets/certs/ca-csr.json | cfssljson -bare $TUTORIAL_HOME/../assets/certs/generated/ca -
+  cfssl gencert -initca $TUTORIAL_HOME/../assets/certs/ca-csr.json \
+    | cfssljson -bare $TUTORIAL_HOME/../assets/certs/generated/ca -
 
 ::
 
@@ -280,9 +285,10 @@ then the internal domain names will be:
 
   # Create server certificates with the appropriate SANs (SANs listed in server-domain.json)
   cfssl gencert -ca=$TUTORIAL_HOME/../assets/certs/generated/ca.pem \
-  -ca-key=$TUTORIAL_HOME/../assets/certs/generated/ca-key.pem \
-  -config=$TUTORIAL_HOME/../assets/certs/ca-config.json \
-  -profile=server $TUTORIAL_HOME/../assets/certs/server-domain.json | cfssljson -bare $TUTORIAL_HOME/../assets/certs/generated/server
+    -ca-key=$TUTORIAL_HOME/../assets/certs/generated/ca-key.pem \
+    -config=$TUTORIAL_HOME/../assets/certs/ca-config.json \
+    -profile=server $TUTORIAL_HOME/../assets/certs/server-domain.json \
+      | cfssljson -bare $TUTORIAL_HOME/../assets/certs/generated/server
 
   # Validate server certificate and SANs
   openssl x509 -in $TUTORIAL_HOME/../assets/certs/generated/server.pem -text -noout

@@ -123,21 +123,23 @@ Provide component TLS certificates
 Provide authentication credentials
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-#. Create a Kubernetes secret object for Zookeeper, Kafka, and Control Center.
+#. Create Kubernetes secrets for Zookeeper and Kafka.
 
    This secret object contains file based properties. These files are in the
    format that each respective Confluent component requires for authentication
    credentials.
 
    ::
-   
+
      kubectl create secret generic zk-credential \
      --from-file=digest-users.json=$TUTORIAL_HOME/creds-zookeeper-sasl-digest-users.json 
 
      kubectl create secret generic broker-credential \
       --from-file=digest.txt=$TUTORIAL_HOME/creds-kafka-zookeeper-credentials.txt \
       --from-file=ldap.txt=$TUTORIAL_HOME/ldap.txt \
-      --from-file=plain-jaas.conf=$TUTORIAL_HOME/plain-jaas.conf
+      --from-file=plain-jaas.conf=$TUTORIAL_HOME/plain-jaas.conf \
+      --from-file=mdsTokenKeyPair.pem=$TUTORIAL_HOME/../assets/certs/mds-tokenkeypair.txt \
+      --from-file=mdsPublicKey.pem=$TUTORIAL_HOME/../assets/certs/mds-publickey.txt
 
 Provide RBAC principal credentials
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -146,9 +148,8 @@ Provide RBAC principal credentials
 
    ::
    
-     kubectl create secret generic mds-token \
-       --from-file=mdsPublicKey.pem=$TUTORIAL_HOME/../assets/certs/mds-publickey.txt \
-       --from-file=mdsTokenKeyPair.pem=$TUTORIAL_HOME/../assets/certs/mds-tokenkeypair.txt
+     kubectl create secret generic mds-public \
+       --from-file=mdsPublicKey.pem=$TUTORIAL_HOME/../assets/certs/mds-publickey.txt 
    
    ::
    

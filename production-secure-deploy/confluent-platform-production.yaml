@@ -65,7 +65,7 @@ spec:
       tls:
         enabled: true
       tokenKeyPair:
-        secretRef: mds-token
+        secretRef: broker-credential
       externalAccess:
         type: loadBalancer
         loadBalancer:
@@ -136,7 +136,7 @@ spec:
     mds:
       endpoint: https://kafka.confluent.svc.cluster.local:8090
       tokenKeyPair:
-        secretRef: mds-token
+        secretRef: mds-public
       authentication:
         type: bearer
         bearer:
@@ -173,7 +173,7 @@ spec:
     mds:
       endpoint: https://kafka.confluent.svc.cluster.local:8090
       tokenKeyPair:
-        secretRef: mds-token
+        secretRef: mds-public
       authentication:
         type: bearer
         bearer:
@@ -211,7 +211,7 @@ spec:
     mds:
       endpoint: https://kafka.confluent.svc.cluster.local:8090
       tokenKeyPair:
-        secretRef: mds-token
+        secretRef: mds-public
       authentication:
         type: bearer
         bearer:
@@ -255,7 +255,7 @@ spec:
     mds:
       endpoint: https://kafka.confluent.svc.cluster.local:8090
       tokenKeyPair:
-        secretRef: mds-token
+        secretRef: mds-public
       authentication:
         type: bearer
         bearer:

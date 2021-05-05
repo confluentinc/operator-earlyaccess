@@ -13,7 +13,7 @@ spec:
   authentication:
     type: digest
     jaasConfig:
-      secretRef: credential
+      secretRef: zk-credential
   tls:
     secretRef: tls-group1
 ---
@@ -78,7 +78,7 @@ spec:
           authentication:
             type: simple
             simple:
-              secretRef: credential
+              secretRef: broker-credential
           tls:
             enabled: true
             secretRef: tls-group1
@@ -103,7 +103,7 @@ spec:
       authentication:
         type: digest
         jaasConfig:
-          secretRef: credential
+          secretRef: broker-credential
       tls:
         enabled: true
 ---

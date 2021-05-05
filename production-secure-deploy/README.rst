@@ -131,16 +131,13 @@ Provide authentication credentials
 
    ::
    
-     kubectl create secret generic credential \
-      --from-file=digest-users.json=$TUTORIAL_HOME/creds-zookeeper-sasl-digest-users.json \
+     kubectl create secret generic zk-credential \
+     --from-file=digest-users.json=$TUTORIAL_HOME/creds-zookeeper-sasl-digest-users.json 
+
+     kubectl create secret generic broker-credential \
       --from-file=digest.txt=$TUTORIAL_HOME/creds-kafka-zookeeper-credentials.txt \
-      --from-file=ldap.txt=$TUTORIAL_HOME/ldap.txt
-
-      kubectl create secret generic plain-login --from-file=plain-jaas.conf=$TUTORIAL_HOME/plain-jaas.conf
-
-   In this tutorial, we use one credential for authenticating all client and
-   server communication to Kafka brokers. In production scenarios, you'll want
-   to specify different credentials for each of them.
+      --from-file=ldap.txt=$TUTORIAL_HOME/ldap.txt \
+      --from-file=plain-jaas.conf=$TUTORIAL_HOME/plain-jaas.conf
 
 Provide RBAC principal credentials
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

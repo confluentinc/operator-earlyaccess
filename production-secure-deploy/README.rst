@@ -287,31 +287,6 @@ then the internal domain names will be:
   # Validate server certificate and SANs
   openssl x509 -in $TUTORIAL_HOME/../assets/certs/generated/server.pem -text -noout
 
-=====================================
-Appendix: Update authentication users
-=====================================
-
-In order to add users to the authenticated users list, you'll need to update the list in the following files:
-
-- For Kafka users, update the list in ``creds-kafka-sasl-users.json``.
-- For Control Center users, update the list in ``creds-control-center-users.txt``.
-
-After updating the list of users, you'll update the Kubernetes secret.
-
-::
-
-  kubectl create secret generic credential \
-      --from-file=plain-users.json=$TUTORIAL_HOME/creds-kafka-sasl-users.json \
-      --from-file=digest-users.json=$TUTORIAL_HOME/creds-zookeeper-sasl-digest-users.json \
-      --from-file=digest.txt=$TUTORIAL_HOME/creds-kafka-zookeeper-credentials.txt \
-      --from-file=plain.txt=$TUTORIAL_HOME/creds-client-kafka-sasl-user.txt \
-      --from-file=basic.txt=$TUTORIAL_HOME/creds-control-center-users.txt \
-      --from-file=ldap.txt=$TUTORIAL_HOME/ldap.txt \ 
-      --save-config --dry-run=client -oyaml | k apply -f -
-
-In this above CLI command, you are generating the YAML for the secret, and applying it as an update to the existing secret ``credential``.
-
-There's no need to restart the Kafka brokers or Control Center. The updates users list is picked up by the services.
 
 =======================================
 Appendix: Configure mTLS authentication

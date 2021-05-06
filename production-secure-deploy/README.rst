@@ -249,6 +249,9 @@ through a local port forwarding like below:
    
      https://localhost:9021
 
+#. Go to the menu with three horizontal lines in the top right corner, and navigate to ADMINISTRATION -> Manage Role Assignments. 
+   Select a cluster and click the button to add a role assignment. Here, you will see user and group search for creating a new rolebinding.
+
 The ``testadmin`` user (``testadmin`` password) has the ``SystemAdmin`` role granted and will have access to the
 cluster and broker information.
   

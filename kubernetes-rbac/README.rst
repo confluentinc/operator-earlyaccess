@@ -10,12 +10,14 @@ namespace.
    
    ::
   
-   mkdir -p <confluent-operator-contents-dir>
+     mkdir -p <confluent-operator-contents-dir>
    
-   helm pull confluentinc_earlyaccess/confluent-for-kubernetes \
+   ::
+
+     helm pull confluentinc_earlyaccess/confluent-for-kubernetes \
      --untar --untardir=<confluent-operator-contents-dir>
 
-#. Pre-install the |co-long| CRDs with the following command:
+#. Pre-install the CRDs with the following command:
 
    ::
 
@@ -33,7 +35,7 @@ namespace.
   given namespace.
 
    ::
-   
+
      kubectl apply -f namespaced-rolebinding.yaml
 
 

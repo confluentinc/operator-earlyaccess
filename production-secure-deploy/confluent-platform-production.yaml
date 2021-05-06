@@ -40,14 +40,14 @@ spec:
       authentication:
         type: plain
         jaasConfigPassThrough:
-          secretRef: plain-login
+          secretRef: broker-credential
       tls:
         enabled: true
     external:
       authentication:
         type: plain
         jaasConfigPassThrough:
-          secretRef: plain-login
+          secretRef: broker-credential
       externalAccess:
         type: loadBalancer
         loadBalancer:
@@ -89,9 +89,9 @@ spec:
             groupMemberAttributePattern: cn=(.*),ou=users,dc=test,dc=com
             groupSearchBase: ou=groups,dc=test,dc=com
             userNameAttribute: cn
-            userMemberOfAttributePattern: cn=(.*),.*dc=test,dc=com
+            userMemberOfAttributePattern: cn=(.*),ou=users,dc=test,dc=com
             userObjectClass: organizationalRole
-            userSearchBase: dc=test,dc=com
+            userSearchBase: ou=users,dc=test,dc=com
   dependencies:
     kafkaRest:
       authentication:

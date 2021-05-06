@@ -29,27 +29,15 @@ ldifs:
   emmy.ldif: |-
     dn: cn=emmy,ou=users,dc=test,dc=com
     userPassword: emmy-secret
-    objectClass: top
-    objectClass: person
-    objectClass: OrganizationalPerson
-    objectClass: inetOrgPerson
+    objectClass: simpleSecurityObject
     objectClass: organizationalRole
-    givenName: Amelie
-    surname: Noether
-    displayName: Emmy Noether
     description: Interested in action and conservation. If you like it, you should put a Noetherian Ring on it.
     cn: emmy
   alice.ldif: |-
     dn: cn=alice,ou=users,dc=test,dc=com
     userPassword: alice-secret
-    objectClass: top
-    objectClass: person
-    objectClass: OrganizationalPerson
-    objectClass: inetOrgPerson
+    objectClass: simpleSecurityObject
     objectClass: organizationalRole
-    givenName: Alice
-    surname: Lookingglass
-    displayName: Alice Lookingglass
     description: Alice is great at changing perspectives, but sometimes chases down rabbit holes
     cn: alice
   developers.ldif: |-
@@ -61,56 +49,56 @@ ldifs:
     member: cn=emmy,ou=users,dc=test,dc=com
     member: cn=alice,ou=users,dc=test,dc=com
   kafka.ldif: |-
-    dn: cn=kafka,dc=test,dc=com
+    dn: cn=kafka,ou=users,dc=test,dc=com
     userPassword: kafka-secret
     description: kafka user
     objectClass: simpleSecurityObject
     objectClass: organizationalRole
     cn: kafka
   erp.ldif: |-
-    dn: cn=erp,dc=test,dc=com
+    dn: cn=erp,ou=users,dc=test,dc=com
     userPassword: erp-secret
     description: erp user
     objectClass: simpleSecurityObject
     objectClass: organizationalRole
     cn: erp
   sr.ldif: |-
-    dn: cn=sr,dc=test,dc=com
+    dn: cn=sr,ou=users,dc=test,dc=com
     userPassword: sr-secret
     description: schema registry user
     objectClass: simpleSecurityObject
     objectClass: organizationalRole
     cn: sr
   c3.ldif: |-
-    dn: cn=c3,dc=test,dc=com
+    dn: cn=c3,ou=users,dc=test,dc=com
     userPassword: c3-secret
     description: control center user
     objectClass: simpleSecurityObject
     objectClass: organizationalRole
     cn: c3
   ksql.ldif: |-
-    dn: cn=ksql,dc=test,dc=com
+    dn: cn=ksql,ou=users,dc=test,dc=com
     userPassword: ksql-secret
     description: ksql user
     objectClass: simpleSecurityObject
     objectClass: organizationalRole
     cn: ksql
   connect.ldif: |-
-    dn: cn=connect,dc=test,dc=com
+    dn: cn=connect,ou=users,dc=test,dc=com
     userPassword: connect-secret
     description: connect user
     objectClass: simpleSecurityObject
     objectClass: organizationalRole
     cn: connect
   replicator.ldif: |-
-    dn: cn=replicator,dc=test,dc=com
+    dn: cn=replicator,ou=users,dc=test,dc=com
     userPassword: replicator-secret
     description: replicator user
     objectClass: simpleSecurityObject
     objectClass: organizationalRole
     cn: replicator
   c3-test.ldif: |-
-    dn: cn=testadmin,dc=test,dc=com
+    dn: cn=testadmin,ou=users,dc=test,dc=com
     userPassword: testadmin
     description: testadmin user
     objectClass: simpleSecurityObject

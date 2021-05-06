@@ -30,8 +30,8 @@ namespace.
   permissions you might additionally require.
 
   Also, if required to have a custom service-account setup, make sure to pass the custom service-account name
-  when deploying Confluent Operator through helm commands `--set serviceAccount.create=false --set serviceAccount.name=<reference-service-account>` and upate
-  the `namespaced-rolebinding.yaml` accordinly to reflect the custom service account name.
+  when deploying Confluent Operator through helm command: ``--set serviceAccount.create=false --set serviceAccount.name=<reference-service-account>``, and update
+  the ``namespaced-rolebinding.yaml`` accordingly to reflect the custom service account name.
 
   The role and role binding should be in the same namespace as Confluent Operator.
 

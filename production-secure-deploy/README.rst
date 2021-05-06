@@ -166,21 +166,27 @@ Provide RBAC principal credentials
        --from-file=mdsPublicKey.pem=$TUTORIAL_HOME/../assets/certs/mds-publickey.txt 
 
 #. Create Kubernetes secrets for each Confluent component to authenticate to MDS for RBAC.
+   Notice each component expects a file called ``bearer.txt`` with credentials to authenticate to 
+   MDS and a file called ``plain.txt`` with credentials to authenticate to brokers via SASL/PLAIN.
 
    ::
    
      # Control Center RBAC credential
      kubectl create secret generic mds-client-c3 \
-       --from-file=bearer.txt=$TUTORIAL_HOME/mds-client-c3.txt
+       --from-file=bearer.txt=$TUTORIAL_HOME/mds-client-c3.txt \
+       --from-file=plain.txt=$TUTORIAL_HOME/mds-client-c3.txt
      # Connect RBAC credential
      kubectl create secret generic mds-client-connect \
-       --from-file=bearer.txt=$TUTORIAL_HOME/mds-client-connect.txt
+       --from-file=bearer.txt=$TUTORIAL_HOME/mds-client-connect.txt \
+       --from-file=plain.txt=$TUTORIAL_HOME/mds-client-connect.txt
      # Schema Registry RBAC credential
      kubectl create secret generic mds-client-sr \
-       --from-file=bearer.txt=$TUTORIAL_HOME/mds-client-sr.txt
+       --from-file=bearer.txt=$TUTORIAL_HOME/mds-client-sr.txt \
+       --from-file=plain.txt=$TUTORIAL_HOME/mds-client-sr.txt
      # ksqlDB RBAC credential
      kubectl create secret generic mds-client-ksqldb \
-       --from-file=bearer.txt=$TUTORIAL_HOME/mds-client-ksqldb.txt
+       --from-file=bearer.txt=$TUTORIAL_HOME/mds-client-ksqldb.txt \
+       --from-file=plain.txt=$TUTORIAL_HOME/mds-client-ksqldb.txt
      # Kafka REST credential
      kubectl create secret generic rest-credential \
        --from-file=bearer.txt=$TUTORIAL_HOME/bearer.txt 

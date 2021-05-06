@@ -8,8 +8,8 @@ namespace.
 
 #. Pull the Helm Chart contents to get the CRDs:
    
-   .. sourcecode:: bash
-
+   ::
+  
    mkdir -p <confluent-operator-contents-dir>
    
    helm pull confluentinc_earlyaccess/confluent-for-kubernetes \
@@ -24,16 +24,17 @@ namespace.
 
 #. Create the ``rolebinding.yaml`` file with the permissions required for a namespaced deployment. 
 
-    The content contains the minimum permissions required. Add any other resource
-    permissions you might additionally require.
+  The content contains the minimum permissions required. Add any other resource
+  permissions you might additionally require.
 
-    The role and role binding should be in the same namespace as Confluent Operator.
+  The role and role binding should be in the same namespace as Confluent Operator.
 
-    The ``subject`` in the role binding must be the user/account existing in the
-    given namespace.
+  The ``subject`` in the role binding must be the user/account existing in the
+  given namespace.
 
-    ::
-      kubectl apply -f namespaced-rolebinding.yaml
+   ::
+   
+     kubectl apply -f namespaced-rolebinding.yaml
 
 
 Cluster Role and Role Binding

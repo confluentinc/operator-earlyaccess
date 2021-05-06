@@ -3,7 +3,7 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
 metadata:
   name: confluent-operator
-  namespace: operator
+  namespace: confluent
 rules:
 - apiGroups:
   - cluster.confluent.com
@@ -111,11 +111,11 @@ kind: RoleBinding
 apiVersion: rbac.authorization.k8s.io/v1
 metadata:
   name: confluent-operator
-  namespace: operator
+  namespace: confluent
 subjects:
 - kind: ServiceAccount
-  name: confluent-for-kubernetes
-  namespace: operator
+  name: confluent-for-kubernetes # customize as required
+  namespace: confluent # customize as required
 roleRef:
   kind: Role
   name: confluent-operator

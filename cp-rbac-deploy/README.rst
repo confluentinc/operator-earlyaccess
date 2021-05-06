@@ -77,7 +77,7 @@ RBAC.
 
    ::
 
-     helm upgrade --install -f $TUTORIAL_HOME/openldap/ldaps-rbac.yaml test-ldap ./openldap --namespace confluent
+     helm upgrade --install -f $TUTORIAL_HOME/openldap/ldaps-rbac.yaml test-ldap $TUTORIAL_HOME/openldap --namespace confluent
 
 
 #. Validate that OpenLDAP is running:  

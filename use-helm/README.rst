@@ -58,16 +58,16 @@ There are two ways to deploy Confluent Operator chart to your Kubernetes:
 ::
 
    # Install for the first time to release name "operator"
-   helm install operator confluentinc_earlyaccess/confluent-operator
+   helm install operator confluentinc_earlyaccess/confluent-for-kubernetes
 
    # Upgrade to latest version, or install if the release does not exist
-   helm upgrade --install operator confluentinc_earlyaccess/confluent-operator
+   helm upgrade --install operator confluentinc_earlyaccess/confluent-for-kubernetes
 
 Install a specific version of the Helm chart:
 
 ::
 
-   helm install operator confluentinc_earlyaccess/confluent-operator --version 0.72.0
+   helm install operator confluentinc_earlyaccess/confluent-for-kubernetes --version 0.72.0
 
 View all installed Helm releases on your Kubernetes:
 

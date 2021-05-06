@@ -38,7 +38,7 @@ instruction
 
    ::
 
-     helm upgrade --install operator confluentinc_earlyaccess/confluent-operator --set image.registry=confluent-docker-internal-early-access-operator-2.jfrog.io
+     helm upgrade --install operator confluentinc_earlyaccess/confluent-for-kubernetes --set image.registry=confluent-docker-internal-early-access-operator-2.jfrog.io
   
 #. Check that the Confluent Operator pod comes up and is running:
 

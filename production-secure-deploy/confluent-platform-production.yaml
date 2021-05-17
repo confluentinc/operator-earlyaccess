@@ -35,6 +35,14 @@ spec:
       - listener.name.replication.plain.sasl.server.callback.handler.class=io.confluent.security.auth.provider.ldap.LdapAuthenticateCallbackHandler
   tls:
     secretRef: tls-group1
+  metricReporter:
+    enabled: true
+    authentication:
+      type: plain
+      jaasConfigPassThrough:
+        secretRef: broker-credential
+    tls:
+      enabled: true
   listeners:
     internal:
       authentication:

@@ -13,7 +13,7 @@ spec:
   authentication:
     type: digest
     jaasConfig:
-      secretRef: credential
+      secretRef: zk-credential
   tls:
     secretRef: tls-group1
 ---
@@ -28,21 +28,34 @@ spec:
     application: confluentinc/cp-server-operator:6.1.0.0
     init: confluentinc/cp-init-container-operator:6.1.0.0
   dataVolumeCapacity: 10Gi
+  configOverrides:
+    server:
+      - listener.name.internal.plain.sasl.server.callback.handler.class=io.confluent.security.auth.provider.ldap.LdapAuthenticateCallbackHandler
+      - listener.name.external.plain.sasl.server.callback.handler.class=io.confluent.security.auth.provider.ldap.LdapAuthenticateCallbackHandler
+      - listener.name.replication.plain.sasl.server.callback.handler.class=io.confluent.security.auth.provider.ldap.LdapAuthenticateCallbackHandler
   tls:
     secretRef: tls-group1
+  metricReporter:
+    enabled: true
+    authentication:
+      type: plain
+      jaasConfigPassThrough:
+        secretRef: broker-credential
+    tls:
+      enabled: true
   listeners:
     internal:
       authentication:
         type: plain
-        jaasConfig:
-          secretRef: credential
+        jaasConfigPassThrough:
+          secretRef: broker-credential
       tls:
         enabled: true
     external:
       authentication:
         type: plain
-        jaasConfig:
-          secretRef: credential
+        jaasConfigPassThrough:
+          secretRef: broker-credential
       externalAccess:
         type: loadBalancer
         loadBalancer:
@@ -60,7 +73,7 @@ spec:
       tls:
         enabled: true
       tokenKeyPair:
-        secretRef: mds-token
+        secretRef: broker-credential
       externalAccess:
         type: loadBalancer
         loadBalancer:
@@ -69,33 +82,36 @@ spec:
       provider:
         type: ldap
         ldap:
-          address: ldap://ldap.confluent.svc.cluster.local:389
+          address: ldaps://ldap.confluent.svc.cluster.local:636
           authentication:
             type: simple
             simple:
-              secretRef: credential
+              secretRef: broker-credential
+          tls:
+            enabled: true
+            secretRef: tls-group1
           configurations:
             groupNameAttribute: cn
-            groupObjectClass: group
+            groupObjectClass: groupOfNames
             groupMemberAttribute: member
-            groupMemberAttributePattern: CN=(.*),DC=test,DC=com
-            groupSearchBase: dc=test,dc=com
+            groupMemberAttributePattern: cn=(.*),ou=users,dc=test,dc=com
+            groupSearchBase: ou=groups,dc=test,dc=com
             userNameAttribute: cn
-            userMemberOfAttributePattern: CN=(.*),DC=test,DC=com
+            userMemberOfAttributePattern: cn=(.*),ou=users,dc=test,dc=com
             userObjectClass: organizationalRole
-            userSearchBase: dc=test,dc=com
+            userSearchBase: ou=users,dc=test,dc=com
   dependencies:
     kafkaRest:
       authentication:
         type: bearer
         bearer:
-          secretRef: mds-client
+          secretRef: broker-credential
     zookeeper:
       endpoint: zookeeper.confluent.svc.cluster.local:2182
       authentication:
         type: digest
         jaasConfig:
-          secretRef: credential
+          secretRef: broker-credential
       tls:
         enabled: true
 ---
@@ -124,17 +140,17 @@ spec:
       authentication:
         type: plain
         jaasConfig:
-          secretRef: credential
+          secretRef: mds-client-connect
       tls:
         enabled: true
     mds:
       endpoint: https://kafka.confluent.svc.cluster.local:8090
       tokenKeyPair:
-        secretRef: mds-token
+        secretRef: mds-public
       authentication:
         type: bearer
         bearer:
-          secretRef: connect-mds-client
+          secretRef: mds-client-connect
       tls:
         enabled: true
 ---
@@ -163,17 +179,17 @@ spec:
       authentication:
         type: plain
         jaasConfig:
-          secretRef: credential
+          secretRef: mds-client-sr
       tls:
         enabled: true
     mds:
       endpoint: https://kafka.confluent.svc.cluster.local:8090
       tokenKeyPair:
-        secretRef: mds-token
+        secretRef: mds-public
       authentication:
         type: bearer
         bearer:
-          secretRef: sr-mds-client
+          secretRef: mds-client-sr
       tls:
         enabled: true
 ---
@@ -203,17 +219,17 @@ spec:
       authentication:
         type: plain
         jaasConfig:
-          secretRef: credential
+          secretRef: mds-client-connect
       tls:
         enabled: true
     mds:
       endpoint: https://kafka.confluent.svc.cluster.local:8090
       tokenKeyPair:
-        secretRef: mds-token
+        secretRef: mds-public
       authentication:
         type: bearer
         bearer:
-          secretRef: ksqldb-mds-client
+          secretRef: mds-client-ksqldb
       tls:
         enabled: true
 ---
@@ -249,17 +265,17 @@ spec:
       authentication:
         type: plain
         jaasConfig:
-          secretRef: credential
+          secretRef: mds-client-connect
       tls:
         enabled: true
     mds:
       endpoint: https://kafka.confluent.svc.cluster.local:8090
       tokenKeyPair:
-        secretRef: mds-token
+        secretRef: mds-public
       authentication:
         type: bearer
         bearer:
-          secretRef: c3-mds-client
+          secretRef: mds-client-c3
       tls:
         enabled: true
     connect:

@@ -1,5 +1,8 @@
-Confluent Operator Early Access
-===============================
+Confluent for Kubernetes is now Generally Available! You can find the docs at https://docs.confluent.io/operator/current/overview.html and the examples repo at https://github.com/confluentinc/confluent-kubernetes-examples.
+
+
+[OLD] Confluent Operator Early Access
+=====================================
 
 The next version of Confluent Operator offers a Kubernetes-native experience, including:
 

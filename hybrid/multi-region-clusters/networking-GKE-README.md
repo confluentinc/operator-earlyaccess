@@ -174,7 +174,8 @@ kubectl delete pods -l k8s-app=kube-dns --namespace kube-system --context mrc-ea
 
 ## Open ports to allow communication across regions
 
-Create a firewall rule like you did in the CockroachDB docs, but for ZooKeeper and Kafka traffic. If you’re lazy, just do it for all TCP traffic instead of figuring out specific ports:
+Create a firewall rule to allow TCP traffic between the regions, to facilitate communication 
+to Kafka and Zookeeper across regions:
 
 ```
 gcloud compute firewall-rules create allow-cp-internal \

@@ -99,6 +99,7 @@ kubectl apply -f $TUTORIAL_HOME/confluent-platform-east.yaml --context mrc-east
 
 ## Tear down
 
+```
 kubectl delete -f $TUTORIAL_HOME/confluent-platform-central.yaml --context mrc-central
 kubectl delete -f $TUTORIAL_HOME/confluent-platform-west.yaml --context mrc-west
 kubectl delete -f $TUTORIAL_HOME/confluent-platform-east.yaml --context mrc-east
@@ -106,3 +107,4 @@ kubectl delete -f $TUTORIAL_HOME/confluent-platform-east.yaml --context mrc-east
 helm uninstall cfk-operator -n east --kube-context mrc-east
 helm uninstall cfk-operator -n west --kube-context mrc-west
 helm uninstall cfk-operator -n central --kube-context mrc-central
+```

@@ -24,3 +24,15 @@ spec:
   configOverrides:
     server:
       - zookeeper.connect=zookeeper.central.svc.cluster.local:2181/kafka-west
+---
+apiVersion: platform.confluent.io/v1beta1
+kind: ControlCenter
+metadata:
+  name: controlcenter
+  namespace: west
+spec:
+  replicas: 1
+  image:
+    application: confluentinc/cp-enterprise-control-center:6.2.0
+    init: confluentinc/confluent-init-container:2.0.0
+  dataVolumeCapacity: 10Gi

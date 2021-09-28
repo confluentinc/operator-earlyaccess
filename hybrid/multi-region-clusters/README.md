@@ -108,3 +108,21 @@ helm uninstall cfk-operator -n east --kube-context mrc-east
 helm uninstall cfk-operator -n west --kube-context mrc-west
 helm uninstall cfk-operator -n central --kube-context mrc-central
 ```
+
+
+## Troubleshooting
+
+### Check that Kafka is using the Zookeeper deployments
+
+Look at the ZK nodes.
+
+```
+$ kubectl exec zookeeper-0 -it bash -n central --context mrc-central
+
+bash-4.4$ zookeeper-shell 127.0.0.1:2181
+
+ls /kafka-west/brokers/ids
+[0, 1, 100, 101, 102, 2]
+
+# You should see 6 brokers ^
+```

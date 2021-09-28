@@ -18,6 +18,7 @@ spec:
     serviceAccountName: kafka
   metricReporter:
     enabled: true
+    bootstrapEndpoint: kafka.west.svc.cluster.local:9071
   dependencies:
     zookeeper:
       endpoint: zookeeper.central.svc.cluster.local:2181

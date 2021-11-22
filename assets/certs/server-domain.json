@@ -2,9 +2,7 @@
   "CN": "*.platformops.dev.gcp.devel.cpdev.cloud",
   "hosts": [
     "*.platformops.dev.gcp.devel.cpdev.cloud",
-    "*.confluent.svc.cluster.local",
-    "*.zookeeper.confluent.svc.cluster.local",
-    "*.kafka.confluent.svc.cluster.local"
+    "*.svc.cluster.local"
   ],
   "key": {
     "algo": "rsa",

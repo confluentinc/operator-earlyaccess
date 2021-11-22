@@ -25,7 +25,7 @@ Spin up the GKE clusters:
 
 ```
 # Spin up a cluster in us-west
-gcloud container clusters create mrc-west --zone=us-west1-a
+gcloud container clusters create mrc-west --region=us-west1
 
 # Set the kubectl context so you can refer to it
 kubectl config rename-context <your-gke-cluster-name> mrc-west
@@ -33,7 +33,7 @@ kubectl config rename-context <your-gke-cluster-name> mrc-west
 
 ```
 # Spin up a cluster in us-east
-gcloud container clusters create mrc-east --zone=us-east1-b
+gcloud container clusters create mrc-east --region=us-east1
 
 # Set the kubectl context so you can refer to it
 kubectl config rename-context <your-gke-cluster-name> mrc-east
@@ -41,7 +41,7 @@ kubectl config rename-context <your-gke-cluster-name> mrc-east
 
 ```
 # Spin up a cluster in us-east
-gcloud container clusters create mrc-central --zone=us-central1-b
+gcloud container clusters create mrc-central --region=us-central1
 
 # Set the kubectl context so you can refer to it
 kubectl config rename-context <your-gke-cluster-name> mrc-central
@@ -64,11 +64,11 @@ kubectl create ns central --context mrc-central
 ### Create a load balancer to access Kube DNS in each Kubernetes cluster
 
 ```
-kubectl apply -f dns-lb.yaml --context mrc-west
+kubectl apply -f $TUTORIAL_HOME/networking/dns-lb.yaml --context mrc-west
 
-kubectl apply -f dns-lb.yaml --context mrc-east
+kubectl apply -f $TUTORIAL_HOME/networking/dns-lb.yaml --context mrc-east
 
-kubectl apply -f dns-lb.yaml --context mrc-central
+kubectl apply -f $TUTORIAL_HOME/networking/dns-lb.yaml --context mrc-central
 ```
 
 ### Determine the IP address endpoint for each Kube DNS load balancer
@@ -131,7 +131,7 @@ data:
   stubDomains: |
     {"east.svc.cluster.local": ["34.74.229.93"], "central.svc.cluster.local": ["35.224.242.222"]}
 
-kubectl apply -f $TUTORIAL_HOME/dns-configmap-west.yaml --context mrc-west
+kubectl apply -f $TUTORIAL_HOME/networking/dns-configmap-west.yaml --context mrc-west
 
 kubectl delete pods -l k8s-app=kube-dns --namespace kube-system --context mrc-west
 ```
@@ -149,7 +149,7 @@ data:
   stubDomains: |
     {"east.svc.cluster.local": ["34.74.229.93"], "west.svc.cluster.local": ["35.185.208.215"]}
 
-kubectl apply -f $TUTORIAL_HOME/dns-configmap-central.yaml --context mrc-central
+kubectl apply -f $TUTORIAL_HOME/networking/dns-configmap-central.yaml --context mrc-central
 
 kubectl delete pods -l k8s-app=kube-dns --namespace kube-system --context mrc-central
 ```
@@ -167,7 +167,7 @@ data:
   stubDomains: |
     {"central.svc.cluster.local": ["35.224.242.222"], "west.svc.cluster.local": ["35.185.208.215"]}
 
-kubectl apply -f $TUTORIAL_HOME/dns-configmap-east.yaml --context mrc-east
+kubectl apply -f $TUTORIAL_HOME/networking/dns-configmap-east.yaml --context mrc-east
 
 kubectl delete pods -l k8s-app=kube-dns --namespace kube-system --context mrc-east
 ```

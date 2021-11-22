@@ -6,6 +6,7 @@ metadata:
 spec:
   authorization:
     type: rbac
+  configOverrides:
     server:
       - bootstrap.servers=kafka.central.svc.cluster.local:9073,kafka.east.svc.cluster.local:9073,kafka.west.svc.cluster.local:9073
       - confluent.controlcenter.schema.registry.url=https://schemaregistry.central.svc.cluster.local:8081,https://schemaregistry.east.svc.cluster.local:8081,https://schemaregistry.west.svc.cluster.local:8081

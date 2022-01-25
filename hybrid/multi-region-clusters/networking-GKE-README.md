@@ -1,5 +1,10 @@
 # Configure Networking: Google Kubernetes Engine
 
+Please find the documentation for this here: https://github.com/confluentinc/confluent-kubernetes-examples/tree/master/hybrid/early-access-multi-region-clusters
+
+
+!!! Old Documentation - see top of page !!!
+
 This is the architecture you'll acheive on Google Kubernetes Engine (GKE):
 
 - Namespace naming
@@ -60,6 +65,8 @@ kubectl create ns central --context mrc-central
 ```
 
 ## Set up DNS
+  
+!!! Old Documentation - see top of page !!!
 
 ### Create a load balancer to access Kube DNS in each Kubernetes cluster
 
@@ -184,6 +191,8 @@ gcloud compute firewall-rules create allow-cp-internal \
 ```
 
 ## Validate networking setup
+  
+!!! Old Documentation - see top of page !!!
 
 You'll validate that the networking is set up correctly by pinging across regions on the local
 Kubernetes network.

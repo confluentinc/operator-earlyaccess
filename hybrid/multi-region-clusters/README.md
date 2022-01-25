@@ -1,5 +1,16 @@
 # Early Access: Confluent Multi-Region Clusters with Confluent for Kubernetes
 
+
+Please find the documentation for this here: https://github.com/confluentinc/confluent-kubernetes-examples/tree/master/hybrid/early-access-multi-region-clusters
+
+
+
+
+
+-----------
+
+!!! OLD DOCUMENTATION !!!
+
 Note: This is Early Access functionality.
 
 Confluent Server is often run across availability zones or nearby datacenters. If the computer network between brokers across availability zones or nearby datacenters is dissimilar, in term of reliability, latency, bandwidth, or cost, this can result in higher latency, lower throughput and increased cost to produce and consume messages.
@@ -68,6 +79,8 @@ helm upgrade --install cfk-operator confluentinc/confluent-for-kubernetes -n wes
 helm upgrade --install cfk-operator confluentinc/confluent-for-kubernetes -n central --kube-context mrc-central
 ```
 
+!!! OLD DOCUMENTATION !!!  
+  
 ## Set up - Deploy Confluent Platform
 
 In this step, you'll deploy:
@@ -95,7 +108,7 @@ kubectl apply -f $TUTORIAL_HOME/confluent-platform-west.yaml --context mrc-west
 kubectl apply -f $TUTORIAL_HOME/confluent-platform-east.yaml --context mrc-east
 ```
 
-
+!!! OLD DOCUMENTATION !!!
 
 ## Tear down
 
